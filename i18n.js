@@ -84,9 +84,9 @@ const translations = {
       interconnect: "Interconexión",
       use_case: "Casos de Uso",
       tdp: "TDP / Consumo",
-      relative_perf: "Prestazioni Relative",
       relative_perf: "Rendimiento Relativo",
-      usd_approx: "USD aprox."
+      usd_approx: "aprox.",
+      currency: "€"
     },
     table: {
       gpu: "GPU",
@@ -183,7 +183,8 @@ const translations = {
       use_case: "Use Cases",
       tdp: "TDP / Power",
       relative_perf: "Relative Performance",
-      usd_approx: "approx USD"
+      usd_approx: "approx.",
+      currency: "$"
     },
     table: {
       gpu: "GPU",
@@ -277,7 +278,11 @@ const translations = {
       price: "Prix",
       no_results: "Aucun résultat trouvé",
       interconnect: "Interconnexion",
-      use_case: "Cas d'Utilisation"
+      use_case: "Cas d'Utilisation",
+      tdp: "TDP / Consommation",
+      relative_perf: "Performance Relative",
+      usd_approx: "environ",
+      currency: "€"
     },
     table: {
       gpu: "GPU",
@@ -374,7 +379,8 @@ const translations = {
       use_case: "Anwendungsfall",
       tdp: "TDP / Verbrauch",
       relative_perf: "Relative Leistung",
-      usd_approx: "ca. USD"
+      usd_approx: "ca.",
+      currency: "€"
     },
     table: {
       gpu: "GPU",
@@ -468,7 +474,11 @@ const translations = {
       price: "Prezzo",
       no_results: "Nessun risultato trovato",
       interconnect: "Interconnessione",
-      use_case: "Casi d'Uso"
+      use_case: "Casi d'Uso",
+      tdp: "TDP / Consumo",
+      relative_perf: "Prestazioni Relative",
+      usd_approx: "circa",
+      currency: "€"
     },
     table: {
       gpu: "GPU",
@@ -565,7 +575,8 @@ const translations = {
       use_case: "Применение",
       tdp: "TDP / Энергопотребление",
       relative_perf: "Относительная производительность",
-      usd_approx: "прим. USD"
+      usd_approx: "прим.",
+      currency: "₽"
     },
     table: {
       gpu: "GPU",
@@ -583,13 +594,26 @@ let currentLang = localStorage.getItem('gpu_lang') || 'es';
 function setLanguage(lang) {
   if (translations[lang]) {
     currentLang = lang;
+    window.currentLang = lang;
     localStorage.setItem('gpu_lang', lang);
     applyTranslations();
+    updateLangUI(lang);
     document.documentElement.lang = lang;
-    // Re-render components if app.js is loaded and components exist
     if (typeof window.renderAll === 'function') {
       window.renderAll();
     }
+  }
+}
+
+function updateLangUI(lang) {
+  const currentFlag = document.getElementById('current-flag');
+  const currentLangText = document.getElementById('current-lang');
+  if (currentFlag) {
+    const flagCode = lang === 'en' ? 'us' : lang;
+    currentFlag.src = `https://flagcdn.com/w20/${flagCode}.png`;
+  }
+  if (currentLangText) {
+    currentLangText.textContent = lang.toUpperCase();
   }
 }
 
@@ -623,21 +647,32 @@ function applyTranslations() {
 // Inicializar
 function initI18n() {
   applyTranslations();
+  updateLangUI(currentLang);
   document.documentElement.lang = currentLang;
   
-  // Si existe un selector de idioma, actualizar su valor
-  const langSelect = document.getElementById('lang-select');
-  if (langSelect) {
-    langSelect.value = currentLang;
-    // Prevenir listeners duplicados si se llama varias veces
-    langSelect.removeEventListener('change', handleLangChange);
-    langSelect.addEventListener('change', handleLangChange);
-  }
-}
+  const switcher = document.querySelector('.lang-switcher');
+  const btn = document.getElementById('lang-btn');
+  const options = document.querySelectorAll('.lang-option');
 
-function handleLangChange(e) {
-  window.currentLang = e.target.value;
-  setLanguage(e.target.value);
+  if (btn && switcher) {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      switcher.classList.toggle('active');
+    };
+  }
+
+  options.forEach(opt => {
+    opt.onclick = () => {
+      const lang = opt.getAttribute('data-value');
+      setLanguage(lang);
+      switcher.classList.remove('active');
+    };
+  });
+
+  // Cerrar al hacer clic fuera
+  document.addEventListener('click', () => {
+    if (switcher) switcher.classList.remove('active');
+  });
 }
 
 if (document.readyState === 'loading') {

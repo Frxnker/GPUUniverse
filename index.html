@@ -40,14 +40,21 @@
           <input type="text" id="gpu-search" placeholder="Buscar GPU (ej. 1080)..." autocomplete="off" data-i18n="nav.search_placeholder">
           <div id="search-results" class="search-results"></div>
         </div>
-        <select id="lang-select" class="lang-select">
-          <option value="es">ES</option>
-          <option value="en">EN</option>
-          <option value="fr">FR</option>
-          <option value="de">DE</option>
-          <option value="it">IT</option>
-          <option value="ru">RU</option>
-        </select>
+        <div class="lang-switcher">
+          <button class="lang-btn" id="lang-btn">
+            <img src="https://flagcdn.com/w20/es.png" id="current-flag" alt="flag">
+            <span id="current-lang">ES</span>
+            <span class="chevron">▾</span>
+          </button>
+          <div class="lang-dropdown" id="lang-dropdown">
+            <div class="lang-option" data-value="es"><img src="https://flagcdn.com/w20/es.png" alt="es"> Español</div>
+            <div class="lang-option" data-value="en"><img src="https://flagcdn.com/w20/us.png" alt="en"> English</div>
+            <div class="lang-option" data-value="fr"><img src="https://flagcdn.com/w20/fr.png" alt="fr"> Français</div>
+            <div class="lang-option" data-value="de"><img src="https://flagcdn.com/w20/de.png" alt="de"> Deutsch</div>
+            <div class="lang-option" data-value="it"><img src="https://flagcdn.com/w20/it.png" alt="it"> Italiano</div>
+            <div class="lang-option" data-value="ru"><img src="https://flagcdn.com/w20/ru.png" alt="ru"> Русский</div>
+          </div>
+        </div>
         <button class="nav-cta" data-i18n="nav.explore">Explorar</button>
       </div>
     </div>

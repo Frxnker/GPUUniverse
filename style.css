@@ -624,3 +624,84 @@ section { position: relative; z-index: 2; padding: 7rem 0; }
 /* Language Selector */
 .lang-select { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--text-color); padding: 0.5rem; border-radius: 4px; font-family: var(--font-main); outline: none; cursor: pointer; }
 .lang-select option { background: var(--bg-color); color: var(--text-color); }
+
+/* CUSTOM LANG SWITCHER */
+.lang-switcher {
+  position: relative;
+  z-index: 1000;
+}
+.lang-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.5rem 0.8rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 0.85rem;
+  backdrop-filter: blur(10px);
+}
+.lang-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+.lang-btn img {
+  width: 20px;
+  height: auto;
+  border-radius: 3px;
+}
+.lang-btn .chevron {
+  font-size: 0.7rem;
+  opacity: 0.5;
+  transition: transform 0.3s;
+}
+.lang-switcher.active .lang-btn .chevron {
+  transform: rotate(180deg);
+}
+.lang-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 160px;
+  background: rgba(10, 10, 20, 0.95);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 0.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+.lang-switcher.active .lang-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  color: var(--text-muted);
+}
+.lang-option:hover {
+  background: rgba(124, 58, 255, 0.1);
+  color: var(--text);
+}
+.lang-option img {
+  width: 20px;
+  border-radius: 2px;
+}

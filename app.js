@@ -92,6 +92,15 @@ const counterObs = new IntersectionObserver(entries => {
 const heroStats = document.querySelector('.hero-stats');
 if (heroStats) counterObs.observe(heroStats);
 
+// ===== UTILS =====
+window.formatPrice = function(priceStr) {
+  if (!priceStr || priceStr === 'N/A') return priceStr;
+  const symbol = typeof window.t === 'function' ? window.t('ui.currency') : '$';
+  // Replace $ with localized symbol. If it's Euro or Ruble, we usually put it at the end, 
+  // but for simplicity and to match the user request "que salga el tipo de moneda", we'll just swap symbols.
+  return priceStr.replace('$', symbol);
+};
+
 // ===== SCROLL REVEAL =====
 const revealObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
@@ -125,7 +134,7 @@ function buildGpuCard(gpu) {
       <div class="perf-label">
         <span>${typeof window.t === "function" ? window.t("ui.relative_perf") || "Rendimiento relativo" : "Rendimiento relativo"}</span><span>${gpu.perf}%</span>
       </div>
-      <div class="gpu-price">${gpu.price} <small>${typeof window.t === "function" ? window.t("ui.usd_approx") || "USD aprox." : "USD aprox."}</small></div>
+      <div class="gpu-price">${window.formatPrice(gpu.price)} <small>${typeof window.t === "function" ? window.t("ui.usd_approx") || "USD aprox." : "USD aprox."}</small></div>
     </div>
   `;
 }
@@ -190,7 +199,7 @@ window.renderCompareTable = function() {
           <td class="mono highlight-cell">${r.tflops.toLocaleString()}</td>
           <td class="mono">${r.vram}</td>
           <td class="mono">${r.bw.toLocaleString()} GB/s</td>
-          <td class="mono">${r.price}</td>
+          <td class="mono">${window.formatPrice(r.price)}</td>
         </tr>
       `).join('') : ''}
     </tbody>
@@ -426,7 +435,7 @@ window.openGpuModal = function(name) {
       <div class="modal-item"><label>TFLOPS</label><span>${gpu.tflops || '-'}</span></div>
       <div class="modal-item"><label>${typeof window.t === "function" ? window.t("ui.bw") : "Ancho de Banda"}</label><span>${gpu.bandwidth || "-"}</span></div>
       <div class="modal-item"><label>${typeof window.t === "function" ? window.t("ui.tdp") || "TDP / Consumo" : "TDP / Consumo"}</label><span>${gpu.tdp || '-'}</span></div>
-      ${gpu.price ? `<div class="modal-item"><label>${typeof window.t === "function" ? window.t("ui.price") : "Precio Estimado"}</label><span>${gpu.price}</span></div>` : ''}
+      ${gpu.price ? `<div class="modal-item"><label>${typeof window.t === "function" ? window.t("ui.price") : "Precio Estimado"}</label><span>${window.formatPrice(gpu.price)}</span></div>` : ''}
       ${gpu.tier ? `<div class="modal-item"><label>${typeof window.t === "function" ? window.t("table.cat") : "Gama"}</label><span style="text-transform: capitalize;">${typeof window.t === "function" ? window.t("ui.tier_" + gpu.tier) : gpu.tier}</span></div>` : ''}
     </div>
     ${gpu.desc ? `<div style="margin-top: 1.5rem; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">${gpu.desc}</div>` : ''}
