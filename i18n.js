@@ -84,6 +84,8 @@ const translations = {
       interconnect: "Interconexión",
       use_case: "Casos de Uso",
       tdp: "TDP / Consumo",
+      relative_perf: "Prestazioni Relative",
+      relative_perf: "Rendimiento Relativo",
       usd_approx: "USD aprox."
     },
     table: {
@@ -180,6 +182,7 @@ const translations = {
       interconnect: "Interconnect",
       use_case: "Use Cases",
       tdp: "TDP / Power",
+      relative_perf: "Relative Performance",
       usd_approx: "approx USD"
     },
     table: {
@@ -370,6 +373,7 @@ const translations = {
       interconnect: "Verbindung",
       use_case: "Anwendungsfall",
       tdp: "TDP / Verbrauch",
+      relative_perf: "Relative Leistung",
       usd_approx: "ca. USD"
     },
     table: {
@@ -560,6 +564,7 @@ const translations = {
       interconnect: "Соединение",
       use_case: "Применение",
       tdp: "TDP / Энергопотребление",
+      relative_perf: "Относительная производительность",
       usd_approx: "прим. USD"
     },
     table: {
@@ -598,6 +603,7 @@ function t(keyPath) {
   return value;
 }
 window.t = t;
+window.currentLang = currentLang;
 
 function applyTranslations() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -630,6 +636,7 @@ function initI18n() {
 }
 
 function handleLangChange(e) {
+  window.currentLang = e.target.value;
   setLanguage(e.target.value);
 }
 

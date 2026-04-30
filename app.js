@@ -114,9 +114,9 @@ function buildGpuCard(gpu) {
       <div class="gpu-name">${gpu.name}</div>
       <div class="gpu-arch">${gpu.arch}</div>
       <div class="gpu-specs">
-        <div class="spec-item"><label>${typeof t === "function" ? t("table.vram") : "VRAM"}</label><span>${gpu.vram}</span></div>
+        <div class="spec-item"><label>${typeof t === "function" ? window.t("table.vram") : "VRAM"}</label><span>${gpu.vram}</span></div>
         <div class="spec-item"><label>TFLOPS FP32</label><span>${gpu.tflops}</span></div>
-        <div class="spec-item"><label>${typeof t === "function" ? t("ui.bw") : "Ancho de Banda"}</label><span>${gpu.bandwidth}</span></div>
+        <div class="spec-item"><label>${typeof t === "function" ? window.t("ui.bw") : "Ancho de Banda"}</label><span>${gpu.bandwidth}</span></div>
         <div class="spec-item"><label>${typeof window.t === "function" ? window.t("ui.tdp") || "TDP" : "TDP"}</label><span>${gpu.tdp}</span></div>
       </div>
       <div class="gpu-perf-bar">
@@ -137,15 +137,15 @@ function buildServerCard(gpu) {
         <span class="server-badge">${gpu.brand.toUpperCase()}</span>
         <div class="server-name">${gpu.name}</div>
         <div class="server-arch">${gpu.arch}</div>
-        <div class="server-desc">${typeof gpu.desc === "object" ? gpu.desc[typeof currentLang !== "undefined" ? currentLang : "es"] : gpu.desc}</div>
+        <div class="server-desc">${typeof gpu.desc === "object" ? gpu.desc[window.window.currentLang || "es"] : gpu.desc}</div>
       </div>
       <div class="server-specs">
         <div class="server-spec highlight"><label>VRAM</label><span>${gpu.vram}</span></div>
         <div class="server-spec highlight2"><label>TFLOPS INT8</label><span>${gpu.tflops}</span></div>
-        <div class="server-spec highlight3"><label>${typeof t === "function" ? t("ui.bw") : "Ancho de Banda"}</label><span>${gpu.bandwidth}</span></div>
+        <div class="server-spec highlight3"><label>${typeof t === "function" ? window.t("ui.bw") : "Ancho de Banda"}</label><span>${gpu.bandwidth}</span></div>
         <div class="server-spec"><label>${typeof window.t === "function" ? window.t("ui.tdp") || "TDP" : "TDP"}</label><span>${gpu.tdp}</span></div>
-        <div class="server-spec"><label>${typeof t === "function" ? t("ui.interconnect") : "Interconexión"}</label><span>${gpu.interconnect}</span></div>
-        <div class="server-spec"><label>${typeof t === "function" ? t("ui.use_case") : "Caso de Uso"}</label><span style="font-size:0.8rem">${gpu.use}</span></div>
+        <div class="server-spec"><label>${typeof t === "function" ? window.t("ui.interconnect") : "Interconexión"}</label><span>${gpu.interconnect}</span></div>
+        <div class="server-spec"><label>${typeof t === "function" ? window.t("ui.use_case") : "Caso de Uso"}</label><span style="font-size:0.8rem">${gpu.use}</span></div>
       </div>
     </div>
   `;
@@ -174,19 +174,19 @@ window.renderCompareTable = function() {
   table.innerHTML = `
     <thead>
       <tr>
-        <th>${typeof t === "function" ? t("table.gpu") : "GPU"}</th>
-        <th>${typeof t === "function" ? t("table.cat") : "Categoría"}</th>
-        <th>${typeof t === "function" ? t("table.tflops") : "Rendimiento (TFLOPS)"}</th>
-        <th>${typeof t === "function" ? t("table.vram") : "Memoria VRAM"}</th>
-        <th>${typeof t === "function" ? t("table.bw") : "Ancho de Banda"}</th>
-        <th>${typeof t === "function" ? t("table.price") : "Precio Est."}</th>
+        <th>${typeof t === "function" ? window.t("table.gpu") : "GPU"}</th>
+        <th>${typeof t === "function" ? window.t("table.cat") : "Categoría"}</th>
+        <th>${typeof t === "function" ? window.t("table.tflops") : "Rendimiento (TFLOPS)"}</th>
+        <th>${typeof t === "function" ? window.t("table.vram") : "Memoria VRAM"}</th>
+        <th>${typeof t === "function" ? window.t("table.bw") : "Ancho de Banda"}</th>
+        <th>${typeof t === "function" ? window.t("table.price") : "Precio Est."}</th>
       </tr>
     </thead>
     <tbody>
       ${typeof COMPARE_DATA !== 'undefined' ? COMPARE_DATA.map(r => `
         <tr>
           <td><strong>${r.name}</strong></td>
-          <td>${typeof t === "function" ? (t("ui.tier_" + r.cat.toLowerCase()) || r.cat) : r.cat}</td>
+          <td>${typeof t === "function" ? (window.t("ui.tier_" + r.cat.toLowerCase()) || r.cat) : r.cat}</td>
           <td class="mono highlight-cell">${r.tflops.toLocaleString()}</td>
           <td class="mono">${r.vram}</td>
           <td class="mono">${r.bw.toLocaleString()} GB/s</td>
@@ -207,7 +207,7 @@ window.renderTimeline = function() {
       <div class="timeline-dot"></div>
       <div class="timeline-year">${item.year}</div>
       <h4>${item.title}</h4>
-      <p>${typeof item.desc === "object" ? item.desc[typeof currentLang !== 'undefined' ? currentLang : 'es'] : item.desc}</p>
+      <p>${typeof item.desc === "object" ? item.desc[window.window.currentLang || 'es'] : item.desc}</p>
     </div>
   `).join('');
   
@@ -251,10 +251,14 @@ document.querySelectorAll('.cat-card').forEach(card => {
 });
 
 // ===== PERFORMANCE CHART =====
-(function buildChart() {
+window.renderChart = function() {
   const canvas = document.getElementById('perf-chart');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
+  
+  // Clear and resize
+  canvas.width = canvas.parentElement.offsetWidth - 64;
+  canvas.height = 360;
 
   const labels = ['RTX 4060', 'RX 9070 XT', 'RTX 4090', 'RTX 5090', 'RTX 6000 Ada', 'H100 SXM', 'H200 SXM', 'MI300X'];
   const tflopsData = [15.1, 73.0, 82.6, 209.8, 91.1, 3028, 3958, 5220];
@@ -354,7 +358,8 @@ document.querySelectorAll('.cat-card').forEach(card => {
   ctx.textAlign = 'center';
   ctx.fillText('TFLOPS (FP32 / INT8)', 0, 0);
   ctx.restore();
-})();
+};
+window.renderChart();
 
 // ===== SEARCH & MODAL LOGIC =====
 const searchInput = document.getElementById('gpu-search');
@@ -457,4 +462,18 @@ window.renderAll = function() {
   
   if (document.getElementById('compare-table')) renderCompareTable();
   if (document.getElementById('timeline-container')) renderTimeline();
+  if (document.getElementById('perf-chart')) renderChart();
+  
+  // Re-observe reveals
+  if (typeof revealObs !== 'undefined') {
+    document.querySelectorAll('.reveal').forEach(el => {
+      el.classList.remove('visible');
+      revealObs.observe(el);
+    });
+  }
+  
+  // Re-observe performance bars
+  if (typeof barObs !== 'undefined') {
+    document.querySelectorAll('.gpu-card').forEach(card => barObs.observe(card));
+  }
 };
