@@ -606,7 +606,7 @@ function applyTranslations() {
 }
 
 // Inicializar
-document.addEventListener('DOMContentLoaded', () => {
+function initI18n() {
   applyTranslations();
   document.documentElement.lang = currentLang;
   
@@ -614,6 +614,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const langSelect = document.getElementById('lang-select');
   if (langSelect) {
     langSelect.value = currentLang;
-    langSelect.addEventListener('change', (e) => setLanguage(e.target.value));
+    // Prevenir listeners duplicados si se llama varias veces
+    langSelect.removeEventListener('change', handleLangChange);
+    langSelect.addEventListener('change', handleLangChange);
   }
-});
+}
+
+function handleLangChange(e) {
+  setLanguage(e.target.value);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initI18n);
+} else {
+  initI18n();
+}

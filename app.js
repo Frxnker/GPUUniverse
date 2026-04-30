@@ -107,9 +107,9 @@ function buildGpuCard(gpu) {
       <div class="gpu-name">${gpu.name}</div>
       <div class="gpu-arch">${gpu.arch}</div>
       <div class="gpu-specs">
-        <div class="spec-item"><label>VRAM</label><span>${gpu.vram}</span></div>
+        <div class="spec-item"><label>${typeof t === "function" ? t("table.vram") : "VRAM"}</label><span>${gpu.vram}</span></div>
         <div class="spec-item"><label>TFLOPs FP32</label><span>${gpu.tflops}</span></div>
-        <div class="spec-item"><label>Ancho de Banda</label><span>${gpu.bandwidth}</span></div>
+        <div class="spec-item"><label>${typeof t === "function" ? t("ui.bw") : "Ancho de Banda"}</label><span>${gpu.bandwidth}</span></div>
         <div class="spec-item"><label>TDP</label><span>${gpu.tdp}</span></div>
       </div>
       <div class="gpu-perf-bar">
@@ -130,15 +130,15 @@ function buildServerCard(gpu) {
         <span class="server-badge">${gpu.brand.toUpperCase()}</span>
         <div class="server-name">${gpu.name}</div>
         <div class="server-arch">${gpu.arch}</div>
-        <div class="server-desc">${gpu.desc}</div>
+        <div class="server-desc">${typeof gpu.desc === "object" ? gpu.desc[typeof currentLang !== "undefined" ? currentLang : "es"] : gpu.desc}</div>
       </div>
       <div class="server-specs">
         <div class="server-spec highlight"><label>VRAM</label><span>${gpu.vram}</span></div>
         <div class="server-spec highlight2"><label>TFLOPS INT8</label><span>${gpu.tflops}</span></div>
-        <div class="server-spec highlight3"><label>Ancho de Banda</label><span>${gpu.bandwidth}</span></div>
+        <div class="server-spec highlight3"><label>${typeof t === "function" ? t("ui.bw") : "Ancho de Banda"}</label><span>${gpu.bandwidth}</span></div>
         <div class="server-spec"><label>TDP</label><span>${gpu.tdp}</span></div>
-        <div class="server-spec"><label>Interconexión</label><span>${gpu.interconnect}</span></div>
-        <div class="server-spec"><label>Caso de Uso</label><span style="font-size:0.8rem">${gpu.use}</span></div>
+        <div class="server-spec"><label>${typeof t === "function" ? t("ui.interconnect") : "Interconexión"}</label><span>${gpu.interconnect}</span></div>
+        <div class="server-spec"><label>${typeof t === "function" ? t("ui.use_case") : "Caso de Uso"}</label><span style="font-size:0.8rem">${gpu.use}</span></div>
       </div>
     </div>
   `;
@@ -393,10 +393,10 @@ window.openGpuModal = function(name) {
     <div class="modal-grid">
       <div class="modal-item"><label>Memoria VRAM</label><span>${gpu.vram || '-'}</span></div>
       <div class="modal-item"><label>TFLOPS</label><span>${gpu.tflops || '-'}</span></div>
-      <div class="modal-item"><label>Ancho de Banda</label><span>${gpu.bandwidth || '-'}</span></div>
+      <div class="modal-item"><label>${typeof t === "function" ? t("ui.bw") : "Ancho de Banda"}</label><span>${gpu.bandwidth || "-"}</span></div>
       <div class="modal-item"><label>TDP / Consumo</label><span>${gpu.tdp || '-'}</span></div>
-      ${gpu.price ? `<div class="modal-item"><label>Precio Estimado</label><span>${gpu.price}</span></div>` : ''}
-      ${gpu.tier ? `<div class="modal-item"><label>Gama</label><span style="text-transform: capitalize;">${gpu.tier}</span></div>` : ''}
+      ${gpu.price ? `<div class="modal-item"><label>${typeof t === "function" ? t("ui.price") : "Precio Estimado"}</label><span>${gpu.price}</span></div>` : ''}
+      ${gpu.tier ? `<div class="modal-item"><label>${typeof t === "function" ? t("table.cat") : "Gama"}</label><span style="text-transform: capitalize;">${typeof t === "function" ? t("ui.tier_" + gpu.tier) : gpu.tier}</span></div>` : ''}
     </div>
     ${gpu.desc ? `<div style="margin-top: 1.5rem; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">${gpu.desc}</div>` : ''}
   `;
