@@ -11,13 +11,17 @@
   resize();
   window.addEventListener('resize', resize);
 
-  for (let i = 0; i < 80; i++) {
+  const isMobile = window.innerWidth < 768;
+  const particleCount = isMobile ? 35 : 80;
+  const connectionDist = isMobile ? 90 : 120;
+
+  for (let i = 0; i < particleCount; i++) {
     particles.push({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
       r: Math.random() * 1.5 + 0.3,
-      dx: (Math.random() - 0.5) * 0.3,
-      dy: (Math.random() - 0.5) * 0.3,
+      dx: (Math.random() - 0.5) * (isMobile ? 0.2 : 0.3),
+      dy: (Math.random() - 0.5) * (isMobile ? 0.2 : 0.3),
       alpha: Math.random() * 0.5 + 0.1
     });
   }
@@ -40,11 +44,11 @@
         const dx = particles[i].x - particles[j].x;
         const dy = particles[i].y - particles[j].y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 120) {
+        if (dist < connectionDist) {
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(124,58,255,${0.08 * (1 - dist / 120)})`;
+          ctx.strokeStyle = `rgba(124,58,255,${0.08 * (1 - dist / connectionDist)})`;
           ctx.lineWidth = 0.5;
           ctx.stroke();
         }

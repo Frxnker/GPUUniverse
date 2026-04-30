@@ -38,6 +38,16 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   max-width: 100vw;
+  text-rendering: optimizeSpeed;
+}
+
+section {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 500px;
+}
+
+.gpu-card, .cat-card, .server-card {
+  will-change: transform, opacity;
 }
 
 /* Scrollbar */
@@ -1361,6 +1371,19 @@ html[lang="ru"] .nav-links a {
 }
 
 @media (max-width: 768px) {
+  .hero-glow {
+    filter: blur(40px);
+    opacity: 0.4;
+  }
+
+  .gpu-card:hover {
+    transform: none;
+  }
+
+  .gpu-card::before {
+    display: none;
+  }
+
   .container {
     padding: 0 1.5rem;
   }
