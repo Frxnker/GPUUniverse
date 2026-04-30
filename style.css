@@ -149,6 +149,9 @@ body {
   gap: 1.5rem;
   white-space: nowrap;
   justify-self: center;
+
+  /* DESPLAZAR */
+  /*transform: translateX(-30px);*/
 }
 
 .nav-links a {
