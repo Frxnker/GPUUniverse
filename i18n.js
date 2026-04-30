@@ -496,7 +496,7 @@ const translations = {
       server: "Серверы",
       compare: "Сравнение",
       history: "История",
-      search_placeholder: "Поиск GPU...",
+      search_placeholder: "Поиск GPU (напр. 1080)...",
       explore: "Обзор"
     },
     hero: {

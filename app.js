@@ -95,10 +95,33 @@ if (heroStats) counterObs.observe(heroStats);
 // ===== UTILS =====
 window.formatPrice = function(priceStr) {
   if (!priceStr || priceStr === 'N/A') return priceStr;
+  
   const symbol = typeof window.t === 'function' ? window.t('ui.currency') : '$';
-  // Replace $ with localized symbol. If it's Euro or Ruble, we usually put it at the end, 
-  // but for simplicity and to match the user request "que salga el tipo de moneda", we'll just swap symbols.
-  return priceStr.replace('$', symbol);
+  const lang = window.currentLang || 'es';
+  
+  // Extraer el número (maneja formatos como ~$1,599 o $849)
+  let numericValue = parseFloat(priceStr.replace(/[^0-9.]/g, ''));
+  if (isNaN(numericValue)) return priceStr;
+
+  // Tasas de conversión base (suponiendo que la base es USD)
+  const rates = {
+    es: 0.92, // USD to EUR
+    en: 1,    // USD to USD
+    fr: 0.92, // USD to EUR
+    de: 0.92, // USD to EUR
+    it: 0.92, // USD to EUR
+    ru: 92.5  // USD to RUB
+  };
+
+  const rate = rates[lang] || 1;
+  let converted = Math.round(numericValue * rate);
+  
+  // Formatear con separador de miles
+  let formatted = converted.toLocaleString(lang === 'ru' ? 'ru-RU' : 'es-ES');
+  
+  if (lang === 'ru') return `~${formatted} ${symbol}`;
+  if (lang === 'en') return `~$${formatted}`;
+  return `~${formatted}${symbol}`;
 };
 
 // ===== SCROLL REVEAL =====
