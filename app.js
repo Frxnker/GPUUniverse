@@ -57,8 +57,15 @@
 
 // ===== NAVBAR SCROLL =====
 const navbar = document.getElementById('navbar');
+let isScrolling = false;
 window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 60);
+  if (!isScrolling) {
+    window.requestAnimationFrame(() => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+      isScrolling = false;
+    });
+    isScrolling = true;
+  }
 });
 
 // ===== COUNTER ANIMATION =====
@@ -102,23 +109,23 @@ function buildGpuCard(gpu) {
     <div class="gpu-card reveal" onclick="openGpuModal('${gpu.name}')" style="cursor: pointer;">
       <div class="gpu-card-header">
         <span class="gpu-brand brand-${gpu.brand}">${brandMap[gpu.brand]}</span>
-        <span class="gpu-tier tier-${gpu.tier}">${tierMap[gpu.tier]}</span>
+        <span class="gpu-tier tier-${gpu.tier}">${typeof window.t === "function" && window.t("ui.tier_" + gpu.tier) !== "ui.tier_" + gpu.tier ? window.t("ui.tier_" + gpu.tier) : tierMap[gpu.tier]}</span>
       </div>
       <div class="gpu-name">${gpu.name}</div>
       <div class="gpu-arch">${gpu.arch}</div>
       <div class="gpu-specs">
         <div class="spec-item"><label>${typeof t === "function" ? t("table.vram") : "VRAM"}</label><span>${gpu.vram}</span></div>
-        <div class="spec-item"><label>TFLOPs FP32</label><span>${gpu.tflops}</span></div>
+        <div class="spec-item"><label>TFLOPS FP32</label><span>${gpu.tflops}</span></div>
         <div class="spec-item"><label>${typeof t === "function" ? t("ui.bw") : "Ancho de Banda"}</label><span>${gpu.bandwidth}</span></div>
-        <div class="spec-item"><label>TDP</label><span>${gpu.tdp}</span></div>
+        <div class="spec-item"><label>${typeof window.t === "function" ? window.t("ui.tdp") || "TDP" : "TDP"}</label><span>${gpu.tdp}</span></div>
       </div>
       <div class="gpu-perf-bar">
         <div class="gpu-perf-fill ${gpu.fillColor}" data-width="${gpu.perf}"></div>
       </div>
       <div class="perf-label">
-        <span>Rendimiento relativo</span><span>${gpu.perf}%</span>
+        <span>${typeof window.t === "function" ? window.t("ui.relative_perf") || "Rendimiento relativo" : "Rendimiento relativo"}</span><span>${gpu.perf}%</span>
       </div>
-      <div class="gpu-price">${gpu.price} <small>USD aprox.</small></div>
+      <div class="gpu-price">${gpu.price} <small>${typeof window.t === "function" ? window.t("ui.usd_approx") || "USD aprox." : "USD aprox."}</small></div>
     </div>
   `;
 }
@@ -136,7 +143,7 @@ function buildServerCard(gpu) {
         <div class="server-spec highlight"><label>VRAM</label><span>${gpu.vram}</span></div>
         <div class="server-spec highlight2"><label>TFLOPS INT8</label><span>${gpu.tflops}</span></div>
         <div class="server-spec highlight3"><label>${typeof t === "function" ? t("ui.bw") : "Ancho de Banda"}</label><span>${gpu.bandwidth}</span></div>
-        <div class="server-spec"><label>TDP</label><span>${gpu.tdp}</span></div>
+        <div class="server-spec"><label>${typeof window.t === "function" ? window.t("ui.tdp") || "TDP" : "TDP"}</label><span>${gpu.tdp}</span></div>
         <div class="server-spec"><label>${typeof t === "function" ? t("ui.interconnect") : "Interconexión"}</label><span>${gpu.interconnect}</span></div>
         <div class="server-spec"><label>${typeof t === "function" ? t("ui.use_case") : "Caso de Uso"}</label><span style="font-size:0.8rem">${gpu.use}</span></div>
       </div>
@@ -362,28 +369,32 @@ function getAllGpus() {
 }
 
 if (searchInput) {
+  let searchTimeout;
   searchInput.addEventListener('input', (e) => {
-    const term = e.target.value.toLowerCase().trim();
-    if (term.length < 2) {
-      searchResults.classList.remove('active');
-      return;
-    }
-    
-    const gpus = getAllGpus();
-    const filtered = gpus.filter(g => g.name.toLowerCase().includes(term) || g.arch.toLowerCase().includes(term));
-    
-    if (filtered.length > 0) {
-      searchResults.innerHTML = filtered.slice(0, 8).map(g => `
-        <div class="search-result-item" onclick="openGpuModal('${g.name}')">
-          <span class="sr-name">${g.name}</span>
-          <span class="sr-arch">${g.brand.toUpperCase()} · ${g.year || g.arch}</span>
-        </div>
-      `).join('');
-      searchResults.classList.add('active');
-    } else {
-      searchResults.innerHTML = '<div style="padding: 0.5rem; color: #888; font-size: 0.8rem;">No se encontraron resultados</div>';
-      searchResults.classList.add('active');
-    }
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      const term = e.target.value.toLowerCase().trim();
+      if (term.length < 2) {
+        searchResults.classList.remove('active');
+        return;
+      }
+      
+      const gpus = getAllGpus();
+      const filtered = gpus.filter(g => g.name.toLowerCase().includes(term) || g.arch.toLowerCase().includes(term));
+      
+      if (filtered.length > 0) {
+        searchResults.innerHTML = filtered.slice(0, 8).map(g => `
+          <div class="search-result-item" onclick="openGpuModal('${g.name}')">
+            <span class="sr-name">${g.name}</span>
+            <span class="sr-arch">${g.brand.toUpperCase()} · ${g.year || g.arch}</span>
+          </div>
+        `).join('');
+        searchResults.classList.add('active');
+      } else {
+        searchResults.innerHTML = `<div style="padding: 0.5rem; color: #888; font-size: 0.8rem;">${typeof window.t === "function" ? window.t("ui.no_results") : "No se encontraron resultados"}</div>`;
+        searchResults.classList.add('active');
+      }
+    }, 200); // 200ms debounce
   });
 
   document.addEventListener('click', (e) => {
@@ -406,12 +417,12 @@ window.openGpuModal = function(name) {
       <div class="modal-subtitle">${brandMap[gpu.brand]} | ${gpu.arch} ${gpu.year ? '| Año: ' + gpu.year : ''}</div>
     </div>
     <div class="modal-grid">
-      <div class="modal-item"><label>Memoria VRAM</label><span>${gpu.vram || '-'}</span></div>
+      <div class="modal-item"><label>${typeof window.t === "function" ? window.t("table.vram") : "Memoria VRAM"}</label><span>${gpu.vram || '-'}</span></div>
       <div class="modal-item"><label>TFLOPS</label><span>${gpu.tflops || '-'}</span></div>
-      <div class="modal-item"><label>${typeof t === "function" ? t("ui.bw") : "Ancho de Banda"}</label><span>${gpu.bandwidth || "-"}</span></div>
-      <div class="modal-item"><label>TDP / Consumo</label><span>${gpu.tdp || '-'}</span></div>
-      ${gpu.price ? `<div class="modal-item"><label>${typeof t === "function" ? t("ui.price") : "Precio Estimado"}</label><span>${gpu.price}</span></div>` : ''}
-      ${gpu.tier ? `<div class="modal-item"><label>${typeof t === "function" ? t("table.cat") : "Gama"}</label><span style="text-transform: capitalize;">${typeof t === "function" ? t("ui.tier_" + gpu.tier) : gpu.tier}</span></div>` : ''}
+      <div class="modal-item"><label>${typeof window.t === "function" ? window.t("ui.bw") : "Ancho de Banda"}</label><span>${gpu.bandwidth || "-"}</span></div>
+      <div class="modal-item"><label>${typeof window.t === "function" ? window.t("ui.tdp") || "TDP / Consumo" : "TDP / Consumo"}</label><span>${gpu.tdp || '-'}</span></div>
+      ${gpu.price ? `<div class="modal-item"><label>${typeof window.t === "function" ? window.t("ui.price") : "Precio Estimado"}</label><span>${gpu.price}</span></div>` : ''}
+      ${gpu.tier ? `<div class="modal-item"><label>${typeof window.t === "function" ? window.t("table.cat") : "Gama"}</label><span style="text-transform: capitalize;">${typeof window.t === "function" ? window.t("ui.tier_" + gpu.tier) : gpu.tier}</span></div>` : ''}
     </div>
     ${gpu.desc ? `<div style="margin-top: 1.5rem; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">${gpu.desc}</div>` : ''}
   `;

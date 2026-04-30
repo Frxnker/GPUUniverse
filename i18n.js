@@ -82,7 +82,9 @@ const translations = {
       price: "Precio",
       no_results: "No se encontraron resultados",
       interconnect: "Interconexión",
-      use_case: "Casos de Uso"
+      use_case: "Casos de Uso",
+      tdp: "TDP / Consumo",
+      usd_approx: "USD aprox."
     },
     table: {
       gpu: "GPU",
@@ -176,7 +178,9 @@ const translations = {
       price: "Price",
       no_results: "No results found",
       interconnect: "Interconnect",
-      use_case: "Use Cases"
+      use_case: "Use Cases",
+      tdp: "TDP / Power",
+      usd_approx: "approx USD"
     },
     table: {
       gpu: "GPU",
@@ -364,7 +368,9 @@ const translations = {
       price: "Preis",
       no_results: "Keine Ergebnisse gefunden",
       interconnect: "Verbindung",
-      use_case: "Anwendungsfall"
+      use_case: "Anwendungsfall",
+      tdp: "TDP / Verbrauch",
+      usd_approx: "ca. USD"
     },
     table: {
       gpu: "GPU",
@@ -552,7 +558,9 @@ const translations = {
       price: "Цена",
       no_results: "Ничего не найдено",
       interconnect: "Соединение",
-      use_case: "Применение"
+      use_case: "Применение",
+      tdp: "TDP / Энергопотребление",
+      usd_approx: "прим. USD"
     },
     table: {
       gpu: "GPU",
@@ -574,8 +582,8 @@ function setLanguage(lang) {
     applyTranslations();
     document.documentElement.lang = lang;
     // Re-render components if app.js is loaded and components exist
-    if (typeof renderAll === 'function') {
-      renderAll();
+    if (typeof window.renderAll === 'function') {
+      window.renderAll();
     }
   }
 }
@@ -589,6 +597,7 @@ function t(keyPath) {
   }
   return value;
 }
+window.t = t;
 
 function applyTranslations() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
