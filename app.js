@@ -152,6 +152,10 @@ if (gamingGrid) gamingGrid.innerHTML = GAMING_GPUS.map(buildGpuCard).join('');
 const wsGrid = document.getElementById('workstation-grid');
 if (wsGrid) wsGrid.innerHTML = WORKSTATION_GPUS.map(buildGpuCard).join('');
 
+// Render Mobile
+const mobileGrid = document.getElementById('mobile-grid');
+if (mobileGrid) mobileGrid.innerHTML = MOBILE_GPUS.map(buildGpuCard).join('');
+
 // Render Server
 const serverGrid = document.getElementById('server-grid');
 if (serverGrid) serverGrid.innerHTML = SERVER_GPUS.map(buildServerCard).join('');
@@ -338,7 +342,7 @@ const modalClose = document.getElementById('modal-close');
 const modalBody = document.getElementById('modal-body');
 
 function getAllGpus() {
-  const all = [...(typeof ALL_DOMESTIC_GPUS !== 'undefined' ? ALL_DOMESTIC_GPUS : []), ...GAMING_GPUS, ...WORKSTATION_GPUS, ...SERVER_GPUS];
+  const all = [...(typeof ALL_DOMESTIC_GPUS !== 'undefined' ? ALL_DOMESTIC_GPUS : []), ...GAMING_GPUS, ...WORKSTATION_GPUS, ...SERVER_GPUS, ...(typeof MOBILE_GPUS !== 'undefined' ? MOBILE_GPUS : [])];
   return Array.from(new Map(all.map(item => [item.name, item])).values());
 }
 

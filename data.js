@@ -81,6 +81,39 @@ const WORKSTATION_GPUS = [
   },
 ];
 
+const MOBILE_GPUS = [
+  {
+    brand: 'nvidia', name: 'RTX 4090 Laptop', arch: 'Ada Lovelace / AD103',
+    tier: 'ultra', vram: '16 GB GDDR6', tflops: '39.7', bandwidth: '432 GB/s',
+    tdp: '80-150W', price: 'N/A', perf: 65, fillColor: 'fill-gold'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 4080 Laptop', arch: 'Ada Lovelace / AD104',
+    tier: 'high', vram: '12 GB GDDR6', tflops: '29.7', bandwidth: '432 GB/s',
+    tdp: '60-150W', price: 'N/A', perf: 55, fillColor: 'fill-purple'
+  },
+  {
+    brand: 'amd', name: 'RX 7900M', arch: 'RDNA 3 / Navi 31',
+    tier: 'high', vram: '16 GB GDDR6', tflops: '38.5', bandwidth: '576 GB/s',
+    tdp: '180W', price: 'N/A', perf: 58, fillColor: 'fill-purple'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 4070 Laptop', arch: 'Ada Lovelace / AD106',
+    tier: 'mid', vram: '8 GB GDDR6', tflops: '15.6', bandwidth: '256 GB/s',
+    tdp: '35-115W', price: 'N/A', perf: 40, fillColor: 'fill-blue'
+  },
+  {
+    brand: 'intel', name: 'Arc A730M', arch: 'Alchemist',
+    tier: 'mid', vram: '12 GB GDDR6', tflops: '10.2', bandwidth: '336 GB/s',
+    tdp: '80-120W', price: 'N/A', perf: 25, fillColor: 'fill-blue'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 4050 Laptop', arch: 'Ada Lovelace / AD107',
+    tier: 'entry', vram: '6 GB GDDR6', tflops: '9.0', bandwidth: '192 GB/s',
+    tdp: '35-115W', price: 'N/A', perf: 20, fillColor: 'fill-green'
+  }
+];
+
 const SERVER_GPUS = [
   {
     brand: 'nvidia', name: 'H200 SXM', arch: 'Hopper / GH100',
