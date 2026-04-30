@@ -83,6 +83,21 @@ const WORKSTATION_GPUS = [
 
 const MOBILE_GPUS = [
   {
+    brand: 'nvidia', name: 'RTX 5090 Laptop', arch: 'Blackwell / GB203',
+    tier: 'ultra', vram: '16 GB GDDR7', tflops: '52.4', bandwidth: '512 GB/s',
+    tdp: '80-175W', price: 'N/A', perf: 85, fillColor: 'fill-gold'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 5080 Laptop', arch: 'Blackwell / GB205',
+    tier: 'high', vram: '12 GB GDDR7', tflops: '38.2', bandwidth: '432 GB/s',
+    tdp: '60-150W', price: 'N/A', perf: 72, fillColor: 'fill-purple'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 5070 Laptop', arch: 'Blackwell / GB206',
+    tier: 'mid', vram: '8 GB GDDR7', tflops: '24.5', bandwidth: '320 GB/s',
+    tdp: '35-115W', price: 'N/A', perf: 55, fillColor: 'fill-blue'
+  },
+  {
     brand: 'nvidia', name: 'RTX 4090 Laptop', arch: 'Ada Lovelace / AD103',
     tier: 'ultra', vram: '16 GB GDDR6', tflops: '39.7', bandwidth: '432 GB/s',
     tdp: '80-150W', price: 'N/A', perf: 65, fillColor: 'fill-gold'
@@ -310,9 +325,12 @@ const ALL_DOMESTIC_GPUS = [
 
   // Generación 2024-2025 (Blackwell / RDNA 4 / Battlemage)
   { brand: 'nvidia', name: 'RTX 5090', arch: 'Blackwell', year: 2025, tier: 'ultra', vram: '32 GB GDDR7', tflops: '209.8', bandwidth: '1792 GB/s', tdp: '575W' },
+  { brand: 'nvidia', name: 'RTX 5090 Laptop', arch: 'Blackwell', year: 2025, tier: 'ultra', vram: '16 GB GDDR7', tflops: '52.4', bandwidth: '512 GB/s', tdp: '175W' },
   { brand: 'nvidia', name: 'RTX 5080', arch: 'Blackwell', year: 2025, tier: 'high', vram: '16 GB GDDR7', tflops: '102.5', bandwidth: '1024 GB/s', tdp: '350W' },
+  { brand: 'nvidia', name: 'RTX 5080 Laptop', arch: 'Blackwell', year: 2025, tier: 'high', vram: '12 GB GDDR7', tflops: '38.2', bandwidth: '432 GB/s', tdp: '150W' },
   { brand: 'nvidia', name: 'RTX 5070 Ti', arch: 'Blackwell', year: 2025, tier: 'high', vram: '16 GB GDDR7', tflops: '65.5', bandwidth: '640 GB/s', tdp: '275W' },
   { brand: 'nvidia', name: 'RTX 5070', arch: 'Blackwell', year: 2025, tier: 'high', vram: '12 GB GDDR7', tflops: '50.2', bandwidth: '576 GB/s', tdp: '220W' },
+  { brand: 'nvidia', name: 'RTX 5070 Laptop', arch: 'Blackwell', year: 2025, tier: 'mid', vram: '8 GB GDDR7', tflops: '24.5', bandwidth: '320 GB/s', tdp: '115W' },
   { brand: 'nvidia', name: 'RTX 5060 Ti', arch: 'Blackwell', year: 2025, tier: 'mid', vram: '8 GB GDDR7', tflops: '32.1', bandwidth: '448 GB/s', tdp: '170W' },
   { brand: 'amd', name: 'Radeon RX 9070 XT', arch: 'RDNA 4', year: 2025, tier: 'high', vram: '16 GB GDDR6', tflops: '73.0', bandwidth: '640 GB/s', tdp: '304W' },
   { brand: 'amd', name: 'Radeon RX 9070', arch: 'RDNA 4', year: 2025, tier: 'high', vram: '16 GB GDDR6', tflops: '58.4', bandwidth: '576 GB/s', tdp: '250W' },

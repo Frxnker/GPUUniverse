@@ -75,8 +75,11 @@ body {
   padding: 0.75rem 2rem;
 }
 .nav-inner {
-  max-width: 1280px; margin: 0 auto;
-  display: flex; align-items: center; gap: 2rem;
+  max-width: 1400px; margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) auto minmax(400px, 1fr);
+  align-items: center;
+  gap: 1.5rem;
 }
 .nav-logo {
   display: flex; align-items: center; gap: 0.5rem;
@@ -86,7 +89,9 @@ body {
 }
 .logo-icon { font-size: 1.5rem; color: var(--accent); }
 .nav-links {
-  display: flex; list-style: none; gap: 2rem; margin-left: auto;
+  display: flex; list-style: none; gap: 1.5rem;
+  white-space: nowrap;
+  justify-self: center;
 }
 .nav-links a {
   color: var(--text-muted); text-decoration: none;
@@ -99,8 +104,10 @@ body {
   padding: 0.5rem 1.5rem; border-radius: 50px;
   font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.9rem;
   cursor: pointer; transition: all 0.2s;
+  text-decoration: none;
+  display: inline-block;
 }
-.nav-cta:hover { background: #6025d6; transform: translateY(-1px); }
+.nav-cta:hover { background: #6025d6; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(124,58,255,0.4); }
 
 /* ===== HERO ===== */
 #hero {
@@ -256,9 +263,15 @@ body {
   padding: 4rem 0;
 }
 .categories-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
 }
 .cat-card {
+  flex: 1;
+  min-width: 280px;
+  max-width: 380px;
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-lg); padding: 2rem;
   cursor: pointer; transition: all 0.3s;
@@ -298,7 +311,14 @@ section { position: relative; z-index: 2; padding: 7rem 0; }
 .section-header p { color: var(--text-muted); max-width: 560px; margin: 0 auto; }
 
 /* ===== GPU GRID ===== */
-.gpu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.gpu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
 
 .gpu-card {
   background: var(--surface); border: 1px solid var(--border);
@@ -521,15 +541,24 @@ section { position: relative; z-index: 2; padding: 7rem 0; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* ===== SEARCH BAR ===== */
-.nav-actions { display: flex; align-items: center; gap: 1rem; }
+.nav-actions { 
+  display: flex; align-items: center; gap: 1rem; 
+  justify-self: end;
+}
 .search-container { position: relative; }
 #gpu-search {
   background: var(--surface); border: 1px solid var(--border);
   color: var(--text); padding: 0.5rem 1rem; border-radius: 50px;
-  font-family: 'Outfit', sans-serif; font-size: 0.9rem;
-  width: 250px; transition: all 0.3s;
+  font-family: 'Outfit', sans-serif; font-size: 0.85rem;
+  width: 180px; transition: all 0.3s;
 }
-#gpu-search:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 15px rgba(124,58,255,0.3); width: 280px; }
+#gpu-search:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 15px rgba(124,58,255,0.3); width: 220px; }
+
+/* RU adjustments */
+html[lang="ru"] .nav-links { gap: 1rem; }
+html[lang="ru"] #gpu-search { width: 140px; }
+html[lang="ru"] #gpu-search:focus { width: 160px; }
+html[lang="ru"] .nav-links a { font-size: 0.8rem; }
 .search-results {
   position: absolute; top: 110%; left: 0; right: 0;
   background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(20px);
