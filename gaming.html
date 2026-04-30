@@ -23,18 +23,26 @@
         <span>GPU<strong>Universe</strong></span>
       </a>
       <ul class="nav-links">
-        <li><a href="gaming.html">Gaming</a></li>
-        <li><a href="workstation.html">Workstation</a></li>
-        <li><a href="server.html">Servidor</a></li>
-        <li><a href="compare.html">Comparar</a></li>
-        <li><a href="index.html#timeline">Historia</a></li>
+        <li><a href="gaming.html" data-i18n="nav.gaming">Gaming</a></li>
+        <li><a href="workstation.html" data-i18n="nav.workstation">Workstation</a></li>
+        <li><a href="server.html" data-i18n="nav.server">Servidor</a></li>
+        <li><a href="compare.html" data-i18n="nav.compare">Comparar</a></li>
+        <li><a href="index.html#timeline" data-i18n="nav.history">Historia</a></li>
       </ul>
       <div class="nav-actions">
         <div class="search-container">
-          <input type="text" id="gpu-search" placeholder="Buscar GPU (ej. 1080)..." autocomplete="off">
+          <input type="text" id="gpu-search" placeholder="Buscar GPU (ej. 1080)..." autocomplete="off" data-i18n="nav.search_placeholder">
           <div id="search-results" class="search-results"></div>
         </div>
-        <button class="nav-cta">Explorar</button>
+        <select id="lang-select" class="lang-select">
+          <option value="es">ES</option>
+          <option value="en">EN</option>
+          <option value="fr">FR</option>
+          <option value="de">DE</option>
+          <option value="it">IT</option>
+          <option value="ru">RU</option>
+        </select>
+        <button class="nav-cta" data-i18n="nav.explore">Explorar</button>
       </div>
     </div>
   </nav>
@@ -46,9 +54,9 @@
     <div class="section-bg-accent accent-green"></div>
     <div class="container">
       <div class="section-header">
-        <span class="section-label">🎮 Gaming</span>
-        <h2>GPUs <span class="gradient-text-green">Domésticas</span></h2>
-        <p>Las mejores tarjetas gráficas para gaming, desde gama de entrada hasta lo más top del mercado</p>
+        <span class="section-label" data-i18n="sections.gaming_label">🎮 Gaming</span>
+        <h2><span data-i18n="sections.gaming_title">GPUs</span> <span class="gradient-text-green" data-i18n="sections.gaming_title_hl">Domésticas</span></h2>
+        <p data-i18n="sections.gaming_p">Las mejores tarjetas gráficas para gaming, desde gama de entrada hasta lo más top del mercado</p>
       </div>
       <div class="gpu-grid" id="gaming-grid"></div>
     </div>

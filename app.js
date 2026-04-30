@@ -191,7 +191,7 @@ if (serverGrid) serverGrid.innerHTML = SERVER_GPUS.map(buildServerCard).join('')
       <div class="timeline-dot"></div>
       <div class="timeline-year">${item.year}</div>
       <h4>${item.title}</h4>
-      <p>${item.desc}</p>
+      <p>${typeof item.desc === "object" ? item.desc[currentLang || "es"] : item.desc}</p>
     </div>
   `).join('');
 })();
@@ -414,3 +414,21 @@ if (modalOverlay) {
     if (e.target === modalOverlay) modalOverlay.classList.remove('active');
   });
 }
+
+// Re-render components globally for i18n
+window.renderAll = function() {
+  const gg = document.getElementById('gaming-grid');
+  if (gg) gg.innerHTML = GAMING_GPUS.map(buildGpuCard).join('');
+  
+  const wg = document.getElementById('workstation-grid');
+  if (wg) wg.innerHTML = WORKSTATION_GPUS.map(buildGpuCard).join('');
+  
+  const mg = document.getElementById('mobile-grid');
+  if (mg && typeof MOBILE_GPUS !== 'undefined') mg.innerHTML = MOBILE_GPUS.map(buildGpuCard).join('');
+  
+  const sg = document.getElementById('server-grid');
+  if (sg) sg.innerHTML = SERVER_GPUS.map(buildServerCard).join('');
+  
+  if (document.getElementById('compare-table')) renderCompareTable();
+  if (document.getElementById('timeline-container')) renderTimeline();
+};

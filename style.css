@@ -620,3 +620,7 @@ section { position: relative; z-index: 2; padding: 7rem 0; }
   .scroll-indicator { display: none; }
   .compare-chart-wrap { padding: 1rem; }
 }
+
+/* Language Selector */
+.lang-select { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--text-color); padding: 0.5rem; border-radius: 4px; font-family: var(--font-main); outline: none; cursor: pointer; }
+.lang-select option { background: var(--bg-color); color: var(--text-color); }

@@ -23,18 +23,26 @@
         <span>GPU<strong>Universe</strong></span>
       </a>
       <ul class="nav-links">
-        <li><a href="gaming.html">Gaming</a></li>
-        <li><a href="workstation.html">Workstation</a></li>
-        <li><a href="server.html">Servidor</a></li>
-        <li><a href="compare.html">Comparar</a></li>
-        <li><a href="index.html#timeline">Historia</a></li>
+        <li><a href="gaming.html" data-i18n="nav.gaming">Gaming</a></li>
+        <li><a href="workstation.html" data-i18n="nav.workstation">Workstation</a></li>
+        <li><a href="server.html" data-i18n="nav.server">Servidor</a></li>
+        <li><a href="compare.html" data-i18n="nav.compare">Comparar</a></li>
+        <li><a href="index.html#timeline" data-i18n="nav.history">Historia</a></li>
       </ul>
       <div class="nav-actions">
         <div class="search-container">
-          <input type="text" id="gpu-search" placeholder="Buscar GPU (ej. 1080)..." autocomplete="off">
+          <input type="text" id="gpu-search" placeholder="Buscar GPU (ej. 1080)..." autocomplete="off" data-i18n="nav.search_placeholder">
           <div id="search-results" class="search-results"></div>
         </div>
-        <button class="nav-cta">Explorar</button>
+        <select id="lang-select" class="lang-select">
+          <option value="es">ES</option>
+          <option value="en">EN</option>
+          <option value="fr">FR</option>
+          <option value="de">DE</option>
+          <option value="it">IT</option>
+          <option value="ru">RU</option>
+        </select>
+        <button class="nav-cta" data-i18n="nav.explore">Explorar</button>
       </div>
     </div>
   </nav>
@@ -46,9 +54,9 @@
     <div class="section-bg-accent accent-purple"></div>
     <div class="container">
       <div class="section-header">
-        <span class="section-label">🚀 Enterprise</span>
-        <h2>GPUs de <span class="gradient-text-purple">Servidor</span></h2>
-        <p>Los aceleradores más poderosos del planeta para IA, HPC y centros de datos</p>
+        <span class="section-label" data-i18n="sections.server_label">🚀 Enterprise</span>
+        <h2><span data-i18n="sections.server_title">GPUs de</span> <span class="gradient-text-purple" data-i18n="sections.server_title_hl">Servidor</span></h2>
+        <p data-i18n="sections.server_p">Los aceleradores más poderosos del planeta para IA, HPC y centros de datos</p>
       </div>
       <div class="server-showcase" id="server-grid"></div>
     </div>
