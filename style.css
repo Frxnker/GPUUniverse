@@ -849,8 +849,6 @@ section {
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
 }
 
-.server-meta {}
-
 .server-badge {
   display: inline-block;
   margin-bottom: 1rem;
@@ -937,8 +935,6 @@ section {
 }
 
 /* ===== COMPARE CHART ===== */
-#compare {}
-
 .compare-chart-wrap {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -1080,8 +1076,6 @@ section {
   gap: 4rem;
   margin-bottom: 3rem;
 }
-
-.footer-brand {}
 
 .footer-brand>span:first-child {
   font-size: 2rem;
