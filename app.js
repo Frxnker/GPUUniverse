@@ -146,19 +146,20 @@ function buildServerCard(gpu) {
 
 // Render Gaming
 const gamingGrid = document.getElementById('gaming-grid');
-gamingGrid.innerHTML = GAMING_GPUS.map(buildGpuCard).join('');
+if (gamingGrid) gamingGrid.innerHTML = GAMING_GPUS.map(buildGpuCard).join('');
 
 // Render Workstation
 const wsGrid = document.getElementById('workstation-grid');
-wsGrid.innerHTML = WORKSTATION_GPUS.map(buildGpuCard).join('');
+if (wsGrid) wsGrid.innerHTML = WORKSTATION_GPUS.map(buildGpuCard).join('');
 
 // Render Server
 const serverGrid = document.getElementById('server-grid');
-serverGrid.innerHTML = SERVER_GPUS.map(buildServerCard).join('');
+if (serverGrid) serverGrid.innerHTML = SERVER_GPUS.map(buildServerCard).join('');
 
 // ===== COMPARE TABLE =====
 (function buildTable() {
   const table = document.getElementById('compare-table');
+  if (!table) return;
   const headers = ['Modelo', 'Categoría', 'TFLOPS FP32/INT8', 'VRAM', 'Ancho de Banda', 'Precio Est.'];
   table.innerHTML = `
     <thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
@@ -180,6 +181,7 @@ serverGrid.innerHTML = SERVER_GPUS.map(buildServerCard).join('');
 // ===== TIMELINE =====
 (function buildTimeline() {
   const container = document.getElementById('timeline-container');
+  if (!container) return;
   container.innerHTML = TIMELINE_DATA.map(item => `
     <div class="timeline-item reveal">
       <div class="timeline-dot"></div>
@@ -212,13 +214,20 @@ document.querySelectorAll('.gpu-card').forEach(card => barObs.observe(card));
 document.querySelectorAll('.cat-card').forEach(card => {
   card.addEventListener('click', () => {
     const href = card.dataset.href;
-    if (href) document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    if (href) {
+      if (href.startsWith('#')) {
+        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.location.href = href;
+      }
+    }
   });
 });
 
 // ===== PERFORMANCE CHART =====
 (function buildChart() {
   const canvas = document.getElementById('perf-chart');
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
   const labels = ['RTX 4060', 'RX 9070 XT', 'RTX 4090', 'RTX 5090', 'RTX 6000 Ada', 'H100 SXM', 'H200 SXM', 'MI300X'];

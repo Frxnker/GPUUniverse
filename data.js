@@ -117,6 +117,7 @@ const COMPARE_DATA = [
 ];
 
 const TIMELINE_DATA = [
+  { year: '1996', title: '3dfx Voodoo', desc: 'El primer acelerador 3D de gran éxito comercial. Inicia la era del gaming en 3D para PC.' },
   { year: '1999', title: 'NVIDIA GeForce 256', desc: 'Primera GPU del mundo con T&L hardware. Revolución gráfica.' },
   { year: '2006', title: 'NVIDIA G80 / GeForce 8800 GTX', desc: 'Arquitectura unificada. Nace CUDA y la computación en GPU.' },
   { year: '2010', title: 'NVIDIA Fermi', desc: 'Primera GPU diseñada para HPC con ECC y doble precisión.' },
