@@ -161,29 +161,38 @@ const serverGrid = document.getElementById('server-grid');
 if (serverGrid) serverGrid.innerHTML = SERVER_GPUS.map(buildServerCard).join('');
 
 // ===== COMPARE TABLE =====
-(function buildTable() {
+window.renderCompareTable = function() {
   const table = document.getElementById('compare-table');
   if (!table) return;
-  const headers = ['Modelo', 'Categoría', 'TFLOPS FP32/INT8', 'VRAM', 'Ancho de Banda', 'Precio Est.'];
   table.innerHTML = `
-    <thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+    <thead>
+      <tr>
+        <th>${typeof t === "function" ? t("table.gpu") : "GPU"}</th>
+        <th>${typeof t === "function" ? t("table.cat") : "Categoría"}</th>
+        <th>${typeof t === "function" ? t("table.tflops") : "Rendimiento (TFLOPS)"}</th>
+        <th>${typeof t === "function" ? t("table.vram") : "Memoria VRAM"}</th>
+        <th>${typeof t === "function" ? t("table.bw") : "Ancho de Banda"}</th>
+        <th>${typeof t === "function" ? t("table.price") : "Precio Est."}</th>
+      </tr>
+    </thead>
     <tbody>
-      ${COMPARE_DATA.map(r => `
+      ${typeof COMPARE_DATA !== 'undefined' ? COMPARE_DATA.map(r => `
         <tr>
           <td><strong>${r.name}</strong></td>
-          <td>${r.cat}</td>
+          <td>${typeof t === "function" ? (t("ui.tier_" + r.cat.toLowerCase()) || r.cat) : r.cat}</td>
           <td class="mono highlight-cell">${r.tflops.toLocaleString()}</td>
           <td class="mono">${r.vram}</td>
           <td class="mono">${r.bw.toLocaleString()} GB/s</td>
           <td class="mono">${r.price}</td>
         </tr>
-      `).join('')}
+      `).join('') : ''}
     </tbody>
   `;
-})();
+};
+window.renderCompareTable();
 
 // ===== TIMELINE =====
-(function buildTimeline() {
+window.renderTimeline = function() {
   const container = document.getElementById('timeline-container');
   if (!container) return;
   container.innerHTML = TIMELINE_DATA.map(item => `
@@ -191,10 +200,16 @@ if (serverGrid) serverGrid.innerHTML = SERVER_GPUS.map(buildServerCard).join('')
       <div class="timeline-dot"></div>
       <div class="timeline-year">${item.year}</div>
       <h4>${item.title}</h4>
-      <p>${typeof item.desc === "object" ? item.desc[currentLang || "es"] : item.desc}</p>
+      <p>${typeof item.desc === "object" ? item.desc[typeof currentLang !== 'undefined' ? currentLang : 'es'] : item.desc}</p>
     </div>
   `).join('');
-})();
+  
+  // Re-observe revealed items
+  if (typeof revealObs !== 'undefined') {
+    document.querySelectorAll('#timeline-container .reveal').forEach(el => revealObs.observe(el));
+  }
+};
+window.renderTimeline();
 
 // ===== OBSERVE REVEALS =====
 setTimeout(() => {
