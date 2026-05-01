@@ -1,3 +1,23 @@
+// ===== THEME TOGGLE =====
+(function initTheme() {
+  // Apply saved theme ASAP to avoid flash
+  const saved = localStorage.getItem('gpu-universe-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+
+  // Wire button once DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('gpu-universe-theme', next);
+    });
+  });
+})();
+
 // ===== PARTICLES =====
 (function initParticles() {
   const canvas = document.getElementById('particles-canvas');

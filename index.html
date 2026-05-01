@@ -14,6 +14,8 @@
     rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="data:,">
+  <!-- Prevent theme flash -->
+  <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('gpu-universe-theme') || 'dark');</script>
 </head>
 
 <body>
@@ -40,6 +42,10 @@
           <input type="text" id="gpu-search" placeholder="Buscar GPU (ej. 1080)..." autocomplete="off" data-i18n="nav.search_placeholder">
           <div id="search-results" class="search-results"></div>
         </div>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema" title="Cambiar tema claro/oscuro">
+          <span class="icon-sun">☀️</span>
+          <span class="icon-moon">🌙</span>
+        </button>
         <div class="lang-switcher">
           <button class="lang-btn" id="lang-btn">
             <img src="https://flagcdn.com/w20/es.png" id="current-flag" alt="flag">

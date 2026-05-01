@@ -22,6 +22,33 @@
   --gold: #ffd700;
   --radius: 16px;
   --radius-lg: 24px;
+  --navbar-scrolled-bg: rgba(5, 5, 8, 0.85);
+  --search-results-bg: rgba(10, 10, 15, 0.95);
+  --lang-dropdown-bg: rgba(10, 10, 20, 0.95);
+  --floating-chip-bg: rgba(10, 10, 20, 0.9);
+  --particles-color: 124, 58, 255;
+  --transition-theme: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* ===== LIGHT THEME ===== */
+[data-theme="light"] {
+  --bg: #f0f2f8;
+  --bg2: #e4e7f2;
+  --surface: rgba(0, 0, 0, 0.04);
+  --surface2: rgba(0, 0, 0, 0.07);
+  --border: rgba(0, 0, 0, 0.1);
+  --text: #12122a;
+  --text-muted: #5c5c80;
+  --accent: #6020e0;
+  --accent2: #0099cc;
+  --green: #009944;
+  --pink: #cc1155;
+  --gold: #b8860b;
+  --navbar-scrolled-bg: rgba(240, 242, 248, 0.9);
+  --search-results-bg: rgba(240, 242, 248, 0.98);
+  --lang-dropdown-bg: rgba(240, 242, 248, 0.98);
+  --floating-chip-bg: rgba(240, 242, 248, 0.95);
+  --particles-color: 96, 32, 224;
 }
 
 html {
@@ -122,7 +149,7 @@ section {
 }
 
 #navbar.scrolled {
-  background: rgba(5, 5, 8, 0.85);
+  background: var(--navbar-scrolled-bg);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
   padding: 0.75rem 2rem;
@@ -1209,7 +1236,7 @@ html[lang="ru"] .nav-links a {
   top: 110%;
   left: 0;
   right: 0;
-  background: rgba(10, 10, 15, 0.95);
+  background: var(--search-results-bg);
   backdrop-filter: blur(20px);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -1219,7 +1246,7 @@ html[lang="ru"] .nav-links a {
   flex-direction: column;
   gap: 0.5rem;
   padding: 0.5rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 
 .search-results.active {
@@ -1605,7 +1632,7 @@ html[lang="ru"] .nav-links a {
   top: calc(100% + 10px);
   right: 0;
   width: 160px;
-  background: rgba(10, 10, 20, 0.95);
+  background: var(--lang-dropdown-bg);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 0.5rem;
@@ -1614,7 +1641,7 @@ html[lang="ru"] .nav-links a {
   transform: translateY(10px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(20px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .lang-switcher.active .lang-dropdown {
@@ -1643,4 +1670,111 @@ html[lang="ru"] .nav-links a {
 .lang-option img {
   width: 20px;
   border-radius: 2px;
+}
+
+/* ===== THEME TOGGLE BUTTON ===== */
+.theme-toggle {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1rem;
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle:hover {
+  background: rgba(124, 58, 255, 0.15);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(124, 58, 255, 0.25);
+}
+
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+  position: absolute;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+  line-height: 1;
+}
+
+/* Dark mode: show moon, hide sun */
+.theme-toggle .icon-sun { opacity: 0; transform: translateY(-16px) rotate(90deg); }
+.theme-toggle .icon-moon { opacity: 1; transform: translateY(0) rotate(0deg); }
+
+/* Light mode: show sun, hide moon */
+[data-theme="light"] .theme-toggle .icon-sun { opacity: 1; transform: translateY(0) rotate(0deg); }
+[data-theme="light"] .theme-toggle .icon-moon { opacity: 0; transform: translateY(16px) rotate(-90deg); }
+
+/* Light mode surface adjustments */
+[data-theme="light"] .gpu-card:hover {
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15), 0 0 40px rgba(96, 32, 224, 0.1);
+}
+
+[data-theme="light"] .cat-card:hover,
+[data-theme="light"] .cat-card.featured {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 40px rgba(96, 32, 224, 0.1);
+}
+
+[data-theme="light"] .server-card:hover {
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .floating-chip {
+  background: var(--floating-chip-bg);
+  color: var(--accent2);
+  border-color: rgba(96, 32, 224, 0.3);
+}
+
+[data-theme="light"] .modal-content {
+  background: var(--bg2);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.2), 0 0 60px rgba(96, 32, 224, 0.1);
+}
+
+[data-theme="light"] .timeline-dot {
+  border-color: var(--bg);
+}
+
+[data-theme="light"] .hero-bg-grid {
+  background-image:
+    linear-gradient(rgba(96, 32, 224, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96, 32, 224, 0.07) 1px, transparent 1px);
+}
+
+[data-theme="light"] .glow-1 {
+  background: rgba(96, 32, 224, 0.12);
+}
+
+[data-theme="light"] .glow-2 {
+  background: rgba(0, 153, 204, 0.1);
+}
+
+[data-theme="light"] #navbar.scrolled {
+  border-bottom-color: var(--border);
+}
+
+[data-theme="light"] .gpu-perf-bar {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .compare-table td {
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+/* Smooth transition for all theme-aware elements */
+body, #navbar, .gpu-card, .cat-card, .server-card,
+.modal-content, .search-results, .lang-dropdown,
+.timeline-item, #footer, .footer-inner,
+.section-label, .compare-table th, .compare-table td,
+.server-spec, .modal-item, .hero-badge {
+  transition: background 0.35s ease, color 0.35s ease,
+              border-color 0.35s ease, box-shadow 0.35s ease;
 }
