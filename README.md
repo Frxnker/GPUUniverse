@@ -1,6 +1,6 @@
 # 🌌 GPU Universe — Portal de Hardware Gráfico
 
-[![Project Version](https://img.shields.io/badge/version-1.4.0-blueviolet)](https://github.com/Frxnker/gpu-universe)
+[![Project Version](https://img.shields.io/badge/version-1.5.0-blueviolet)](https://github.com/Frxnker/gpu-universe)
 [![Status](https://img.shields.io/badge/status-active-success)]()
 [![License](https://img.shields.io/badge/license-MIT-green)]()
 
@@ -15,7 +15,7 @@
 - ⚖️ **Comparador Dinámico**: Visualización de rendimiento entre generaciones (Ref: **RTX 5090**).
 - 📱 **Diseño Ultra-Premium**: Estética *Glassmorphism* con efectos de partículas y optimización a 60 FPS.
 - 💹 **Localización de Precios**: Conversión automática a EUR, USD o RUB.
-- 🛡️ **Estructura Profesional**: Código organizado en un directorio de fuentes (`src/`) para máxima limpieza.
+- 🛡️ **Estructura Optimizada**: Organización profesional por carpetas para facilitar el despliegue en GitHub Pages.
 
 ## 🚀 Tecnologías Utilizadas
 
@@ -25,12 +25,11 @@
 ## 📁 Estructura del Proyecto
 
 ```text
-├── src/                # Directorio principal de código fuente
-│   ├── index.html      # Punto de entrada (Dashboard)
-│   ├── assets/         # Recursos multimedia e imágenes
-│   ├── css/            # Hojas de estilo y diseño
-│   ├── js/             # Lógica, datos e internacionalización
-│   └── pages/          # Páginas secundarias (Gaming, Workstation, Server, Compare)
+├── index.html          # Punto de entrada (Dashboard) - Raíz para despliegue
+├── assets/             # Recursos multimedia e imágenes
+├── css/                # Hojas de estilo y diseño
+├── js/                 # Lógica, datos e internacionalización
+├── pages/              # Páginas secundarias (Gaming, Workstation, Server, Compare)
 ├── package.json        # Dependencias y configuración de Node.js
 └── README.md           # Documentación técnica
 ```
@@ -41,8 +40,8 @@
    ```bash
    git clone https://github.com/Frxnker/gpu-universe.git
    ```
-2. **Ejecutar**: Abre `src/index.html` en tu navegador.
-3. **Servidor**: Se recomienda servir desde la raíz para mantener la integridad de las rutas del proyecto.
+2. **Ejecutar**: Abre `index.html` en tu navegador.
+3. **Despliegue**: Optimizado para GitHub Pages directamente desde la rama principal.
 
 ---
 
