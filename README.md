@@ -29,14 +29,18 @@
 
 ```text
 ├── index.html          # Dashboard principal y línea de tiempo histórica
-├── gaming.html         # Catálogo de GPUs domésticas (Blackwell, Ada, RDNA)
-├── workstation.html    # Hardware profesional (RTX Pro, Quadro, Apple M4 Ultra)
-├── server.html         # Aceleradores Enterprise e IA con precios actualizados
-├── compare.html        # Laboratorio de comparación técnica y benchmarks
-├── style.css           # Sistema de diseño, temas y media queries
-├── i18n.js             # Motor de traducción y diccionarios multilingües
-├── data.js             # Núcleo de datos: base de datos centralizada
-└── app.js              # Cerebro del portal: búsqueda, modales y lógica i18n
+├── css/
+│   └── style.css       # Sistema de diseño, temas y media queries
+├── js/
+│   ├── app.js          # Cerebro del portal: búsqueda, modales y lógica
+│   ├── data.js         # Núcleo de datos: base de datos centralizada
+│   └── i18n.js         # Motor de traducción multilingüe
+├── pages/
+│   ├── gaming.html     # Catálogo de GPUs domésticas y portátiles
+│   ├── workstation.html# Hardware profesional y estaciones de trabajo
+│   ├── server.html      # Aceleradores Enterprise e IA
+│   └── compare.html    # Laboratorio de comparación técnica
+└── assets/             # Recursos multimedia (imágenes, iconos)
 ```
 
 ## 🛠️ Instalación y Uso
