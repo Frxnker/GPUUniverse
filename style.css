@@ -1904,8 +1904,16 @@ body, #navbar, .gpu-card, .cat-card, .server-card,
   .nav-logo span:not(.logo-icon) {
     display: none; /* Hide logo text to make room for tools */
   }
+
+  .nav-inner {
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+  }
   
   .nav-actions {
+    flex: 1;
+    justify-content: flex-end;
     gap: 0.25rem;
   }
   
@@ -1918,7 +1926,7 @@ body, #navbar, .gpu-card, .cat-card, .server-card,
   .lang-btn {
     padding: 0.35rem 0.4rem;
     font-size: 0.75rem;
-    gap: 0.3rem;
+    gap: 0.2rem;
   }
   
   .lang-btn img {
@@ -1926,13 +1934,16 @@ body, #navbar, .gpu-card, .cat-card, .server-card,
   }
   
   #gpu-search {
-    width: 90px;
-    padding: 0.4rem 0.5rem;
-    font-size: 0.75rem;
+    width: 100%;
+    min-width: 70px;
+    max-width: 170px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
   }
   
   #gpu-search:focus {
-    width: 120px;
+    width: 100%;
+    max-width: 200px;
   }
   
   .mobile-menu-btn {
