@@ -7,14 +7,39 @@ const GAMING_GPUS = [
     tdp: '575W', price: '~$1999', perf: 100, fillColor: 'fill-gold'
   },
   {
+    brand: 'nvidia', name: 'RTX 5080', arch: 'Blackwell / GB203',
+    tier: 'high', vram: '16 GB GDDR7', tflops: '102.5', bandwidth: '1024 GB/s',
+    tdp: '350W', price: '~$999', perf: 85, fillColor: 'fill-purple'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 5070 Ti', arch: 'Blackwell / GB205',
+    tier: 'high', vram: '16 GB GDDR7', tflops: '65.5', bandwidth: '640 GB/s',
+    tdp: '275W', price: '~$799', perf: 72, fillColor: 'fill-purple'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 5070', arch: 'Blackwell / GB205',
+    tier: 'high', vram: '12 GB GDDR7', tflops: '50.2', bandwidth: '576 GB/s',
+    tdp: '220W', price: '~$599', perf: 64, fillColor: 'fill-purple'
+  },
+  {
     brand: 'nvidia', name: 'RTX 4090', arch: 'Ada Lovelace / AD102',
     tier: 'ultra', vram: '24 GB GDDR6X', tflops: '82.6', bandwidth: '1008 GB/s',
-    tdp: '450W', price: '~$1599', perf: 80, fillColor: 'fill-gold'
+    tdp: '450W', price: '~$1599', perf: 82, fillColor: 'fill-gold'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 4080 SUPER', arch: 'Ada Lovelace / AD103',
+    tier: 'high', vram: '16 GB GDDR6X', tflops: '52.2', bandwidth: '736 GB/s',
+    tdp: '320W', price: '~$999', perf: 70, fillColor: 'fill-purple'
+  },
+  {
+    brand: 'amd', name: 'RX 7900 XTX', arch: 'RDNA 3 / Navi 31',
+    tier: 'high', vram: '24 GB GDDR6', tflops: '61.4', bandwidth: '960 GB/s',
+    tdp: '355W', price: '~$849', perf: 68, fillColor: 'fill-purple'
   },
   {
     brand: 'amd', name: 'RX 9070 XT', arch: 'RDNA 4 / Navi 48',
     tier: 'high', vram: '16 GB GDDR6', tflops: '73.0', bandwidth: '640 GB/s',
-    tdp: '304W', price: '~$599', perf: 68, fillColor: 'fill-purple'
+    tdp: '304W', price: '~$599', perf: 74, fillColor: 'fill-purple'
   },
   {
     brand: 'nvidia', name: 'RTX 4070 Ti SUPER', arch: 'Ada Lovelace / AD103',
@@ -22,19 +47,29 @@ const GAMING_GPUS = [
     tdp: '285W', price: '~$799', perf: 60, fillColor: 'fill-purple'
   },
   {
-    brand: 'amd', name: 'RX 7900 XTX', arch: 'RDNA 3 / Navi 31',
-    tier: 'high', vram: '24 GB GDDR6', tflops: '61.4', bandwidth: '960 GB/s',
-    tdp: '355W', price: '~$849', perf: 62, fillColor: 'fill-purple'
-  },
-  {
     brand: 'nvidia', name: 'RTX 4070 SUPER', arch: 'Ada Lovelace / AD104',
     tier: 'mid', vram: '12 GB GDDR6X', tflops: '35.5', bandwidth: '504 GB/s',
-    tdp: '220W', price: '~$599', perf: 50, fillColor: 'fill-blue'
+    tdp: '220W', price: '~$599', perf: 52, fillColor: 'fill-blue'
   },
   {
     brand: 'amd', name: 'RX 7800 XT', arch: 'RDNA 3 / Navi 32',
     tier: 'mid', vram: '16 GB GDDR6', tflops: '37.3', bandwidth: '624 GB/s',
-    tdp: '263W', price: '~$449', perf: 46, fillColor: 'fill-blue'
+    tdp: '263W', price: '~$449', perf: 48, fillColor: 'fill-blue'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 3090 Ti', arch: 'Ampere / GA102',
+    tier: 'ultra', vram: '24 GB GDDR6X', tflops: '40.0', bandwidth: '1008 GB/s',
+    tdp: '450W', price: '~$1099', perf: 58, fillColor: 'fill-gold'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 3080 Ti', arch: 'Ampere / GA102',
+    tier: 'high', vram: '12 GB GDDR6X', tflops: '34.1', bandwidth: '912 GB/s',
+    tdp: '350W', price: '~$899', perf: 54, fillColor: 'fill-purple'
+  },
+  {
+    brand: 'amd', name: 'RX 6950 XT', arch: 'RDNA 2 / Navi 21',
+    tier: 'ultra', vram: '16 GB GDDR6', tflops: '23.6', bandwidth: '576 GB/s',
+    tdp: '335W', price: '~$649', perf: 52, fillColor: 'fill-gold'
   },
   {
     brand: 'intel', name: 'Arc B580', arch: 'Battlemage / BMG-G21',
@@ -44,17 +79,32 @@ const GAMING_GPUS = [
   {
     brand: 'nvidia', name: 'RTX 4060', arch: 'Ada Lovelace / AD107',
     tier: 'entry', vram: '8 GB GDDR6', tflops: '15.1', bandwidth: '272 GB/s',
-    tdp: '115W', price: '~$299', perf: 28, fillColor: 'fill-green'
+    tdp: '115W', price: '~$299', perf: 30, fillColor: 'fill-green'
   },
   {
     brand: 'nvidia', name: 'RTX 5060', arch: 'Blackwell / GB207',
     tier: 'mid', vram: '12 GB GDDR7', tflops: '28.5', bandwidth: '384 GB/s',
-    tdp: '140W', price: '~$349', perf: 42, fillColor: 'fill-blue'
+    tdp: '140W', price: '~$349', perf: 44, fillColor: 'fill-blue'
   },
   {
     brand: 'nvidia', name: 'RTX 5050', arch: 'Blackwell / GB207',
     tier: 'entry', vram: '8 GB GDDR7', tflops: '18.2', bandwidth: '256 GB/s',
-    tdp: '100W', price: '~$249', perf: 32, fillColor: 'fill-green'
+    tdp: '100W', price: '~$249', perf: 34, fillColor: 'fill-green'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 3060', arch: 'Ampere / GA106',
+    tier: 'mid', vram: '12 GB GDDR6', tflops: '12.7', bandwidth: '360 GB/s',
+    tdp: '170W', price: '~$289', perf: 26, fillColor: 'fill-blue'
+  },
+  {
+    brand: 'amd', name: 'RX 6600 XT', arch: 'RDNA 2 / Navi 23',
+    tier: 'mid', vram: '8 GB GDDR6', tflops: '10.6', bandwidth: '256 GB/s',
+    tdp: '160W', price: '~$249', perf: 24, fillColor: 'fill-blue'
+  },
+  {
+    brand: 'intel', name: 'Arc A770', arch: 'Alchemist / ACM-G10',
+    tier: 'mid', vram: '16 GB GDDR6', tflops: '19.6', bandwidth: '560 GB/s',
+    tdp: '225W', price: '~$299', perf: 32, fillColor: 'fill-blue'
   },
 ];
 
@@ -68,6 +118,11 @@ const WORKSTATION_GPUS = [
     brand: 'nvidia', name: 'RTX 5000 Ada', arch: 'Ada Lovelace / AD104',
     tier: 'high', vram: '32 GB GDDR6', tflops: '65.3', bandwidth: '576 GB/s',
     tdp: '250W', price: '~$3999', perf: 70, fillColor: 'fill-purple'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 4500 Ada', arch: 'Ada Lovelace / AD104',
+    tier: 'high', vram: '24 GB GDDR6', tflops: '39.6', bandwidth: '432 GB/s',
+    tdp: '210W', price: '~$2249', perf: 55, fillColor: 'fill-purple'
   },
   {
     brand: 'amd', name: 'Radeon PRO W7900', arch: 'RDNA 3 / Navi 31',
@@ -88,6 +143,11 @@ const WORKSTATION_GPUS = [
     brand: 'amd', name: 'Radeon PRO W7800', arch: 'RDNA 3 / Navi 32',
     tier: 'high', vram: '32 GB GDDR6', tflops: '45.2', bandwidth: '576 GB/s',
     tdp: '260W', price: '~$2499', perf: 55, fillColor: 'fill-purple'
+  },
+  {
+    brand: 'amd', name: 'Radeon PRO W7700', arch: 'RDNA 3 / Navi 32',
+    tier: 'mid', vram: '16 GB GDDR6', tflops: '28.3', bandwidth: '576 GB/s',
+    tdp: '190W', price: '~$999', perf: 40, fillColor: 'fill-blue'
   },
 ];
 
@@ -141,11 +201,27 @@ const MOBILE_GPUS = [
 
 const SERVER_GPUS = [
   {
+    brand: 'nvidia', name: 'B200 NVL72', arch: 'Blackwell / GB202',
+    vram: '192 GB HBM3e', tflops: '20000 (FP8)', bandwidth: '8000 GB/s',
+    tdp: '1200W', interconnect: 'NVLink 1.8 TB/s', use: 'IA / Entrenamiento de LLMs masivos',
+    price: '~$70,000',
+    desc: {es: 'La joya de la corona de Blackwell. Una arquitectura de doble chip que redefine el cómputo de IA, ofreciendo un rendimiento hasta 30 veces superior en inferencia LLM comparado con Hopper.', en: 'The crown jewel of Blackwell. A dual-chip architecture that redefines AI computing, offering up to 30 times more performance in LLM inference compared to Hopper.', fr: 'Le joyau de la couronne de Blackwell. Une architecture double puce qui redéfinit le calcul de l\'IA, offrant des performances jusqu\'à 30 fois supérieures en inférence LLM par rapport à Hopper.', de: 'Das Kronjuwel von Blackwell. Eine Dual-Chip-Architektur, die das KI-Computing neu definiert und eine bis zu 30-mal höhere Leistung bei der LLM-Inferenz im Vergleich to Hopper bietet.', it: 'Il gioiello della corona di Blackwell. Un\'architettura a doppio chip que ridefinisce il calcolo dell\'IA, offrendo prestazioni fino a 30 volte superiores nell\'inferenza LLM rispetto a Hopper.', ru: 'Жемчужина Blackwell. Двухкристальная архитектура, которая переопределяет вычисления ИИ, обеспечивая производительность в 30 раз выше при выводе LLM по сравнению с Hopper.'},
+    cssClass: 'nvidia-card'
+  },
+  {
     brand: 'nvidia', name: 'H200 SXM', arch: 'Hopper / GH100',
     vram: '141 GB HBM3e', tflops: '3958 (INT8)', bandwidth: '4800 GB/s',
     tdp: '700W', interconnect: 'NVLink 900 GB/s', use: 'LLM / HPC / IA Generativa',
     price: '~$40,000',
-    desc: {es: 'El acelerador más potente de NVIDIA para centros de datos. Con 141 GB de HBM3e y 4.8 TB/s de ancho de banda, es el estándar de facto para entrenar modelos LLM como GPT-4.', en: 'The most powerful NVIDIA accelerator for data centers. With 141 GB of HBM3e and 4.8 TB/s bandwidth, it is the de facto standard for training LLM models like GPT-4.', fr: 'L\'accélérateur NVIDIA le plus puissant pour les centres de données. Avec 141 Go de HBM3e et 4,8 To/s de bande passante, c\'est la norme de facto pour l\'entraînement de modèles LLM como GPT-4.', de: 'Der leistungsstärkste NVIDIA-Beschleuniger für Rechenzentren. Mit 141 GB HBM3e und 4,8 TB/s Bandbreite ist er der De-facto-Standard für das Training von LLM-Modellen wie GPT-4.', it: 'L\'acceleratore NVIDIA più potente per i data center. Con 141 GB di HBM3e e 4,8 TB/s di larghezza di banda, è lo standard de facto per l\'addestramento di modelli LLM come GPT-4.', ru: 'Самый мощный ускоритель NVIDIA для дата-центров. С 141 ГБ HBM3e и пропускной способностью 4,8 ТБ/с он является стандартом де-факто для обучения моделей LLM, таких как GPT-4.'},
+    desc: {es: 'El acelerador más potente de NVIDIA para centros de datos. Con 141 GB de HBM3e y 4.8 TB/s de ancho de banda, es el estándar de facto para entrenar modelos LLM como GPT-4.', en: 'The most powerful NVIDIA accelerator for data centers. With 141 GB of HBM3e and 4.8 TB/s bandwidth, it is the de facto standard for training LLM models like GPT-4.', fr: 'L\'accélérateur NVIDIA le plus puissant pour les centres de données. Avec 141 Go de HBM3e y 4,8 To/s de bande passante, c\'est la norme de facto pour l\'entraînement de modèles LLM como GPT-4.', de: 'Der leistungsstärkste NVIDIA-Beschleuniger für Rechenzentren. Mit 141 GB HBM3e und 4,8 TB/s Bandbreite ist er der De-facto-Standard für das Training von LLM-Modellen wie GPT-4.', it: 'L\'acceleratore NVIDIA più potente per i data center. Con 141 GB di HBM3e e 4,8 TB/s di larghezza di banda, è lo standard de facto para l\'addestramento di modelli LLM come GPT-4.', ru: 'Самый мощный ускоритель NVIDIA для дата-центров. С 141 ГБ HBM3e и пропускной способностью 4,8 ТБ/с он является стандартом де-факто для обучения моделей LLM, таких как GPT-4.'},
+    cssClass: 'nvidia-card'
+  },
+  {
+    brand: 'nvidia', name: 'H100 SXM5', arch: 'Hopper / GH100',
+    vram: '80 GB HBM3', tflops: '3958 (INT8)', bandwidth: '3350 GB/s',
+    tdp: '700W', interconnect: 'NVLink 900 GB/s', use: 'IA / Deep Learning / HPC',
+    price: '~$30,000',
+    desc: {es: 'La GPU que impulsó la revolución de la IA generativa. Sigue siendo una de las piezas de hardware más deseadas del mundo por su equilibrio entre rendimiento y eficiencia en centros de datos.', en: 'The GPU that fueled the generative AI revolution. It remains one of the most desired pieces of hardware in the world for its balance of performance and efficiency in data centers.', fr: 'Le GPU qui a alimenté la révolution de l\'IA générative. Il reste l\'un des composants matériels les plus convoités au monde pour son équilibre entre performance et efficacité dans les centres de données.', de: 'Die GPU, die die generative KI-Revolution vorangetrieben hat. Sie bleibt eines der begehrtesten Hardware-Teile der Welt aufgrund ihrer Ausgewogenheit von Leistung und Effizienz in Rechenzentren.', it: 'La GPU che ha alimentato la rivoluzione dell\'IA generativa. Rimane uno dei componenti hardware più desiderati al mondo per il suo equilibrio tra prestazioni ed efficienza nei data center.', ru: 'GPU, которая подстегнула революцию генеративного ИИ. Он остается одним из самых желанных аппаратных средств в мире благодаря балансу производительности и эффективности в дата-центрах.'},
     cssClass: 'nvidia-card'
   },
   {
@@ -153,7 +229,7 @@ const SERVER_GPUS = [
     vram: '192 GB HBM3', tflops: '5220 (INT8)', bandwidth: '5300 GB/s',
     tdp: '750W', interconnect: 'Infinity Fabric 896 GB/s', use: 'IA / Inferencia / HPC',
     price: '~$15,000',
-    desc: {es: 'Con 192 GB de HBM3, el MI300X es el rey en capacidad de memoria. Permite ejecutar modelos enormes sin particionado entre múltiples GPUs, ideal para inferencia a gran escala.', en: 'With 192 GB of HBM3, the MI300X is the king in memory capacity. It allows running massive models without partitioning across multiple GPUs, ideal for large-scale inference.', fr: 'Avec 192 Go de HBM3, le MI300X est le roi de la capacité mémoire. Il permet d\'exécuter des modèles massifs sans partitionnement sur plusieurs GPU, ideal pour l\'inférence à grande échelle.', de: 'Mit 192 GB HBM3 ist der MI300X der König der Speicherkapazität. Er ermöglicht das Ausführen massiver Modelle ohne Partitionierung über mehrere GPUs hinweg, ideal für groß angelegte Inferenz.', it: 'Con 192 GB di HBM3, il MI300X è il re della capacidad de memoria. Permette di eseguire modelli enormi senza partizionamento su più GPU, ideale per inferenza su larga scala.', ru: 'С 192 ГБ HBM3 MI300X является королем по объему памяти. Позволяет запускать огромные модели без разделения между несколькими GPU, идеально подходит для масштабного вывода.'},
+    desc: {es: 'Con 192 GB de HBM3, el MI300X es el rey en capacidad de memoria. Permite ejecutar modelos enormes sin particionado entre múltiples GPUs, ideal para inferencia a gran escala.', en: 'With 192 GB of HBM3, the MI300X is the king in memory capacity. It allows running massive models without partitioning across multiple GPUs, ideal for large-scale inference.', fr: 'Avec 192 Go de HBM3, le MI300X est le roi de la capacité mémoire. Il permite d\'exécuter des modèles massifs sans partitionnement sur plusieurs GPU, ideal pour l\'inférence à grande échelle.', de: 'Mit 192 GB HBM3 ist der MI300X der König der Speicherkapazität. Er ermöglicht das Ausführen massiver Modelle ohne Partitionierung über mehrere GPUs hinweg, ideal für groß angelegte Inferenz.', it: 'Con 192 GB di HBM3, il MI300X è il re della capacidad de memoria. Permette di eseguire modelli enormi senza partizionamento su più GPU, ideale per inferenza su larga scala.', ru: 'С 192 ГБ HBM3 MI300X является королем по объему памяти. Позволяет запускать огромные модели без разделения между несколькими GPU, идеально подходит для масштабного вывода.'},
     cssClass: 'amd-card'
   },
   {
@@ -161,8 +237,16 @@ const SERVER_GPUS = [
     vram: '128 GB HBM2e', tflops: '4835 (INT8)', bandwidth: '3700 GB/s',
     tdp: '900W', interconnect: 'Ethernet 200 GbE', use: 'IA / Entrenamiento / Inferencia',
     price: '~$10,000',
-    desc: {es: 'Intel Gaudi 3 apuesta por la conectividad Ethernet estándar para clusters de IA, reduciendo costes de infraestructura. Competidor directo de H100 con una propuesta de coste-beneficio atractiva.', en: 'Intel Gaudi 3 relies on standard Ethernet connectivity for AI clusters, reducing infrastructure costs. A direct competitor to H100 with an attractive cost-benefit proposition.', fr: 'Intel Gaudi 3 s\'appuie sur la connectividad Ethernet standard pour les clusters d\'IA, réduisant les coûts d\'infrastructure. Un concurrent direct de la H100 avec une proposition coût-bénéfice intéressante.', de: 'Intel Gaudi 3 setzt auf Standard-Ethernet-Konnektivität für KI-Cluster und reduziert so die Infrastrukturkosten. Ein direkter Konkurrent der H100 mit einem attraktiven Kosten-Nutzen-Verhältnis.', it: 'Intel Gaudi 3 punta sulla connettividad Ethernet standard per i cluster IA, riducendo i costi infrastrutturali. Un concorrente directo della H100 con una propuesta costo-beneficio interesante.', ru: 'Intel Gaudi 3 делает ставку на стандартное Ethernet-соединение для ИИ-кластеров, снижая затраты на инфраструктуру. Прямой конкурент H100 с привлекательным соотношением цена-качество.'},
+    desc: {es: 'Intel Gaudi 3 apuesta por la conectividad Ethernet estándar para clusters de IA, reduciendo costes de infraestructura. Competidor directo de H100 con una propuesta de coste-beneficio atractiva.', en: 'Intel Gaudi 3 relies on standard Ethernet connectivity for AI clusters, reducing infrastructure costs. A direct competitor to H100 with an attractive cost-benefit proposition.', fr: 'Intel Gaudi 3 s\'appuie sur la conectividad Ethernet standard pour les clusters d\'IA, réduisant les coûts d\'infrastructure. Un concurrent direct de la H100 con una propuesta coût-bénéfice intéressante.', de: 'Intel Gaudi 3 setzt auf Standard-Ethernet-Konnektivität für KI-Cluster und reduziert so die Infrastrukturkosten. Ein direkter Konkurrent der H100 mit einem attraktiven Kosten-Nutzen-Verhältnis.', it: 'Intel Gaudi 3 punta sulla connettividad Ethernet standard per i cluster IA, riducendo i costi infrastrutturali. Un concorrente directo della H100 con una propuesta costo-beneficio interesante.', ru: 'Intel Gaudi 3 делает ставку на стандартное Ethernet-соединение для ИИ-кластеров, снижая затраты на инфраструктуру. Прямой конкурент H100 с привлекательным соотношением цена-качество.'},
     cssClass: 'intel-card'
+  },
+  {
+    brand: 'nvidia', name: 'A100 SXM4', arch: 'Ampere / GA100',
+    vram: '80 GB HBM2e', tflops: '1248 (INT8)', bandwidth: '2039 GB/s',
+    tdp: '400W', interconnect: 'NVLink 600 GB/s', use: 'IA / Análisis de Datos / HPC',
+    price: '~$8,000',
+    desc: {es: 'La GPU que definió la era Ampere en el data center. Sigue siendo extremadamente versátil para una amplia gama de cargas de trabajo de computación científica y análisis de Big Data.', en: 'The GPU that defined the Ampere era in the data center. It remains extremely versatile for a wide range of scientific computing and Big Data analysis workloads.', fr: 'Le GPU que a défini l\'ère Ampere dans le centre de données. Il reste extrêmement polyvalent pour une large gamme de charges de travail de calcul scientifique et d\'analyse Big Data.', de: 'Die GPU, die die Ampere-Ära im Rechenzentrum definierte. Sie bleibt extrem vielseitig für eine breite Palette von wissenschaftlichen Computer- und Big-Data-Analyse-Workloads.', it: 'La GPU che ha definido l\'era Ampere nel data center. Rimane estremamente versatile per una vasta gamma di carichi di lavoro di calcolo scientifico e analisi Big Data.', ru: 'GPU, определившая эпоху Ampere в дата-центре. Она остается чрезвычайно универсальной для широкого спектра научных вычислений и задач анализа Big Data.'},
+    cssClass: 'nvidia-card'
   }
 ];
 
@@ -184,16 +268,16 @@ const TIMELINE_DATA = [
   { year: '2001', title: 'NVIDIA GeForce 3', desc: {es: 'Primeros shaders programables. Nace el realismo cinematográfico.', en: 'First programmable shaders. Cinematic realism is born.', fr: 'Premiers shaders programmables. Le réalisme cinématographique est né.', de: 'Erste programmierbare Shader. Filmischer Realismus wird geboren.', it: 'Primi shader programmabili. Nasce il realismo cinematografico.', ru: 'Первые программируемые шейдеры. Рождение кинематографического реализма.'} },
   { year: '2004', title: 'NVIDIA SLI', desc: {es: 'Nace el soporte para múltiples GPUs en un mismo PC doméstico.', en: 'Multi-GPU support for home PCs is born.', fr: 'Le support multi-GPU pour les PC domestiques est né.', de: 'Multi-GPU-Unterstützung für Heim-PCs wird geboren.', it: 'Nasce il supporto multi-GPU per i PC domestici.', ru: 'Рождение поддержки нескольких GPU в домашних ПК.'} },
   { year: '2006', title: 'NVIDIA G80 / GeForce 8800 GTX', desc: {es: 'Arquitectura unificada. Nace CUDA y la computación en GPU.', en: 'Unified architecture. CUDA and GPU computing are born.', fr: 'Architecture unifiée. Naissance de CUDA et du calcul sur GPU.', de: 'Einheitliche Architektur. CUDA und GPU-Computing werden geboren.', it: 'Architettura unificata. Nasce CUDA e il calcolo su GPU.', ru: 'Унифицированная архитектура. Рождение CUDA и GPU-вычислений.'} },
-  { year: '2008', title: 'NVIDIA Tesla C870', desc: {es: 'Primer procesador dedicado exclusivamente al cálculo (GPGPU).', en: 'First processor dedicated exclusively to computing (GPGPU).', fr: 'Premier processeur dédié exclusivement au calcul (GPGPU).', de: 'Erster exklusiv für Berechnungen dedizierter Prozessor (GPGPU).', it: 'Primo procesore dedicato esclusivamente al calcolo (GPGPU).', ru: 'Первый процессор, предназначенный исключительно для вычислений (GPGPU).'} },
+  { year: '2008', title: 'NVIDIA Tesla C870', desc: {es: 'Primer procesador dedicado exclusivamente al cálculo (GPGPU).', en: 'First processor dedicated exclusively to computing (GPGPU).', fr: 'Premier processeur dédié exclusivement au calcul (GPGPU).', de: 'Erster exklusiv für Berechnungen dedizierter Prozessor (GPGPU).', it: 'Primo procesore dedicado esclusivamente al calcolo (GPGPU).', ru: 'Первый процессор, предназначенный исключительно для вычислений (GPGPU).'} },
   { year: '2010', title: 'NVIDIA Fermi', desc: {es: 'Primera GPU diseñada para HPC con ECC y doble precisión.', en: 'First GPU designed for HPC with ECC and double precision.', fr: 'Premier GPU conçu pour le HPC avec ECC et double précision.', de: 'Erste für HPC konzipierte GPU mit ECC und doppelter Genauigkeit.', it: 'Prima GPU progettata per HPC con ECC e doppia precisione.', ru: 'Первый GPU, разработанный для HPC с ECC и двойной точностью.'} },
-  { year: '2012', title: 'AMD GCN / NVIDIA Kepler', desc: {es: 'La era del cómputo general. Primeros aceleradores Tesla.', en: 'The era of general computing. First Tesla accelerators.', fr: 'L\'ère du calcul généraliste. Premiers accélérateurs Tesla.', de: 'Die Ära des allgemeinen Rechnens. Erste Tesla-Beschleuniger.', it: 'L\'era del calcolo generale. Primi aceleratori Tesla.', ru: 'Эра общих вычислений. Первые ускорители Tesla.'} },
+  { year: '2012', title: 'AMD GCN / NVIDIA Kepler', desc: {es: 'La era del cómputo general. Primeros aceleradores Tesla.', en: 'The era of general computing. First Tesla accelerators.', fr: 'L\'ère du calcul généraliste. Premiers aceleratori Tesla.', de: 'Die Ära des allgemeinen Rechnens. Erste Tesla-Beschleuniger.', it: 'L\'era del calcolo generale. Primi aceleratori Tesla.', ru: 'Эра общих вычислений. Первые ускорители Tesla.'} },
   { year: '2014', title: 'NVIDIA Maxwell', desc: {es: 'Revolución en eficiencia energética y rendimiento por vatio.', en: 'Revolution in power efficiency and performance per watt.', fr: 'Révolution dans l\'efficacité énergétique et la performance par watt.', de: 'Revolution bei der Energieeffizienz und Leistung pro Watt.', it: 'Rivolución nell\'efficienza energetica e prestazioni per watt.', ru: 'Революция в энергоэффективности и производительности на ватт.'} },
   { year: '2016', title: 'NVIDIA Pascal GP100', desc: {es: 'NVLink y 3D-HBM. Nace el Tesla P100, la GPU de IA moderna.', en: 'NVLink and 3D-HBM. The Tesla P100 is born, the modern AI GPU.', fr: 'NVLink et 3D-HBM. Naissance du Tesla P100, le GPU d\'IA moderne.', de: 'NVLink und 3D-HBM. Die Tesla P100 wird geboren, die moderne KI-GPU.', it: 'NVLink e 3D-HBM. Nasce la Tesla P100, la GPU per IA moderna.', ru: 'NVLink и 3D-HBM. Рождается Tesla P100, современный ИИ-GPU.'} },
   { year: '2018', title: 'NVIDIA Turing / RTX 20', desc: {es: 'Ray Tracing en tiempo real y Tensor Cores para IA.', en: 'Real-time Ray Tracing and Tensor Cores for AI.', fr: 'Ray Tracing en temps réel et Tensor Cores pour l\'IA.', de: 'Echtzeit-Raytracing und Tensor Cores für KI.', it: 'Ray Tracing in tempo reale e Tensor Cores per IA.', ru: 'Трассировка лучей в реальном времени и Tensor Cores для ИИ.'} },
   { year: '2020', title: 'NVIDIA Ampere / A100', desc: {es: 'A100 80GB HBM2e. Domina el entrenamiento de IA a escala.', en: 'A100 80GB HBM2e. Dominates AI training at scale.', fr: 'A100 80 Go HBM2e. Domine l\'entraînement de l\'IA à grande échelle.', de: 'A100 80GB HBM2e. Dominiert das KI-Training in großem Maßstab.', it: 'A100 80GB HBM2e. Domina l\'addestramento dell\'IA su scala.', ru: 'A100 80GB HBM2e. Доминирует в обучении ИИ в больших масштабах.'} },
   { year: '2022', title: 'AMD RDNA 3 / NVIDIA Ada', desc: {es: 'RTX 4090 y RX 7900 XTX. Batalla épica en el gaming high-end.', en: 'RTX 4090 and RX 7900 XTX. Epic battle in high-end gaming.', fr: 'RTX 4090 et RX 7900 XTX. Bataille épique dans le jeu haut de gamme.', de: 'RTX 4090 und RX 7900 XTX. Epischer Kampf im High-End-Gaming.', it: 'RTX 4090 e RX 7900 XTX. Battaglia epica nel gaming high-end.', ru: 'RTX 4090 и RX 7900 XTX. Эпическая битва в high-end гейминге.'} },
   { year: '2023', title: 'NVIDIA Hopper H100 / AMD MI300X', desc: {es: 'La carrera de la IA. H100 se convierte en el chip más demandado del planeta.', en: 'The AI race. H100 becomes the most demanded chip on the planet.', fr: 'La course à l\'IA. H100 devient la puce la plus demandée au monde.', de: 'Das KI-Rennen. H100 wird zum gefragtesten Chip des Planeten.', it: 'La corsa all\'IA. H100 diventa il chip più richiesto del pianeta.', ru: 'Гонка ИИ. H100 становится самым востребованным чипом на планете.'} },
-  { year: '2024', title: 'NVIDIA Blackwell B200 / Intel Gaudi 3', desc: {es: 'Arquitecturas de próxima generación. 1000+ TFLOPS para LLMs.', en: 'Next-generation architectures. 1000+ TFLOPS for LLMs.', fr: 'Architectures de nouvelle génération. 1000+ TFLOPS pour les LLM.', de: 'Architekturen der nächsten Generation. 1000+ TFLOPS für LLMs.', it: 'Architetture di prossima generazione. 1000+ TFLOPS per LLM.', ru: 'Архитектуры нового поколения. 1000+ TFLOPS для LLM.'} },
+  { year: '2024', title: 'NVIDIA Blackwell B200 / Intel Gaudi 3', desc: {es: 'Arquitecturas de próxima generación. 1000+ TFLOPS para LLMs.', en: 'Next-generation architectures. 1000+ TFLOPS for LLMs.', fr: 'Architectures de nouvelle generación. 1000+ TFLOPS pour les LLM.', de: 'Architekturen der nächsten Generation. 1000+ TFLOPS für LLMs.', it: 'Architetture di prossima generazione. 1000+ TFLOPS per LLM.', ru: 'Архитектуры нового поколения. 1000+ TFLOPS для LLM.'} },
   { year: '2025', title: 'RTX 5090 / NVIDIA H200', desc: {es: 'Consumer Blackwell llega. H200 con HBM3e marca el nuevo estándar.', en: 'Consumer Blackwell arrives. H200 with HBM3e sets the new standard.', fr: 'Arrivée de Blackwell pour le grand public. H200 avec HBM3e fixe la nouvelle norme.', de: 'Consumer Blackwell kommt. H200 mit HBM3e setzt den neuen Standard.', it: 'Arriva Blackwell consumer. H200 con HBM3e stabilisce il nuovo estándar.', ru: 'Потребительский Blackwell прибывает. H200 с HBM3e устанавливает новый стандарт.'} }
 ];
 
@@ -268,7 +352,9 @@ const ALL_DOMESTIC_GPUS = [
   { brand: 'nvidia', name: 'GTX 1070 Ti', arch: 'Pascal', year: 2017, tier: 'high', vram: '8 GB GDDR5', tflops: '8.19', bandwidth: '256.3 GB/s', tdp: '180W', price: '~$449' },
   { brand: 'nvidia', name: 'GTX 1070', arch: 'Pascal', year: 2016, tier: 'high', vram: '8 GB GDDR5', tflops: '6.46', bandwidth: '256.3 GB/s', tdp: '150W', price: '~$379' },
   { brand: 'nvidia', name: 'GTX 1060 (6GB)', arch: 'Pascal', year: 2016, tier: 'mid', vram: '6 GB GDDR5', tflops: '4.37', bandwidth: '192.2 GB/s', tdp: '120W', price: '~$249' },
+  { brand: 'nvidia', name: 'GTX 1060 (3GB)', arch: 'Pascal', year: 2016, tier: 'mid', vram: '3 GB GDDR5', tflops: '3.91', bandwidth: '192.2 GB/s', tdp: '120W', price: '~$199' },
   { brand: 'nvidia', name: 'GTX 1050 Ti', arch: 'Pascal', year: 2016, tier: 'entry', vram: '4 GB GDDR5', tflops: '2.14', bandwidth: '112.1 GB/s', tdp: '75W', price: '~$139' },
+  { brand: 'nvidia', name: 'GTX 1050', arch: 'Pascal', year: 2016, tier: 'entry', vram: '2 GB GDDR5', tflops: '1.86', bandwidth: '112.1 GB/s', tdp: '75W', price: '~$109' },
   { brand: 'amd', name: 'Radeon RX 590', arch: 'Polaris', year: 2018, tier: 'mid', vram: '8 GB GDDR5', tflops: '7.12', bandwidth: '256.0 GB/s', tdp: '225W', price: '~$279' },
   { brand: 'amd', name: 'Radeon RX 580', arch: 'Polaris', year: 2017, tier: 'mid', vram: '8 GB GDDR5', tflops: '6.17', bandwidth: '256.0 GB/s', tdp: '185W', price: '~$229' },
   { brand: 'amd', name: 'Radeon RX 570', arch: 'Polaris', year: 2017, tier: 'mid', vram: '4 GB GDDR5', tflops: '5.10', bandwidth: '224.0 GB/s', tdp: '150W', price: '~$169' },
@@ -287,6 +373,7 @@ const ALL_DOMESTIC_GPUS = [
   { brand: 'nvidia', name: 'GTX 1660 SUPER', arch: 'Turing', year: 2019, tier: 'mid', vram: '6 GB GDDR6', tflops: '5.02', bandwidth: '336.0 GB/s', tdp: '125W', price: '~$229' },
   { brand: 'nvidia', name: 'GTX 1660', arch: 'Turing', year: 2019, tier: 'mid', vram: '6 GB GDDR5', tflops: '5.03', bandwidth: '192.1 GB/s', tdp: '120W', price: '~$219' },
   { brand: 'nvidia', name: 'GTX 1650 SUPER', arch: 'Turing', year: 2019, tier: 'entry', vram: '4 GB GDDR6', tflops: '4.42', bandwidth: '192.0 GB/s', tdp: '100W', price: '~$159' },
+  { brand: 'nvidia', name: 'GTX 1650', arch: 'Turing', year: 2019, tier: 'entry', vram: '4 GB GDDR5', tflops: '2.98', bandwidth: '128.1 GB/s', tdp: '75W', price: '~$149' },
   { brand: 'amd', name: 'Radeon RX 5700 XT', arch: 'RDNA 1', year: 2019, tier: 'high', vram: '8 GB GDDR6', tflops: '9.75', bandwidth: '448.0 GB/s', tdp: '225W', price: '~$399' },
   { brand: 'amd', name: 'Radeon RX 5700', arch: 'RDNA 1', year: 2019, tier: 'high', vram: '8 GB GDDR6', tflops: '7.95', bandwidth: '448.0 GB/s', tdp: '180W', price: '~$349' },
   { brand: 'amd', name: 'Radeon RX 5600 XT', arch: 'RDNA 1', year: 2020, tier: 'mid', vram: '6 GB GDDR6', tflops: '7.19', bandwidth: '288.0 GB/s', tdp: '150W', price: '~$279' },
@@ -302,6 +389,7 @@ const ALL_DOMESTIC_GPUS = [
   { brand: 'nvidia', name: 'RTX 3060 Ti', arch: 'Ampere', year: 2020, tier: 'mid', vram: '8 GB GDDR6', tflops: '16.20', bandwidth: '448.0 GB/s', tdp: '200W', price: '~$399' },
   { brand: 'nvidia', name: 'RTX 3060', arch: 'Ampere', year: 2021, tier: 'mid', vram: '12 GB GDDR6', tflops: '12.74', bandwidth: '360.0 GB/s', tdp: '170W', price: '~$329' },
   { brand: 'nvidia', name: 'RTX 3050', arch: 'Ampere', year: 2022, tier: 'entry', vram: '8 GB GDDR6', tflops: '9.10', bandwidth: '224.0 GB/s', tdp: '130W', price: '~$249' },
+  { brand: 'nvidia', name: 'RTX 3050 (6GB)', arch: 'Ampere', year: 2024, tier: 'entry', vram: '6 GB GDDR6', tflops: '6.20', bandwidth: '168.0 GB/s', tdp: '70W', price: '~$179' },
   { brand: 'amd', name: 'Radeon RX 6950 XT', arch: 'RDNA 2', year: 2022, tier: 'ultra', vram: '16 GB GDDR6', tflops: '23.65', bandwidth: '576.0 GB/s', tdp: '335W', price: '~$1099' },
   { brand: 'amd', name: 'Radeon RX 6900 XT', arch: 'RDNA 2', year: 2020, tier: 'ultra', vram: '16 GB GDDR6', tflops: '23.04', bandwidth: '512.0 GB/s', tdp: '300W', price: '~$999' },
   { brand: 'amd', name: 'Radeon RX 6800 XT', arch: 'RDNA 2', year: 2020, tier: 'high', vram: '16 GB GDDR6', tflops: '20.74', bandwidth: '512.0 GB/s', tdp: '300W', price: '~$649' },
