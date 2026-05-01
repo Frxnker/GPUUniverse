@@ -224,35 +224,214 @@ const serverGrid = document.getElementById('server-grid');
 if (serverGrid) serverGrid.innerHTML = SERVER_GPUS.map(buildServerCard).join('');
 
 // ===== COMPARE TABLE =====
+// ===== DYNAMIC COMPARISON =====
+window.gpuA = null;
+window.gpuB = null;
+
+function initComparisonSelectors() {
+  const inputA = document.getElementById('gpu-a-input');
+  const resultsA = document.getElementById('results-a');
+  const badgeA = document.getElementById('selected-a');
+  
+  const inputB = document.getElementById('gpu-b-input');
+  const resultsB = document.getElementById('results-b');
+  const badgeB = document.getElementById('selected-b');
+
+  if (!inputA || !inputB) return;
+
+  function setupSelector(input, results, badge, side) {
+    let timeout;
+    input.addEventListener('input', (e) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        const term = e.target.value.toLowerCase().trim();
+        if (term.length < 2) {
+          results.classList.remove('active');
+          return;
+        }
+        const gpus = getAllGpus();
+        const filtered = gpus.filter(g => g.name.toLowerCase().includes(term) || g.arch.toLowerCase().includes(term));
+        
+        if (filtered.length > 0) {
+          results.innerHTML = filtered.slice(0, 6).map(g => `
+            <div class="search-result-item" onclick="selectForCompare('${g.name}', '${side}')">
+              <div class="sr-info">
+                <span class="gpu-brand brand-${g.brand}">${g.brand.toUpperCase()}</span>
+                <span class="sr-name">${g.name}</span>
+              </div>
+              <span class="sr-arch">${g.arch}</span>
+            </div>
+          `).join('');
+          results.classList.add('active');
+        } else {
+          results.innerHTML = `<div style="padding: 0.5rem; color: #888; font-size: 0.8rem;">No hay resultados</div>`;
+          results.classList.add('active');
+        }
+      }, 200);
+    });
+
+    // Close on blur (delayed to allow click)
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.compare-select')) {
+        results.classList.remove('active');
+      }
+    });
+  }
+
+  setupSelector(inputA, resultsA, badgeA, 'A');
+  setupSelector(inputB, resultsB, badgeB, 'B');
+
+  // Set defaults
+  window.selectForCompare('RTX 4090', 'A');
+  window.selectForCompare('RX 7900 XTX', 'B');
+}
+
+window.selectForCompare = function(name, side) {
+  const gpus = getAllGpus();
+  const gpu = gpus.find(g => g.name === name) || gpus.find(g => g.name.includes(name));
+  if (!gpu) return;
+
+  const sideId = side === 'A' ? 'a' : 'b';
+  const input = document.getElementById(`gpu-${sideId}-input`);
+  const badge = document.getElementById(`selected-${sideId}`);
+  const results = document.getElementById(`results-${sideId}`);
+
+  if (side === 'A') window.gpuA = gpu;
+  else window.gpuB = gpu;
+
+  input.value = '';
+  badge.innerHTML = `
+    <div class="selected-card-inner">
+      <span class="gpu-brand brand-${gpu.brand}">${gpu.brand.toUpperCase()}</span>
+      <div class="selected-name">${gpu.name}</div>
+      <div class="selected-meta">${gpu.vram} · ${gpu.tflops} TFLOPS</div>
+    </div>
+  `;
+  badge.classList.add('active');
+  results.classList.remove('active');
+
+  window.renderCompareTable();
+  window.renderChart();
+};
+
+// ===== COMPARE TABLE =====
 window.renderCompareTable = function() {
   const table = document.getElementById('compare-table');
   if (!table) return;
+  
+  const gpus = [];
+  if (window.gpuA) gpus.push(window.gpuA);
+  if (window.gpuB) gpus.push(window.gpuB);
+  
+  // If no specific selection, use defaults from data.js
+  const displayData = gpus.length > 0 ? gpus : (typeof COMPARE_DATA !== 'undefined' ? COMPARE_DATA.slice(0, 4) : []);
+
   table.innerHTML = `
     <thead>
       <tr>
         <th>${typeof t === "function" ? window.t("table.gpu") : "GPU"}</th>
-        <th>${typeof t === "function" ? window.t("table.cat") : "Categoría"}</th>
-        <th>${typeof t === "function" ? window.t("table.tflops") : "Rendimiento (TFLOPS)"}</th>
-        <th>${typeof t === "function" ? window.t("table.vram") : "Memoria VRAM"}</th>
-        <th>${typeof t === "function" ? window.t("table.bw") : "Ancho de Banda"}</th>
+        <th>${typeof t === "function" ? window.t("table.vram") : "Memoria"}</th>
+        <th>TFLOPS</th>
+        <th>${typeof t === "function" ? window.t("table.bw") : "Ancho Banda"}</th>
+        <th>TDP</th>
         <th>${typeof t === "function" ? window.t("table.price") : "Precio Est."}</th>
       </tr>
     </thead>
     <tbody>
-      ${typeof COMPARE_DATA !== 'undefined' ? COMPARE_DATA.map(r => `
-        <tr>
-          <td><strong>${r.name}</strong></td>
-          <td>${typeof t === "function" ? (window.t("ui.tier_" + r.cat.toLowerCase()) || r.cat) : r.cat}</td>
-          <td class="mono highlight-cell">${r.tflops.toLocaleString()}</td>
+      ${displayData.map(r => `
+        <tr class="reveal visible">
+          <td><strong>${r.name}</strong><br><small style="opacity:0.6">${r.brand.toUpperCase()} · ${r.arch}</small></td>
           <td class="mono">${r.vram}</td>
-          <td class="mono">${r.bw.toLocaleString()} GB/s</td>
+          <td class="mono highlight-cell">${parseFloat(r.tflops).toLocaleString()}</td>
+          <td class="mono">${r.bandwidth || r.bw + ' GB/s'}</td>
+          <td class="mono">${r.tdp || '-'}</td>
           <td class="mono">${window.formatPrice(r.price)}</td>
         </tr>
-      `).join('') : ''}
+      `).join('')}
     </tbody>
   `;
 };
-window.renderCompareTable();
+
+// ===== PERFORMANCE CHART =====
+window.renderChart = function() {
+  const canvas = document.getElementById('perf-chart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  
+  const gpus = [];
+  if (window.gpuA) gpus.push(window.gpuA);
+  if (window.gpuB) gpus.push(window.gpuB);
+  
+  // If no selection, show a pre-defined group
+  const displayData = gpus.length > 0 ? gpus : (typeof COMPARE_DATA !== 'undefined' ? COMPARE_DATA.slice(0, 4) : []);
+
+  const labels = displayData.map(g => g.name);
+  const tflopsData = displayData.map(g => parseFloat(g.tflops));
+  const colors = displayData.map(g => g.brand === 'nvidia' ? 'rgba(118,185,0,0.8)' : (g.brand === 'amd' ? 'rgba(237,28,36,0.8)' : 'rgba(0,212,255,0.8)'));
+
+  canvas.width = canvas.parentElement.offsetWidth - 64;
+  canvas.height = 360;
+
+  const maxVal = Math.max(...tflopsData, 10);
+  const padding = { top: 20, right: 40, bottom: 60, left: 80 };
+  const chartW = canvas.width - padding.left - padding.right;
+  const chartH = canvas.height - padding.top - padding.bottom;
+  const barW = Math.min(chartW / labels.length * 0.4, 100);
+  const gap = chartW / labels.length;
+
+  // grid lines
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let i = 0; i <= 5; i++) {
+    const y = padding.top + (chartH / 5) * i;
+    const val = Math.round(maxVal * (1 - i / 5));
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(padding.left, y); ctx.lineTo(padding.left + chartW, y); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = '11px JetBrains Mono, monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText(val.toLocaleString(), padding.left - 10, y + 4);
+  }
+
+  // bars
+  tflopsData.forEach((val, i) => {
+    const x = padding.left + gap * i + (gap - barW) / 2;
+    const barH = (val / maxVal) * chartH;
+    const y = padding.top + chartH - barH;
+
+    const grad = ctx.createLinearGradient(0, y, 0, y + barH);
+    grad.addColorStop(0, colors[i]);
+    grad.addColorStop(1, 'rgba(0,0,0,0.2)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.roundRect(x, y, barW, barH, [8, 8, 0, 0]);
+    ctx.fill();
+
+    // Value on top
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 12px Outfit';
+    ctx.textAlign = 'center';
+    ctx.fillText(val.toLocaleString(), x + barW / 2, y - 8);
+
+    // Label
+    ctx.fillStyle = 'rgba(255,255,255,0.8)';
+    ctx.font = '11px Outfit';
+    ctx.fillText(labels[i], x + barW / 2, padding.top + chartH + 25);
+  });
+
+  // axis
+  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+  ctx.beginPath();
+  ctx.moveTo(padding.left, padding.top);
+  ctx.lineTo(padding.left, padding.top + chartH);
+  ctx.lineTo(padding.left + chartW, padding.top + chartH);
+  ctx.stroke();
+};
+
+// Initialize selectors on load
+document.addEventListener('DOMContentLoaded', () => {
+  initComparisonSelectors();
+});
 
 // ===== TIMELINE =====
 window.renderTimeline = function() {
@@ -276,7 +455,9 @@ window.renderTimeline();
 
 // ===== OBSERVE REVEALS =====
 setTimeout(() => {
-  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+  if (typeof revealObs !== 'undefined') {
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+  }
 }, 100);
 
 // ===== PERF BAR ANIMATION =====
@@ -306,116 +487,69 @@ document.querySelectorAll('.cat-card').forEach(card => {
   });
 });
 
-// ===== PERFORMANCE CHART =====
-window.renderChart = function() {
-  const canvas = document.getElementById('perf-chart');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
+// Re-render components globally for i18n
+window.renderAll = function() {
+  const gg = document.getElementById('gaming-grid');
+  if (gg) gg.innerHTML = GAMING_GPUS.map(buildGpuCard).join('');
   
-  // Clear and resize
-  canvas.width = canvas.parentElement.offsetWidth - 64;
-  canvas.height = 360;
-
-  const labels = ['RTX 4060', 'RX 9070 XT', 'RTX 4090', 'RTX 5090', 'RTX 6000 Ada', 'H100 SXM', 'H200 SXM', 'MI300X'];
-  const tflopsData = [15.1, 73.0, 82.6, 209.8, 91.1, 3028, 3958, 5220];
-  const colors = [
-    'rgba(0,255,136,0.8)', 'rgba(237,28,36,0.8)', 'rgba(118,185,0,0.8)',
-    'rgba(255,215,0,0.8)', 'rgba(118,185,0,0.8)', 'rgba(0,212,255,0.6)',
-    'rgba(124,58,255,0.8)', 'rgba(237,28,36,0.8)'
-  ];
-
-  // responsive
-  canvas.width = canvas.parentElement.offsetWidth - 64;
-  canvas.height = 360;
-
-  const maxVal = Math.max(...tflopsData);
-  const padding = { top: 20, right: 20, bottom: 80, left: 80 };
-  const chartW = canvas.width - padding.left - padding.right;
-  const chartH = canvas.height - padding.top - padding.bottom;
-  const barW = chartW / labels.length * 0.6;
-  const gap = chartW / labels.length;
-
-  // grid lines
-  for (let i = 0; i <= 5; i++) {
-    const y = padding.top + (chartH / 5) * i;
-    const val = Math.round(maxVal * (1 - i / 5));
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(padding.left, y); ctx.lineTo(padding.left + chartW, y); ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,0.3)';
-    ctx.font = '11px JetBrains Mono, monospace';
-    ctx.textAlign = 'right';
-    ctx.fillText(val.toLocaleString(), padding.left - 10, y + 4);
+  const wg = document.getElementById('workstation-grid');
+  if (wg) wg.innerHTML = WORKSTATION_GPUS.map(buildGpuCard).join('');
+  
+  const mg = document.getElementById('mobile-grid');
+  if (mg && typeof MOBILE_GPUS !== 'undefined') mg.innerHTML = MOBILE_GPUS.map(buildGpuCard).join('');
+  
+  const sg = document.getElementById('server-grid');
+  if (sg) sg.innerHTML = SERVER_GPUS.map(buildServerCard).join('');
+  
+  if (document.getElementById('compare-table')) renderCompareTable();
+  if (document.getElementById('timeline-container')) renderTimeline();
+  if (document.getElementById('perf-chart')) renderChart();
+  
+  // Re-observe reveals
+  if (typeof revealObs !== 'undefined') {
+    document.querySelectorAll('.reveal').forEach(el => {
+      el.classList.remove('visible');
+      revealObs.observe(el);
+    });
   }
+  
+  // Re-observe performance bars
+  if (typeof barObs !== 'undefined') {
+    document.querySelectorAll('.gpu-card').forEach(card => barObs.observe(card));
+  }
+};
 
-  // bars (animated)
-  let progress = 0;
-  function animBars() {
-    ctx.clearRect(padding.left, padding.top, chartW, chartH);
-    // redraw grid
-    for (let i = 0; i <= 5; i++) {
-      const y = padding.top + (chartH / 5) * i;
-      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-      ctx.beginPath(); ctx.moveTo(padding.left, y); ctx.lineTo(padding.left + chartW, y); ctx.stroke();
-    }
-    tflopsData.forEach((val, i) => {
-      const x = padding.left + gap * i + (gap - barW) / 2;
-      const fullH = (val / maxVal) * chartH;
-      const animH = fullH * Math.min(progress, 1);
-      const y = padding.top + chartH - animH;
-
-      // gradient bar
-      const grad = ctx.createLinearGradient(0, y, 0, y + animH);
-      grad.addColorStop(0, colors[i]);
-      grad.addColorStop(1, 'rgba(0,0,0,0.1)');
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.roundRect(x, y, barW, animH, [6, 6, 0, 0]);
-      ctx.fill();
-
-      // label
-      ctx.fillStyle = 'rgba(255,255,255,0.6)';
-      ctx.font = '10px Outfit, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.save();
-      ctx.translate(x + barW / 2, padding.top + chartH + 12);
-      ctx.rotate(-0.5);
-      ctx.fillText(labels[i], 0, 0);
-      ctx.restore();
+// ===== MOBILE MENU =====
+document.addEventListener('DOMContentLoaded', () => {
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const navLinks = document.querySelector('.nav-links');
+  
+  if (mobileBtn && navLinks) {
+    mobileBtn.addEventListener('click', () => {
+      mobileBtn.classList.toggle('active');
+      navLinks.classList.toggle('active');
+      document.body.classList.toggle('menu-open');
     });
 
-    if (progress < 1) {
-      progress += 0.025;
-      requestAnimationFrame(animBars);
-    }
+    // Close menu when clicking a link
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileBtn.classList.remove('active');
+        navLinks.classList.remove('active');
+        document.body.classList.remove('menu-open');
+      });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (navLinks.classList.contains('active') && !e.target.closest('.nav-links') && !e.target.closest('#mobile-menu-btn')) {
+        mobileBtn.classList.remove('active');
+        navLinks.classList.remove('active');
+        document.body.classList.remove('menu-open');
+      }
+    });
   }
-
-  // trigger on scroll
-  const chartObs = new IntersectionObserver(entries => {
-    if (entries[0].isIntersecting) { animBars(); chartObs.disconnect(); }
-  }, { threshold: 0.3 });
-  chartObs.observe(canvas);
-
-  // axis
-  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(padding.left, padding.top);
-  ctx.lineTo(padding.left, padding.top + chartH);
-  ctx.lineTo(padding.left + chartW, padding.top + chartH);
-  ctx.stroke();
-
-  // Y axis label
-  ctx.save();
-  ctx.translate(16, padding.top + chartH / 2);
-  ctx.rotate(-Math.PI / 2);
-  ctx.fillStyle = 'rgba(255,255,255,0.3)';
-  ctx.font = '11px Outfit, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('TFLOPS (FP32 / INT8)', 0, 0);
-  ctx.restore();
-};
-window.renderChart();
+});
 
 // ===== SEARCH & MODAL LOGIC =====
 const searchInput = document.getElementById('gpu-search');

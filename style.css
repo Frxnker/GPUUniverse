@@ -975,6 +975,139 @@ section {
 }
 
 /* ===== COMPARE CHART ===== */
+/* ===== COMPARISON SELECTORS ===== */
+.compare-selectors-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2rem;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.compare-select {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.compare-select label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.compare-select input {
+  width: 100% !important;
+  background: var(--surface2) !important;
+  border: 1px solid var(--border) !important;
+  padding: 0.8rem 1.2rem !important;
+  border-radius: 12px !important;
+  color: var(--text) !important;
+  font-size: 1rem !important;
+  transition: all 0.3s;
+}
+
+.compare-select input:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 15px rgba(124, 58, 255, 0.2) !important;
+  outline: none;
+}
+
+.compare-vs {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--text-muted);
+  padding-bottom: 1.2rem;
+  font-style: italic;
+  opacity: 0.5;
+}
+
+.selected-gpu-badge {
+  margin-top: 1rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  display: none;
+  animation: fade-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.selected-gpu-badge:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.selected-gpu-badge.active {
+  display: block;
+}
+
+.selected-card-inner {
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.selected-name {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0.4rem 0;
+}
+
+.selected-meta {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Dropdown improvements */
+.search-result-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.8rem 1rem;
+}
+
+.sr-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.sr-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.sr-arch {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding-left: 0;
+}
+
+@media (max-width: 768px) {
+  .compare-selectors-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    text-align: center;
+  }
+  
+  .compare-vs {
+    padding-bottom: 0;
+  }
+}
+
 .compare-chart-wrap {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -1251,6 +1384,16 @@ html[lang="ru"] .nav-links a {
 
 .search-results.active {
   display: flex;
+}
+
+/* Specific for compare selectors to avoid overlapping */
+.compare-select .search-results {
+  position: relative;
+  top: 0;
+  margin-top: 0.5rem;
+  box-shadow: none;
+  background: var(--surface2);
+  border-radius: 12px;
 }
 
 .search-result-item {

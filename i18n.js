@@ -62,6 +62,10 @@ const translations = {
       timeline_title_hl: "GPUs",
       timeline_p: "Desde los primeros aceleradores gráficos 2D en los años 80 hasta las supercomputadoras de IA actuales, la evolución de la Unidad de Procesamiento Gráfico (GPU) es una de las historias más fascinantes de la tecnología. Lo que empezó como un chip dedicado para renderizar píxeles en videojuegos, se ha convertido hoy en el cerebro indiscutible de la inteligencia artificial y el motor del cómputo paralelo masivo a nivel mundial."
     },
+    compare: {
+      label_primary: "GPU Principal",
+      label_target: "Comparar con..."
+    },
     footer: {
       desc: "La base de datos interactiva más completa sobre aceleradores gráficos.",
       explore_title: "Explorar",
@@ -159,6 +163,10 @@ const translations = {
       timeline_title: "Evolution of",
       timeline_title_hl: "GPUs",
       timeline_p: "From the first 2D graphics accelerators in the 80s to today's AI supercomputers, the evolution of the Graphics Processing Unit (GPU) is one of the most fascinating stories in technology. What started as a dedicated chip for rendering pixels in video games has now become the undisputed brain of artificial intelligence and the engine of massive parallel computing worldwide."
+    },
+    compare: {
+      label_primary: "Primary GPU",
+      label_target: "Compare with..."
     },
     footer: {
       desc: "The most comprehensive interactive database on graphics accelerators.",
@@ -258,6 +266,10 @@ const translations = {
       timeline_title_hl: "GPUs",
       timeline_p: "Des premiers accélérateurs graphiques 2D dans les années 80 aux supercalculateurs d'IA actuels, l'évolution de l'Unité de Traitement Graphique (GPU) est l'une des histoires les plus fascinantes de la technologie. Ce qui a commencé comme une puce dédiée au rendu de pixels dans les jeux vidéo est devenu aujourd'hui le cerveau incontesté de l'intelligence artificielle et le moteur du calcul parallèle massif dans le monde entier."
     },
+    compare: {
+      label_primary: "GPU Principale",
+      label_target: "Comparer avec..."
+    },
     footer: {
       desc: "La base de données interactive la plus complète sur les accélérateurs graphiques.",
       explore_title: "Explorer",
@@ -355,6 +367,10 @@ const translations = {
       timeline_title: "Entwicklung der",
       timeline_title_hl: "GPUs",
       timeline_p: "Von den ersten 2D-Grafikbeschleunigern in den 80ern bis zu den heutigen KI-Supercomputern ist die Entwicklung der Graphics Processing Unit (GPU) eine der faszinierendsten Geschichten der Technologie. Was als dedizierter Chip zum Rendern von Pixeln in Videospielen begann, ist heute das unbestrittene Gehirn der künstlichen Intelligenz und der Motor des massiven Parallel-Computings weltweit geworden."
+    },
+    compare: {
+      label_primary: "Haupt-GPU",
+      label_target: "Vergleichen mit..."
     },
     footer: {
       desc: "Die umfassendste interaktive Datenbank für Grafikbeschleuniger.",
@@ -454,6 +470,10 @@ const translations = {
       timeline_title_hl: "GPU",
       timeline_p: "Dai primi acceleratori grafici 2D negli anni '80 agli attuali supercomputer IA, l'evoluzione della Graphics Processing Unit (GPU) è una delle storie più affascinanti della tecnologia. Ciò che era iniziato come un chip dedicato al rendering dei pixel nei videogiochi, oggi è diventato il cervello indiscusso dell'intelligenza artificiale e il motore del calcolo parallelo massivo in tutto il mondo."
     },
+    compare: {
+      label_primary: "GPU Principale",
+      label_target: "Confronta con..."
+    },
     footer: {
       desc: "Il database interattivo più completo sugli acceleratori grafici.",
       explore_title: "Esplora",
@@ -551,6 +571,10 @@ const translations = {
       timeline_title: "Эволюция",
       timeline_title_hl: "GPU",
       timeline_p: "От первых 2D графических ускорителей 80-х до сегодняшних ИИ-суперкомпьютеров, эволюция графических процессоров (GPU) — одна из самых увлекательных историй в технологиях. То, что началось как специализированный чип для рендеринга пикселей в видеоиграх, сегодня стало бесспорным мозгом искусственного интеллекта и двигателем массивно-параллельных вычислений во всем мире."
+    },
+    compare: {
+      label_primary: "Основная GPU",
+      label_target: "Сравнить с..."
     },
     footer: {
       desc: "Самая полная интерактивная база данных графических ускорителей.",

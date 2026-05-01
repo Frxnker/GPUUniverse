@@ -46,6 +46,16 @@ const GAMING_GPUS = [
     tier: 'entry', vram: '8 GB GDDR6', tflops: '15.1', bandwidth: '272 GB/s',
     tdp: '115W', price: '~$299', perf: 28, fillColor: 'fill-green'
   },
+  {
+    brand: 'nvidia', name: 'RTX 5060', arch: 'Blackwell / GB207',
+    tier: 'mid', vram: '12 GB GDDR7', tflops: '28.5', bandwidth: '384 GB/s',
+    tdp: '140W', price: '~$349', perf: 42, fillColor: 'fill-blue'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 5050', arch: 'Blackwell / GB207',
+    tier: 'entry', vram: '8 GB GDDR7', tflops: '18.2', bandwidth: '256 GB/s',
+    tdp: '100W', price: '~$249', perf: 32, fillColor: 'fill-green'
+  },
 ];
 
 const WORKSTATION_GPUS = [
