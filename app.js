@@ -533,3 +533,35 @@ window.renderAll = function() {
     document.querySelectorAll('.gpu-card').forEach(card => barObs.observe(card));
   }
 };
+
+// ===== MOBILE MENU =====
+document.addEventListener('DOMContentLoaded', () => {
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const navLinks = document.querySelector('.nav-links');
+  
+  if (mobileBtn && navLinks) {
+    mobileBtn.addEventListener('click', () => {
+      mobileBtn.classList.toggle('active');
+      navLinks.classList.toggle('active');
+      document.body.classList.toggle('menu-open');
+    });
+
+    // Close menu when clicking a link
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileBtn.classList.remove('active');
+        navLinks.classList.remove('active');
+        document.body.classList.remove('menu-open');
+      });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (navLinks.classList.contains('active') && !e.target.closest('.nav-links') && !e.target.closest('#mobile-menu-btn')) {
+        mobileBtn.classList.remove('active');
+        navLinks.classList.remove('active');
+        document.body.classList.remove('menu-open');
+      }
+    });
+  }
+});
