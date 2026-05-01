@@ -974,6 +974,16 @@ section {
   color: var(--gold);
 }
 
+.server-spec.highlight-price {
+  grid-column: span 2;
+  border-color: rgba(124, 58, 255, 0.3);
+  background: rgba(124, 58, 255, 0.05);
+}
+
+.server-spec.highlight-price span {
+  color: var(--accent);
+}
+
 /* ===== COMPARE CHART ===== */
 /* ===== COMPARISON SELECTORS ===== */
 .compare-selectors-grid {

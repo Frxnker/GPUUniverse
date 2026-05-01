@@ -165,6 +165,7 @@ function buildServerCard(gpu) {
         <div class="server-spec"><label>${typeof window.t === "function" ? window.t("ui.tdp") || "TDP" : "TDP"}</label><span>${gpu.tdp}</span></div>
         <div class="server-spec"><label>${typeof t === "function" ? window.t("ui.interconnect") : "Interconexión"}</label><span>${gpu.interconnect}</span></div>
         <div class="server-spec"><label>${typeof t === "function" ? window.t("ui.use_case") : "Caso de Uso"}</label><span style="font-size:0.8rem">${gpu.use}</span></div>
+        <div class="server-spec highlight-price"><label>${typeof window.t === "function" ? window.t("ui.price") : "Precio Estimado"}</label><span>${window.formatPrice(gpu.price)}</span></div>
       </div>
     </div>
   `;
