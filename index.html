@@ -167,6 +167,8 @@
 
   <!-- QUIZ FINDER -->
   <section id="gpu-quiz" class="reveal">
+    <div class="quiz-glow quiz-glow-1"></div>
+    <div class="quiz-glow quiz-glow-2"></div>
     <div class="container">
       <div class="quiz-container">
         <div class="quiz-header">
@@ -248,7 +250,7 @@
           <div id="quiz-results" class="quiz-step">
             <h3 data-i18n="quiz.results_title">Nuestras recomendaciones</h3>
             <div id="quiz-recommendations" class="recommendations-grid"></div>
-            <button class="btn-ghost" onclick="resetQuiz()" style="margin-top: 2rem;" data-i18n="quiz.btn_reset">Repetir Cuestionario</button>
+            <button class="btn-quiz-reset" onclick="resetQuiz()" data-i18n="quiz.btn_reset"><span>🔄</span> Repetir Cuestionario</button>
           </div>
         </div>
       </div>
