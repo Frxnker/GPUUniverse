@@ -35,7 +35,7 @@
         <li><a href="pages/workstation.html" data-i18n="nav.workstation">Workstation</a></li>
         <li><a href="pages/server.html" data-i18n="nav.server">Servidor</a></li>
         <li><a href="pages/compare.html" data-i18n="nav.compare">Comparar</a></li>
-        <li><a href="index.html#timeline" data-i18n="nav.history">Historia</a></li>
+        <li><a href="pages/history.html" data-i18n="nav.history">Historia</a></li>
       </ul>
       <div class="nav-actions">
         <div class="search-container">
@@ -145,6 +145,23 @@
       </div>
     </div>
   </section>
+  
+  <!-- NEWS FEED SECTION -->
+  <section id="news-feed" class="reveal">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label" data-i18n="news.label">📰 Actualidad</span>
+        <h2 data-i18n="news.title">Últimas Noticias de Hardware</h2>
+        <p data-i18n="news.subtitle">Sigue al día con los últimos lanzamientos y filtraciones del mundo de las GPUs.</p>
+      </div>
+      <div class="news-grid" id="news-container">
+        <div class="loading-news">
+          <div class="spinner"></div>
+          <p>Cargando últimas novedades...</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
 
 
@@ -238,21 +255,6 @@
     </div>
   </section>
 
-  <!-- TIMELINE -->
-  <section id="timeline">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label" data-i18n="sections.timeline_label">📅 Historia</span>
-        <h2><span data-i18n="sections.timeline_title">Evolución de las</span> <span class="gradient-text" data-i18n="sections.timeline_title_hl">GPUs</span></h2>
-        <p style="margin-top: 1rem;" data-i18n="sections.timeline_p">Desde los primeros aceleradores gráficos 2D en los años 80 hasta las
-          supercomputadoras de IA actuales, la evolución de la Unidad de Procesamiento Gráfico (GPU) es una de las
-          historias más fascinantes de la tecnología. Lo que empezó como un chip dedicado para renderizar píxeles en
-          videojuegos, se ha convertido hoy en el cerebro indiscutible de la inteligencia artificial y el motor del
-          cómputo paralelo masivo a nivel mundial.</p>
-      </div>
-      <div class="timeline" id="timeline-container"></div>
-    </div>
-  </section>
 
   <!-- FOOTER -->
   <footer id="footer">

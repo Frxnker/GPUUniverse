@@ -59,6 +59,11 @@ const translations = {
       stats_updated: "Actualizado",
       scroll: "Scroll"
     },
+    news: {
+      label: "📰 Actualidad",
+      title: "Últimas Noticias de Hardware",
+      subtitle: "Sigue al día con los últimos lanzamientos y filtraciones del mundo de las GPUs."
+    },
     categories: {
       gaming_title: "Gaming",
       gaming_desc: "Desde GTX 460 hasta RTX 5090",
@@ -203,6 +208,11 @@ const translations = {
       stats_updated: "Updated",
       scroll: "Scroll"
     },
+    news: {
+      label: "📰 News",
+      title: "Latest Hardware News",
+      subtitle: "Stay up to date with the latest releases and leaks from the GPU world."
+    },
     categories: {
       gaming_title: "Gaming",
       gaming_desc: "From GTX 460 to RTX 5090",
@@ -324,6 +334,11 @@ const translations = {
       stats_top: "Top Serveur",
       stats_updated: "Mis à jour",
       scroll: "Défiler"
+    },
+    news: {
+      label: "📰 Actualités",
+      title: "Dernières Nouvelles Matériel",
+      subtitle: "Restez à jour avec les derniers lancements et fuites du monde des GPU."
     },
     categories: {
       gaming_title: "Jeu",
@@ -447,6 +462,11 @@ const translations = {
       stats_updated: "Aktualisiert",
       scroll: "Scrollen"
     },
+    news: {
+      label: "📰 Nachrichten",
+      title: "Neueste Hardware-News",
+      subtitle: "Bleiben Sie auf dem Laufenden mit den neuesten Veröffentlichungen und Leaks aus der GPU-Welt."
+    },
     categories: {
       gaming_title: "Gaming",
       gaming_desc: "Von GTX 460 bis RTX 5090",
@@ -569,6 +589,11 @@ const translations = {
       stats_updated: "Aggiornato",
       scroll: "Scorri"
     },
+    news: {
+      label: "📰 Notizie",
+      title: "Ultime Notizie Hardware",
+      subtitle: "Rimani aggiornato con gli ultimi lanci e leak dal mondo delle GPU."
+    },
     categories: {
       gaming_title: "Gaming",
       gaming_desc: "Da GTX 460 a RTX 5090",
@@ -690,6 +715,11 @@ const translations = {
       stats_top: "Топ Сервер",
       stats_updated: "Обновлено",
       scroll: "Прокрутка"
+    },
+    news: {
+      label: "📰 Новости",
+      title: "Последние новости оборудования",
+      subtitle: "Будьте в курсе последних запусков и утечек из мира GPU."
     },
     categories: {
       gaming_title: "Игры",

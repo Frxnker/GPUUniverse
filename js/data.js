@@ -436,3 +436,20 @@ const ALL_DOMESTIC_GPUS = [
   { brand: 'amd', name: 'Radeon RX 9070', arch: 'RDNA 4', year: 2025, tier: 'high', vram: '16 GB GDDR6', tflops: '58.4', bandwidth: '576 GB/s', tdp: '250W', price: '~$549' },
   { brand: 'intel', name: 'Arc B580', arch: 'Battlemage', year: 2024, tier: 'mid', vram: '12 GB GDDR6', tflops: '24.6', bandwidth: '456 GB/s', tdp: '190W', price: '~$279' }
 ];
+
+const MANUAL_NEWS = [
+  {
+    title: "Lanzamiento Exclusivo: Nueva RTX 5090 en Stock",
+    description: "Tras meses de espera, las principales tiendas confirman la llegada de un pequeño lote de la arquitectura Blackwell.",
+    pubDate: new Date().toISOString(),
+    link: "#",
+    thumbnail: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    title: "Rumores de RDNA 4: ¿El fin de la gama ultra de AMD?",
+    description: "Nuevas filtraciones sugieren que AMD se centrará en la eficiencia y el valor en lugar de competir por la corona del rendimiento absoluto.",
+    pubDate: "2026-05-08T10:00:00Z",
+    link: "#",
+    thumbnail: "https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&q=80&w=400"
+  }
+];

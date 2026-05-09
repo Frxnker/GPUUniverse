@@ -754,10 +754,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Reveal Observer
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('active');
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
   // Init
   initComparisonSelectors();
   initFilters();
   window.renderAll();
+  initNews();
 
   // Chart resize: redraw on window resize with debounce
   let chartResizeTimer;
@@ -768,3 +779,91 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 150);
   });
 });
+
+async function initNews() {
+  const container = document.getElementById('news-container');
+  if (!container) return;
+
+  const FEEDS = [
+    'https://videocardz.com/feed',
+    'https://www.techpowerup.com/rss/news',
+    'https://www.anandtech.com/rss/'
+  ];
+
+  try {
+    const fetchPromises = FEEDS.map(url => 
+      fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`).then(r => r.json())
+    );
+
+    const results = await Promise.all(fetchPromises);
+    let allItems = [];
+    
+    if (typeof MANUAL_NEWS !== 'undefined') {
+      allItems = [...MANUAL_NEWS];
+    }
+
+    results.forEach(data => {
+      if (data.status === 'ok') {
+        allItems = [...allItems, ...data.items];
+      }
+    });
+
+    allItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+    if (allItems.length > 0) {
+      const seenTitles = new Set();
+      const uniqueItems = [];
+      for (const item of allItems) {
+        if (!seenTitles.has(item.title.toLowerCase())) {
+          seenTitles.add(item.title.toLowerCase());
+          uniqueItems.push(item);
+        }
+        if (uniqueItems.length >= 8) break;
+      }
+
+      container.innerHTML = uniqueItems.map(item => {
+        // Intento de extraer imagen de varias fuentes
+        let imageUrl = item.thumbnail || (item.enclosure && item.enclosure.link);
+        
+        // Si no hay imagen, intentamos buscarla en el contenido HTML de la descripción
+        if (!imageUrl && item.description) {
+          const imgMatch = item.description.match(/<img[^>]+src="([^">]+)"/);
+          if (imgMatch) imageUrl = imgMatch[1];
+        }
+
+        // Fallback final si sigue sin haber imagen
+        if (!imageUrl) {
+          imageUrl = 'https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&q=80&w=400';
+        }
+
+        const cleanDesc = (item.description || "").replace(/<[^>]*>?/gm, '').substring(0, 120);
+        const pubDate = new Date(item.pubDate).toLocaleDateString(undefined, { day: 'numeric', month: 'long' });
+        const source = item.link.includes('videocardz') ? 'VideoCardz' : (item.link.includes('techpowerup') ? 'TechPowerUp' : 'AnandTech');
+        
+        return `
+          <div class="news-card">
+            <img src="${imageUrl}" class="news-img" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&q=80&w=400'">
+            <div class="news-content">
+              <div class="news-date">
+                <span>📅</span> ${pubDate} · <strong>${source}</strong>
+              </div>
+              <h3>${item.title}</h3>
+              <p>${cleanDesc}...</p>
+              <a href="${item.link}" target="_blank" class="news-link">Leer más <span>→</span></a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    } else {
+      throw new Error('No news items found');
+    }
+  } catch (error) {
+    console.error('Error loading news:', error);
+    container.innerHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">
+        <p>No se pudieron cargar las noticias reales en este momento.</p>
+        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Conectando con VideoCardz y TechPowerUp...</p>
+      </div>
+    `;
+  }
+}

@@ -3,22 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GPU Universe — De Gaming a Servidor</title>
-  <meta name="description" content="Explora el universo completo de las GPUs: desde tarjetas gráficas domésticas hasta aceleradores de servidor de última generación." />
+  <title>Historia de las GPUs — GPU Universe</title>
+  <meta name="description" content="Explora la fascinante evolución de las Unidades de Procesamiento Gráfico desde sus inicios hasta la era de la IA." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="icon" href="data:,">
-  <!-- Prevent theme flash -->
   <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('gpu-universe-theme') || 'dark');</script>
 </head>
 <body>
 
-  <!-- CANVAS PARTICLES -->
   <canvas id="particles-canvas"></canvas>
 
-  <!-- NAV -->
   <nav id="navbar">
     <div class="nav-inner">
       <a href="../index.html" class="nav-logo">
@@ -30,14 +27,14 @@
         <li><a href="workstation.html" data-i18n="nav.workstation">Workstation</a></li>
         <li><a href="server.html" data-i18n="nav.server">Servidor</a></li>
         <li><a href="compare.html" data-i18n="nav.compare">Comparar</a></li>
-        <li><a href="history.html" data-i18n="nav.history">Historia</a></li>
+        <li><a href="history.html" class="active" data-i18n="nav.history">Historia</a></li>
       </ul>
       <div class="nav-actions">
         <div class="search-container">
-          <input type="text" id="gpu-search" placeholder="Buscar GPU (ej. 1080)..." autocomplete="off" data-i18n="nav.search_placeholder">
+          <input type="text" id="gpu-search" placeholder="Buscar GPU..." autocomplete="off" data-i18n="nav.search_placeholder">
           <div id="search-results" class="search-results"></div>
         </div>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema" title="Cambiar tema claro/oscuro">
+        <button class="theme-toggle" id="theme-toggle">
           <span class="icon-sun">☀️</span>
           <span class="icon-moon">🌙</span>
         </button>
@@ -57,53 +54,41 @@
           </div>
         </div>
         <a href="../index.html#categories" class="nav-cta" data-i18n="nav.explore">Explorar</a>
-        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Abrir menú">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn"><span></span><span></span><span></span></button>
       </div>
     </div>
   </nav>
 
-  <div style="height: 100px;"></div>
-
-  <!-- COMPARE SECTION -->
-  <section id="compare">
+  <section id="history" style="padding-top: 140px;">
+    <div class="section-bg-accent accent-gold"></div>
     <div class="container">
       <div class="section-header">
-        <span class="section-label" data-i18n="sections.compare_label">⚖️ Comparativa</span>
-        <h2><span data-i18n="sections.compare_title">Rendimiento</span> <span class="gradient-text" data-i18n="sections.compare_title_hl">Comparado</span></h2>
-        <p data-i18n="sections.compare_p">Potencia de cómputo y memoria de los modelos más icónicos</p>
-      </div>
-      <div class="compare-selectors-grid">
-        <div class="search-container compare-select" id="select-a-container">
-          <label data-i18n="compare.label_primary">GPU Principal</label>
-          <input type="text" id="gpu-a-input" placeholder="Ej. RTX 5090..." autocomplete="off">
-          <div id="results-a" class="search-results"></div>
-          <div class="selected-gpu-badge" id="selected-a"></div>
-        </div>
-        <div class="compare-vs">VS</div>
-        <div class="search-container compare-select" id="select-b-container">
-          <label data-i18n="compare.label_target">Comparar con...</label>
-          <input type="text" id="gpu-b-input" placeholder="Ej. RX 7900 XTX..." autocomplete="off">
-          <div id="results-b" class="search-results"></div>
-          <div class="selected-gpu-badge" id="selected-b"></div>
-        </div>
+        <span class="section-label" data-i18n="sections.timeline_label">📅 Historia</span>
+        <h2><span data-i18n="sections.timeline_title">Evolución de las</span> <span class="gradient-text-gold" data-i18n="sections.timeline_title_hl">GPUs</span></h2>
+        <p data-i18n="sections.timeline_p">Desde los primeros aceleradores gráficos 2D en los años 80 hasta las supercomputadoras de IA actuales.</p>
       </div>
 
-      <div class="compare-chart-wrap">
-        <canvas id="perf-chart"></canvas>
+      <div class="timeline" id="timeline-container"></div>
+    </div>
+  </section>
+
+  <!-- NEWS FEED SECTION -->
+  <section id="news-feed" class="reveal">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label" data-i18n="news.label">📰 Actualidad</span>
+        <h2 data-i18n="news.title">Últimas Noticias de Hardware</h2>
+        <p data-i18n="news.subtitle">Sigue al día con los últimos lanzamientos y filtraciones del mundo de las GPUs.</p>
       </div>
-      <div class="compare-table-wrap">
-        <table class="compare-table" id="compare-table"></table>
+      <div class="news-grid" id="news-container">
+        <div class="loading-news">
+          <div class="spinner"></div>
+          <p>Cargando últimas novedades...</p>
+        </div>
       </div>
     </div>
   </section>
 
-
-
-  <!-- FOOTER -->
   <footer id="footer">
     <div class="footer-glow"></div>
     <div class="container">
@@ -111,7 +96,7 @@
         <div class="footer-brand">
           <span class="logo-icon">⬡</span>
           <span>GPU<strong>Universe</strong></span>
-          <p>La guía definitiva de GPUs 2025</p>
+          <p>La guía definitiva de GPUs 2026</p>
         </div>
         <div class="footer-links">
           <h4>Categorías</h4>
@@ -121,29 +106,26 @@
           <a href="compare.html">Comparar</a>
         </div>
         <div class="footer-links">
-          <h4>Marcas</h4>
-          <a href="https://www.nvidia.com" target="_blank" rel="noopener noreferrer">NVIDIA</a>
-          <a href="https://www.amd.com" target="_blank" rel="noopener noreferrer">AMD</a>
-          <a href="https://www.intel.com/content/www/us/en/products/details/discrete-gpus.html" target="_blank" rel="noopener noreferrer">Intel Arc</a>
-          <a href="https://www.apple.com/mac/" target="_blank" rel="noopener noreferrer">Apple</a>
+          <h4>Historia</h4>
+          <a href="history.html" class="active">Evolución</a>
+          <a href="../index.html#categories">Explorar</a>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2025 GPU Universe — Información actualizada sobre hardware gráfico</p>
+        <p>© 2026 GPU Universe — Información actualizada sobre hardware gráfico</p>
       </div>
     </div>
   </footer>
 
-  <!-- GPU MODAL -->
-  <div id="gpu-modal" class="modal-overlay">
-    <div class="modal-content">
-      <button id="modal-close" class="modal-close">&times;</button>
+  <div class="gpu-modal-overlay" id="gpu-modal">
+    <div class="gpu-modal">
+      <button class="modal-close" id="modal-close">&times;</button>
       <div id="modal-body"></div>
     </div>
   </div>
 
-  <script src="../js/i18n.js"></script>
   <script src="../js/data.js"></script>
+  <script src="../js/i18n.js"></script>
   <script src="../js/app.js"></script>
 </body>
 </html>
