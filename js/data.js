@@ -4,42 +4,42 @@ const GAMING_GPUS = [
   {
     brand: 'nvidia', name: 'RTX 5090', arch: 'Blackwell / GB202',
     tier: 'ultra', vram: '32 GB GDDR7', tflops: '209.8', bandwidth: '1792 GB/s',
-    tdp: '575W', price: '~$1999', perf: 100, fillColor: 'fill-gold'
+    tdp: '575W', price: '~$3499', perf: 100, fillColor: 'fill-gold'
   },
   {
     brand: 'nvidia', name: 'RTX 5080', arch: 'Blackwell / GB203',
     tier: 'high', vram: '16 GB GDDR7', tflops: '102.5', bandwidth: '1024 GB/s',
-    tdp: '350W', price: '~$999', perf: 85, fillColor: 'fill-purple'
+    tdp: '350W', price: '~$1499', perf: 85, fillColor: 'fill-purple'
   },
   {
     brand: 'nvidia', name: 'RTX 5070 Ti', arch: 'Blackwell / GB205',
     tier: 'high', vram: '16 GB GDDR7', tflops: '65.5', bandwidth: '640 GB/s',
-    tdp: '275W', price: '~$799', perf: 72, fillColor: 'fill-purple'
+    tdp: '275W', price: '~$899', perf: 72, fillColor: 'fill-purple'
   },
   {
     brand: 'nvidia', name: 'RTX 5070', arch: 'Blackwell / GB205',
     tier: 'high', vram: '12 GB GDDR7', tflops: '50.2', bandwidth: '576 GB/s',
-    tdp: '220W', price: '~$599', perf: 64, fillColor: 'fill-purple'
+    tdp: '220W', price: '~$749', perf: 64, fillColor: 'fill-purple'
   },
   {
     brand: 'nvidia', name: 'RTX 4090', arch: 'Ada Lovelace / AD102',
     tier: 'ultra', vram: '24 GB GDDR6X', tflops: '82.6', bandwidth: '1008 GB/s',
-    tdp: '450W', price: '~$1599', perf: 82, fillColor: 'fill-gold'
+    tdp: '450W', price: '~$2599', perf: 82, fillColor: 'fill-gold'
   },
   {
     brand: 'nvidia', name: 'RTX 4080 SUPER', arch: 'Ada Lovelace / AD103',
     tier: 'high', vram: '16 GB GDDR6X', tflops: '52.2', bandwidth: '736 GB/s',
-    tdp: '320W', price: '~$999', perf: 70, fillColor: 'fill-purple'
+    tdp: '320W', price: '~$1199', perf: 70, fillColor: 'fill-purple'
   },
   {
     brand: 'amd', name: 'RX 7900 XTX', arch: 'RDNA 3 / Navi 31',
     tier: 'high', vram: '24 GB GDDR6', tflops: '61.4', bandwidth: '960 GB/s',
-    tdp: '355W', price: '~$849', perf: 68, fillColor: 'fill-purple'
+    tdp: '355W', price: '~$949', perf: 68, fillColor: 'fill-purple'
   },
   {
     brand: 'amd', name: 'RX 9070 XT', arch: 'RDNA 4 / Navi 48',
     tier: 'high', vram: '16 GB GDDR6', tflops: '73.0', bandwidth: '640 GB/s',
-    tdp: '304W', price: '~$599', perf: 74, fillColor: 'fill-purple'
+    tdp: '304W', price: '~$649', perf: 74, fillColor: 'fill-purple'
   },
   {
     brand: 'nvidia', name: 'RTX 4070 Ti SUPER', arch: 'Ada Lovelace / AD103',
@@ -204,7 +204,7 @@ const SERVER_GPUS = [
     brand: 'nvidia', name: 'B200 NVL72', arch: 'Blackwell / GB202',
     vram: '192 GB HBM3e', tflops: '20000 (FP8)', bandwidth: '8000 GB/s',
     tdp: '1200W', interconnect: 'NVLink 1.8 TB/s', use: 'IA / Entrenamiento de LLMs masivos',
-    price: '~$70,000',
+    price: '~$75,000',
     desc: {es: 'La joya de la corona de Blackwell. Una arquitectura de doble chip que redefine el cómputo de IA, ofreciendo un rendimiento hasta 30 veces superior en inferencia LLM comparado con Hopper.', en: 'The crown jewel of Blackwell. A dual-chip architecture that redefines AI computing, offering up to 30 times more performance in LLM inference compared to Hopper.', fr: 'Le joyau de la couronne de Blackwell. Une architecture double puce qui redéfinit le calcul de l\'IA, offrant des performances jusqu\'à 30 fois supérieures en inférence LLM par rapport à Hopper.', de: 'Das Kronjuwel von Blackwell. Eine Dual-Chip-Architektur, die das KI-Computing neu definiert und eine bis zu 30-mal höhere Leistung bei der LLM-Inferenz im Vergleich to Hopper bietet.', it: 'Il gioiello della corona di Blackwell. Un\'architettura a doppio chip que ridefinisce il calcolo dell\'IA, offrendo prestazioni fino a 30 volte superiores nell\'inferenza LLM rispetto a Hopper.', ru: 'Жемчужина Blackwell. Двухкристальная архитектура, которая переопределяет вычисления ИИ, обеспечивая производительность в 30 раз выше при выводе LLM по сравнению с Hopper.'},
     cssClass: 'nvidia-card'
   },
@@ -212,7 +212,7 @@ const SERVER_GPUS = [
     brand: 'nvidia', name: 'H200 SXM', arch: 'Hopper / GH100',
     vram: '141 GB HBM3e', tflops: '3958 (INT8)', bandwidth: '4800 GB/s',
     tdp: '700W', interconnect: 'NVLink 900 GB/s', use: 'LLM / HPC / IA Generativa',
-    price: '~$40,000',
+    price: '~$45,000',
     desc: {es: 'El acelerador más potente de NVIDIA para centros de datos. Con 141 GB de HBM3e y 4.8 TB/s de ancho de banda, es el estándar de facto para entrenar modelos LLM como GPT-4.', en: 'The most powerful NVIDIA accelerator for data centers. With 141 GB of HBM3e and 4.8 TB/s bandwidth, it is the de facto standard for training LLM models like GPT-4.', fr: 'L\'accélérateur NVIDIA le plus puissant pour les centres de données. Avec 141 Go de HBM3e y 4,8 To/s de bande passante, c\'est la norme de facto pour l\'entraînement de modèles LLM como GPT-4.', de: 'Der leistungsstärkste NVIDIA-Beschleuniger für Rechenzentren. Mit 141 GB HBM3e und 4,8 TB/s Bandbreite ist er der De-facto-Standard für das Training von LLM-Modellen wie GPT-4.', it: 'L\'acceleratore NVIDIA più potente per i data center. Con 141 GB di HBM3e e 4,8 TB/s di larghezza di banda, è lo standard de facto para l\'addestramento di modelli LLM come GPT-4.', ru: 'Самый мощный ускоритель NVIDIA для дата-центров. С 141 ГБ HBM3e и пропускной способностью 4,8 ТБ/с он является стандартом де-факто для обучения моделей LLM, таких как GPT-4.'},
     cssClass: 'nvidia-card'
   },
@@ -424,15 +424,15 @@ const ALL_DOMESTIC_GPUS = [
   { brand: 'intel', name: 'Arc A580', arch: 'Alchemist', year: 2023, tier: 'entry', vram: '8 GB GDDR6', tflops: '12.0', bandwidth: '512 GB/s', tdp: '185W', price: '~$179' },
 
   // Generación 2024-2025 (Blackwell / RDNA 4 / Battlemage)
-  { brand: 'nvidia', name: 'RTX 5090', arch: 'Blackwell', year: 2025, tier: 'ultra', vram: '32 GB GDDR7', tflops: '209.8', bandwidth: '1792 GB/s', tdp: '575W', price: '~$1999' },
-  { brand: 'nvidia', name: 'RTX 5090 Laptop', arch: 'Blackwell', year: 2025, tier: 'ultra', vram: '16 GB GDDR7', tflops: '52.4', bandwidth: '512 GB/s', tdp: '175W', price: '~$2999+' },
-  { brand: 'nvidia', name: 'RTX 5080', arch: 'Blackwell', year: 2025, tier: 'high', vram: '16 GB GDDR7', tflops: '102.5', bandwidth: '1024 GB/s', tdp: '350W', price: '~$999' },
-  { brand: 'nvidia', name: 'RTX 5080 Laptop', arch: 'Blackwell', year: 2025, tier: 'high', vram: '12 GB GDDR7', tflops: '38.2', bandwidth: '432 GB/s', tdp: '150W', price: '~$1999+' },
-  { brand: 'nvidia', name: 'RTX 5070 Ti', arch: 'Blackwell', year: 2025, tier: 'high', vram: '16 GB GDDR7', tflops: '65.5', bandwidth: '640 GB/s', tdp: '275W', price: '~$799' },
-  { brand: 'nvidia', name: 'RTX 5070', arch: 'Blackwell', year: 2025, tier: 'high', vram: '12 GB GDDR7', tflops: '50.2', bandwidth: '576 GB/s', tdp: '220W', price: '~$599' },
-  { brand: 'nvidia', name: 'RTX 5070 Laptop', arch: 'Blackwell', year: 2025, tier: 'mid', vram: '8 GB GDDR7', tflops: '24.5', bandwidth: '320 GB/s', tdp: '115W', price: '~$1499+' },
-  { brand: 'nvidia', name: 'RTX 5060 Ti', arch: 'Blackwell', year: 2025, tier: 'mid', vram: '8 GB GDDR7', tflops: '32.1', bandwidth: '448 GB/s', tdp: '170W', price: '~$449' },
-  { brand: 'amd', name: 'Radeon RX 9070 XT', arch: 'RDNA 4', year: 2025, tier: 'high', vram: '16 GB GDDR6', tflops: '73.0', bandwidth: '640 GB/s', tdp: '304W', price: '~$599' },
-  { brand: 'amd', name: 'Radeon RX 9070', arch: 'RDNA 4', year: 2025, tier: 'high', vram: '16 GB GDDR6', tflops: '58.4', bandwidth: '576 GB/s', tdp: '250W', price: '~$499' },
-  { brand: 'intel', name: 'Arc B580', arch: 'Battlemage', year: 2024, tier: 'mid', vram: '12 GB GDDR6', tflops: '24.6', bandwidth: '456 GB/s', tdp: '190W', price: '~$249' }
+  { brand: 'nvidia', name: 'RTX 5090', arch: 'Blackwell', year: 2025, tier: 'ultra', vram: '32 GB GDDR7', tflops: '209.8', bandwidth: '1792 GB/s', tdp: '575W', price: '~$3499' },
+  { brand: 'nvidia', name: 'RTX 5090 Laptop', arch: 'Blackwell', year: 2025, tier: 'ultra', vram: '16 GB GDDR7', tflops: '52.4', bandwidth: '512 GB/s', tdp: '175W', price: '~$3599+' },
+  { brand: 'nvidia', name: 'RTX 5080', arch: 'Blackwell', year: 2025, tier: 'high', vram: '16 GB GDDR7', tflops: '102.5', bandwidth: '1024 GB/s', tdp: '350W', price: '~$1499' },
+  { brand: 'nvidia', name: 'RTX 5080 Laptop', arch: 'Blackwell', year: 2025, tier: 'high', vram: '12 GB GDDR7', tflops: '38.2', bandwidth: '432 GB/s', tdp: '150W', price: '~$2199+' },
+  { brand: 'nvidia', name: 'RTX 5070 Ti', arch: 'Blackwell', year: 2025, tier: 'high', vram: '16 GB GDDR7', tflops: '65.5', bandwidth: '640 GB/s', tdp: '275W', price: '~$899' },
+  { brand: 'nvidia', name: 'RTX 5070', arch: 'Blackwell', year: 2025, tier: 'high', vram: '12 GB GDDR7', tflops: '50.2', bandwidth: '576 GB/s', tdp: '220W', price: '~$749' },
+  { brand: 'nvidia', name: 'RTX 5070 Laptop', arch: 'Blackwell', year: 2025, tier: 'mid', vram: '8 GB GDDR7', tflops: '24.5', bandwidth: '320 GB/s', tdp: '115W', price: '~$1699+' },
+  { brand: 'nvidia', name: 'RTX 5060 Ti', arch: 'Blackwell', year: 2025, tier: 'mid', vram: '8 GB GDDR7', tflops: '32.1', bandwidth: '448 GB/s', tdp: '170W', price: '~$549' },
+  { brand: 'amd', name: 'Radeon RX 9070 XT', arch: 'RDNA 4', year: 2025, tier: 'high', vram: '16 GB GDDR6', tflops: '73.0', bandwidth: '640 GB/s', tdp: '304W', price: '~$649' },
+  { brand: 'amd', name: 'Radeon RX 9070', arch: 'RDNA 4', year: 2025, tier: 'high', vram: '16 GB GDDR6', tflops: '58.4', bandwidth: '576 GB/s', tdp: '250W', price: '~$549' },
+  { brand: 'intel', name: 'Arc B580', arch: 'Battlemage', year: 2024, tier: 'mid', vram: '12 GB GDDR6', tflops: '24.6', bandwidth: '456 GB/s', tdp: '190W', price: '~$279' }
 ];

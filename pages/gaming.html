@@ -77,6 +77,46 @@
         <h2><span data-i18n="sections.gaming_title">GPUs</span> <span class="gradient-text-green" data-i18n="sections.gaming_title_hl">Domésticas</span></h2>
         <p data-i18n="sections.gaming_p">Las mejores tarjetas gráficas para gaming, desde gama de entrada hasta lo más top del mercado</p>
       </div>
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label data-i18n="filters.brand">Fabricante</label>
+          <div class="filter-options" id="filter-brand">
+            <button class="filter-btn active" data-type="brand" data-value="all" data-i18n="filters.all">Todos</button>
+            <button class="filter-btn" data-type="brand" data-value="nvidia">NVIDIA</button>
+            <button class="filter-btn" data-type="brand" data-value="amd">AMD</button>
+            <button class="filter-btn" data-type="brand" data-value="intel">Intel</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label data-i18n="filters.vram">VRAM</label>
+          <div class="filter-options" id="filter-vram">
+            <button class="filter-btn active" data-type="vram" data-value="all" data-i18n="filters.all">Todos</button>
+            <button class="filter-btn" data-type="vram" data-value="8">8GB</button>
+            <button class="filter-btn" data-type="vram" data-value="12">12GB</button>
+            <button class="filter-btn" data-type="vram" data-value="16">16GB</button>
+            <button class="filter-btn" data-type="vram" data-value="24">+16GB</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label data-i18n="filters.usage">Uso</label>
+          <div class="filter-options" id="filter-usage">
+            <button class="filter-btn active" data-type="use" data-value="all" data-i18n="filters.all">Todos</button>
+            <button class="filter-btn" data-type="use" data-value="rt" data-i18n="filters.rt">Ray Tracing</button>
+            <button class="filter-btn" data-type="use" data-value="video" data-i18n="filters.video">Vídeo</button>
+            <button class="filter-btn" data-type="use" data-value="ia" data-i18n="filters.ia">IA</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label data-i18n="filters.sort">Ordenar por</label>
+          <div class="filter-options" id="filter-sort">
+            <button class="filter-btn active" data-type="sort" data-value="perf" data-i18n="filters.sort_perf">Rendimiento</button>
+            <button class="filter-btn" data-type="sort" data-value="price" data-i18n="filters.sort_price">Precio</button>
+            <button class="filter-btn" data-type="sort" data-value="vram" data-i18n="filters.sort_vram">VRAM</button>
+            <button class="filter-btn" data-type="sort" data-value="year" data-i18n="filters.sort_year">Año</button>
+          </div>
+        </div>
+      </div>
+
       <div class="gpu-grid" id="gaming-grid"></div>
     </div>
   </section>

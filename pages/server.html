@@ -77,6 +77,45 @@
         <h2><span data-i18n="sections.server_title">GPUs de</span> <span class="gradient-text-purple" data-i18n="sections.server_title_hl">Servidor</span></h2>
         <p data-i18n="sections.server_p">Los aceleradores más poderosos del planeta para IA, HPC y centros de datos</p>
       </div>
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label data-i18n="filters.brand">Fabricante</label>
+          <div class="filter-options" id="filter-brand">
+            <button class="filter-btn active" data-type="brand" data-value="all" data-i18n="filters.all">Todos</button>
+            <button class="filter-btn" data-type="brand" data-value="nvidia">NVIDIA</button>
+            <button class="filter-btn" data-type="brand" data-value="amd">AMD</button>
+            <button class="filter-btn" data-type="brand" data-value="intel">Intel</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label data-i18n="filters.vram">VRAM</label>
+          <div class="filter-options" id="filter-vram">
+            <button class="filter-btn active" data-type="vram" data-value="all" data-i18n="filters.all">Todos</button>
+            <button class="filter-btn" data-type="vram" data-value="80">80GB</button>
+            <button class="filter-btn" data-type="vram" data-value="141">141GB</button>
+            <button class="filter-btn" data-type="vram" data-value="192">+192GB</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label data-i18n="filters.usage">Uso</label>
+          <div class="filter-options" id="filter-usage">
+            <button class="filter-btn active" data-type="use" data-value="all" data-i18n="filters.all">Todos</button>
+            <button class="filter-btn" data-type="use" data-value="ia" data-i18n="filters.ia">IA / Entrenamiento</button>
+            <button class="filter-btn" data-type="use" data-value="inference">Inferencia</button>
+            <button class="filter-btn" data-type="use" data-value="hpc">HPC / Ciencia</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label data-i18n="filters.sort">Ordenar por</label>
+          <div class="filter-options" id="filter-sort">
+            <button class="filter-btn active" data-type="sort" data-value="perf" data-i18n="filters.sort_perf">Rendimiento</button>
+            <button class="filter-btn" data-type="sort" data-value="price" data-i18n="filters.sort_price">Precio</button>
+            <button class="filter-btn" data-type="sort" data-value="vram" data-i18n="filters.sort_vram">VRAM</button>
+            <button class="filter-btn" data-type="sort" data-value="year" data-i18n="filters.sort_year">Año</button>
+          </div>
+        </div>
+      </div>
+
       <div class="server-showcase" id="server-grid"></div>
     </div>
   </section>

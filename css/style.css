@@ -894,6 +894,83 @@ section {
   border-color: var(--border) transparent transparent transparent;
 }
 
+/* ===== FILTERS ===== */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  background: var(--surface);
+  padding: 1.5rem 2rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  margin-bottom: 3rem;
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 90px;
+  z-index: 90;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.filter-group label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.filter-options {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.5rem 1.2rem;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filter-btn:hover {
+  background: rgba(124, 58, 255, 0.1);
+  border-color: var(--accent);
+}
+
+.filter-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(124, 58, 255, 0.4);
+}
+
+[data-theme="light"] .filter-btn:hover {
+  background: rgba(124, 58, 255, 0.05);
+}
+
+@media (max-width: 768px) {
+  .filter-bar {
+    padding: 1.2rem;
+    gap: 1.2rem;
+    position: relative;
+    top: 0;
+  }
+  .filter-group {
+    width: 100%;
+  }
+}
+
 .has-tooltip:hover .tooltip-box {
   display: block;
   opacity: 1;

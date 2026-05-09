@@ -9,6 +9,21 @@ const translations = {
       search_placeholder: "Buscar GPU (ej. 1080)...",
       explore: "Explorar"
     },
+    filters: {
+      brand: "Fabricante",
+      vram: "VRAM",
+      usage: "Uso",
+      all: "Todos",
+      rt: "Ray Tracing",
+      video: "Vídeo / Render",
+      ia: "IA / Deep Learning",
+      gaming: "Gaming / 4K",
+      sort: "Ordenar por",
+      sort_perf: "Rendimiento",
+      sort_price: "Precio",
+      sort_vram: "VRAM",
+      sort_year: "Año"
+    },
     quiz: {
       label: "🎯 Recomendador",
       title: "¿No sabes qué GPU elegir?",
@@ -137,6 +152,21 @@ const translations = {
       history: "History",
       search_placeholder: "Search GPU (e.g., 1080)...",
       explore: "Explore"
+    },
+    filters: {
+      brand: "Manufacturer",
+      vram: "VRAM",
+      usage: "Usage",
+      all: "All",
+      rt: "Ray Tracing",
+      video: "Video / Render",
+      ia: "AI / Deep Learning",
+      gaming: "Gaming / 4K",
+      sort: "Sort by",
+      sort_perf: "Performance",
+      sort_price: "Price",
+      sort_vram: "VRAM",
+      sort_year: "Year"
     },
     quiz: {
       label: "🎯 Finder",
@@ -267,6 +297,21 @@ const translations = {
       search_placeholder: "Rechercher GPU (ex. 1080)...",
       explore: "Explorer"
     },
+    filters: {
+      brand: "Fabricant",
+      vram: "VRAM",
+      usage: "Utilisation",
+      all: "Tous",
+      rt: "Ray Tracing",
+      video: "Vidéo / Rendu",
+      ia: "IA / Deep Learning",
+      gaming: "Gaming / 4K",
+      sort: "Trier par",
+      sort_perf: "Performance",
+      sort_price: "Prix",
+      sort_vram: "VRAM",
+      sort_year: "Année"
+    },
     hero: {
       badge: "⚡ Le Guide Ultime 2026",
       title_1: "L'Univers",
@@ -373,6 +418,21 @@ const translations = {
       history: "Geschichte",
       search_placeholder: "GPU suchen (z.B. 1080)...",
       explore: "Entdecken"
+    },
+    filters: {
+      brand: "Hersteller",
+      vram: "VRAM",
+      usage: "Anwendung",
+      all: "Alle",
+      rt: "Raytracing",
+      video: "Video / Rendering",
+      ia: "KI / Deep Learning",
+      gaming: "Gaming / 4K",
+      sort: "Sortieren nach",
+      sort_perf: "Leistung",
+      sort_price: "Preis",
+      sort_vram: "VRAM",
+      sort_year: "Jahr"
     },
     hero: {
       badge: "⚡ Der ultimative Leitfaden 2026",
@@ -481,6 +541,21 @@ const translations = {
       search_placeholder: "Cerca GPU (es. 1080)...",
       explore: "Esplora"
     },
+    filters: {
+      brand: "Produttore",
+      vram: "VRAM",
+      usage: "Utilizzo",
+      all: "Tutti",
+      rt: "Ray Tracing",
+      video: "Video / Rendering",
+      ia: "IA / Deep Learning",
+      gaming: "Gaming / 4K",
+      sort: "Ordina per",
+      sort_perf: "Prestazioni",
+      sort_price: "Prezzo",
+      sort_vram: "VRAM",
+      sort_year: "Anno"
+    },
     hero: {
       badge: "⚡ La Guida Definitiva 2026",
       title_1: "L'Universo",
@@ -587,6 +662,21 @@ const translations = {
       history: "История",
       search_placeholder: "Поиск GPU (напр. 1080)...",
       explore: "Обзор"
+    },
+    filters: {
+      brand: "Производитель",
+      vram: "VRAM",
+      usage: "Использование",
+      all: "Все",
+      rt: "Трассировка лучей",
+      video: "Видео / Рендеринг",
+      ia: "ИИ / Обучение",
+      gaming: "Гейминг / 4K",
+      sort: "Сортировать по",
+      sort_perf: "Производительность",
+      sort_price: "Цена",
+      sort_vram: "VRAM",
+      sort_year: "Год"
     },
     hero: {
       badge: "⚡ Полное руководство 2026",
@@ -741,6 +831,7 @@ function applyTranslations() {
     }
   });
 }
+window.applyTranslations = applyTranslations;
 
 // Inicializar
 function initI18n() {

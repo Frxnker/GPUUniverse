@@ -179,30 +179,168 @@ function buildServerCard(gpu) {
   `;
 }
 
+// ===== FILTER LOGIC =====
+window.activeFilters = { brand: 'all', vram: 'all', use: 'all', sort: 'perf' };
+
+function initFilters() {
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const group = btn.parentElement;
+      const type = btn.dataset.type;
+      const value = btn.dataset.value;
+
+      group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      window.activeFilters[type] = value;
+      window.renderAll();
+    });
+  });
+}
+
+function applyGpuFilters(gpus) {
+  return gpus.filter(gpu => {
+    // Brand filter
+    if (window.activeFilters.brand !== 'all' && gpu.brand !== window.activeFilters.brand) return false;
+
+    // VRAM filter
+    if (window.activeFilters.vram !== 'all') {
+      const vramNum = parseInt(gpu.vram.split(' ')[0]);
+      const targetVram = parseInt(window.activeFilters.vram);
+      if (['24', '32', '48', '80', '141', '192'].includes(window.activeFilters.vram)) {
+        if (vramNum < targetVram) return false;
+      } else {
+        if (vramNum !== targetVram) return false;
+      }
+    }
+
+    // Usage filter
+    if (window.activeFilters.use !== 'all') {
+      const use = window.activeFilters.use;
+      const vramNum = parseInt(gpu.vram.split(' ')[0]);
+      const tflopsNum = parseFloat(gpu.tflops);
+
+      if (use === 'rt') {
+        if (tflopsNum < 20 && gpu.tier === 'entry') return false;
+      } else if (use === 'video') {
+        if (vramNum < 12) return false;
+      } else if (use === 'ia') {
+        if (gpu.brand !== 'nvidia' && vramNum < 16) return false;
+        if (vramNum < 8) return false;
+      } else if (use === 'inference' || use === 'hpc') {
+        const useStr = (gpu.use || "").toLowerCase();
+        if (!useStr.includes(use)) return false;
+      }
+    }
+    return true;
+  });
+}
+
+function sortGpus(gpus, sortBy) {
+  return [...gpus].sort((a, b) => {
+    if (sortBy === 'perf') {
+      return (parseFloat(b.perf) || 0) - (parseFloat(a.perf) || 0);
+    }
+    if (sortBy === 'price') {
+      const priceA = parseFloat((a.price || "0").replace(/[^0-9.]/g, '')) || 0;
+      const priceB = parseFloat((b.price || "0").replace(/[^0-9.]/g, '')) || 0;
+      return priceB - priceA;
+    }
+    if (sortBy === 'vram') {
+      const vramA = parseInt((a.vram || "0").split(' ')[0]) || 0;
+      const vramB = parseInt((b.vram || "0").split(' ')[0]) || 0;
+      return vramB - vramA;
+    }
+    if (sortBy === 'year') {
+      const yearA = parseInt(a.year) || 0;
+      const yearB = parseInt(b.year) || 0;
+      return yearB - yearA;
+    }
+    return 0;
+  });
+}
+
 // ===== RENDER LOGIC =====
+
+
 window.renderAll = function() {
   const gg = document.getElementById('gaming-grid');
-  if (gg) gg.innerHTML = GAMING_GPUS.map(buildGpuCard).join('');
+  if (gg) {
+    let dataSource = (typeof ALL_DOMESTIC_GPUS !== 'undefined') ? ALL_DOMESTIC_GPUS : GAMING_GPUS;
+    dataSource = dataSource.filter(g => !g.name.toLowerCase().includes('laptop') && !g.name.toLowerCase().includes('mobile'));
+    
+    const maxTflops = Math.max(...dataSource.map(g => parseFloat(g.tflops) || 0), 1);
+    
+    const prepared = dataSource.map(g => {
+      const tflops = parseFloat(g.tflops) || 0;
+      const calculatedPerf = Math.round((tflops / maxTflops) * 100);
+      return {
+        ...g,
+        perf: g.perf || calculatedPerf,
+        fillColor: g.fillColor || (g.perf ? 'fill-purple' : (calculatedPerf > 70 ? 'fill-gold' : (calculatedPerf > 40 ? 'fill-purple' : (calculatedPerf > 20 ? 'fill-blue' : 'fill-green'))))
+      };
+    });
+    
+    const filtered = applyGpuFilters(prepared);
+    const sorted = sortGpus(filtered, window.activeFilters.sort);
+    gg.innerHTML = sorted.length ? sorted.map(buildGpuCard).join('') : `<div class="no-results-msg" style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);" data-i18n="ui.no_results">No se encontraron resultados</div>`;
+  }
   
   const wg = document.getElementById('workstation-grid');
-  if (wg) wg.innerHTML = WORKSTATION_GPUS.map(buildGpuCard).join('');
+  if (wg) {
+    const maxTflops = Math.max(...WORKSTATION_GPUS.map(g => parseFloat(g.tflops) || 0), 1);
+    const prepared = WORKSTATION_GPUS.map(g => {
+      const tflops = parseFloat(g.tflops) || 0;
+      const calculatedPerf = Math.round((tflops / maxTflops) * 100);
+      return {
+        ...g,
+        perf: g.perf || calculatedPerf,
+        fillColor: g.fillColor || 'fill-blue'
+      };
+    });
+    const filtered = applyGpuFilters(prepared);
+    const sorted = sortGpus(filtered, window.activeFilters.sort);
+    wg.innerHTML = sorted.length ? sorted.map(buildGpuCard).join('') : `<div class="no-results-msg" style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);" data-i18n="ui.no_results">No se encontraron resultados</div>`;
+  }
   
   const mg = document.getElementById('mobile-grid');
-  if (mg && typeof MOBILE_GPUS !== 'undefined') mg.innerHTML = MOBILE_GPUS.map(buildGpuCard).join('');
+  if (mg) {
+    let dataSource = (typeof ALL_DOMESTIC_GPUS !== 'undefined') ? ALL_DOMESTIC_GPUS : (typeof MOBILE_GPUS !== 'undefined' ? MOBILE_GPUS : []);
+    dataSource = dataSource.filter(g => g.name.toLowerCase().includes('laptop') || g.name.toLowerCase().includes('mobile') || (typeof MOBILE_GPUS !== 'undefined' && MOBILE_GPUS.includes(g)));
+    
+    const maxTflops = Math.max(...dataSource.map(g => parseFloat(g.tflops) || 0), 1);
+    const prepared = dataSource.map(g => {
+      const tflops = parseFloat(g.tflops) || 0;
+      const calculatedPerf = Math.round((tflops / maxTflops) * 100);
+      return {
+        ...g,
+        perf: g.perf || calculatedPerf,
+        fillColor: g.fillColor || 'fill-blue'
+      };
+    });
+    const filtered = applyGpuFilters(prepared);
+    const sorted = sortGpus(filtered, window.activeFilters.sort);
+    mg.innerHTML = sorted.length ? sorted.map(buildGpuCard).join('') : `<div class="no-results-msg" style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);" data-i18n="ui.no_results">No se encontraron resultados</div>`;
+  }
   
   const sg = document.getElementById('server-grid');
-  if (sg) sg.innerHTML = SERVER_GPUS.map(buildServerCard).join('');
+  if (sg) {
+    const filtered = applyGpuFilters(SERVER_GPUS);
+    const sorted = sortGpus(filtered, window.activeFilters.sort);
+    sg.innerHTML = sorted.length ? sorted.map(buildServerCard).join('') : `<div class="no-results-msg" style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);" data-i18n="ui.no_results">No se encontraron resultados</div>`;
+  }
   
   if (document.getElementById('compare-table')) renderCompareTable();
   if (document.getElementById('timeline-container')) renderTimeline();
   if (document.getElementById('perf-chart')) renderChart();
   
-  document.querySelectorAll('.reveal').forEach(el => {
-    el.classList.remove('visible');
+  // Only re-observe newly rendered cards
+  document.querySelectorAll('.gpu-grid .reveal, .server-showcase .reveal').forEach(el => {
     revealObs.observe(el);
   });
-
+  
   document.querySelectorAll('.gpu-card').forEach(card => barObs.observe(card));
+  if (typeof window.applyTranslations === 'function') window.applyTranslations();
 };
 
 // ===== DYNAMIC COMPARISON =====
@@ -618,6 +756,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Init
   initComparisonSelectors();
+  initFilters();
   window.renderAll();
 
   // Chart resize: redraw on window resize with debounce
@@ -629,4 +768,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 150);
   });
 });
-

@@ -77,6 +77,45 @@
         <h2><span data-i18n="sections.work_title">GPUs</span> <span class="gradient-text-blue" data-i18n="sections.work_title_hl">Workstation</span></h2>
         <p data-i18n="sections.work_p">Potencia y precisión para profesionales del 3D, diseño, CAD e IA en escritorio</p>
       </div>
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label data-i18n="filters.brand">Fabricante</label>
+          <div class="filter-options" id="filter-brand">
+            <button class="filter-btn active" data-type="brand" data-value="all" data-i18n="filters.all">Todos</button>
+            <button class="filter-btn" data-type="brand" data-value="nvidia">NVIDIA</button>
+            <button class="filter-btn" data-type="brand" data-value="amd">AMD</button>
+            <button class="filter-btn" data-type="brand" data-value="apple">Apple</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label data-i18n="filters.vram">VRAM</label>
+          <div class="filter-options" id="filter-vram">
+            <button class="filter-btn active" data-type="vram" data-value="all" data-i18n="filters.all">Todos</button>
+            <button class="filter-btn" data-type="vram" data-value="16">16GB</button>
+            <button class="filter-btn" data-type="vram" data-value="24">24GB</button>
+            <button class="filter-btn" data-type="vram" data-value="32">32GB</button>
+            <button class="filter-btn" data-type="vram" data-value="48">+48GB</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label data-i18n="filters.usage">Uso</label>
+          <div class="filter-options" id="filter-usage">
+            <button class="filter-btn active" data-type="use" data-value="all" data-i18n="filters.all">Todos</button>
+            <button class="filter-btn" data-type="use" data-value="video" data-i18n="filters.video">Vídeo / 3D</button>
+            <button class="filter-btn" data-type="use" data-value="ia" data-i18n="filters.ia">IA / Deep Learning</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label data-i18n="filters.sort">Ordenar por</label>
+          <div class="filter-options" id="filter-sort">
+            <button class="filter-btn active" data-type="sort" data-value="perf" data-i18n="filters.sort_perf">Rendimiento</button>
+            <button class="filter-btn" data-type="sort" data-value="price" data-i18n="filters.sort_price">Precio</button>
+            <button class="filter-btn" data-type="sort" data-value="vram" data-i18n="filters.sort_vram">VRAM</button>
+            <button class="filter-btn" data-type="sort" data-value="year" data-i18n="filters.sort_year">Año</button>
+          </div>
+        </div>
+      </div>
+
       <div class="gpu-grid" id="workstation-grid"></div>
     </div>
   </section>
