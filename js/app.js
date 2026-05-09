@@ -121,6 +121,14 @@ const revealObs = new IntersectionObserver(entries => {
 }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
 // ===== BUILD COMPONENTS =====
+function wrapWithTooltip(label, defKey) {
+  const def = (typeof window.t === 'function') ? window.t('defs.' + defKey) : '';
+  if (!def || def === 'defs.' + defKey) {
+    return label; // Fallback: just render the label if translation not ready
+  }
+  return `<span class="has-tooltip">${label}<span class="info-icon">i</span><span class="tooltip-box">${def}</span></span>`;
+}
+
 function buildGpuCard(gpu) {
   const brandMap = { nvidia: 'NVIDIA', amd: 'AMD', intel: 'Intel', apple: 'Apple' };
   const tierMap = { entry: 'Entrada', mid: 'Gama Media', high: 'Alto', ultra: 'Ultra' };
@@ -134,9 +142,9 @@ function buildGpuCard(gpu) {
       <div class="gpu-arch">${gpu.arch}</div>
       <div class="gpu-specs">
         <div class="spec-item"><label>${typeof t === "function" ? window.t("table.vram") : "VRAM"}</label><span>${gpu.vram}</span></div>
-        <div class="spec-item"><label>TFLOPS FP32</label><span>${gpu.tflops}</span></div>
+        <div class="spec-item"><label>${wrapWithTooltip('TFLOPS FP32', 'tflops')}</label><span>${gpu.tflops}</span></div>
         <div class="spec-item"><label>${typeof t === "function" ? window.t("ui.bw") : "Ancho de Banda"}</label><span>${gpu.bandwidth}</span></div>
-        <div class="spec-item"><label>${typeof window.t === "function" ? window.t("ui.tdp") || "TDP" : "TDP"}</label><span>${gpu.tdp}</span></div>
+        <div class="spec-item"><label>${wrapWithTooltip(typeof window.t === "function" ? window.t("ui.tdp") || "TDP" : "TDP", 'tdp')}</label><span>${gpu.tdp}</span></div>
       </div>
       <div class="gpu-perf-bar">
         <div class="gpu-perf-fill ${gpu.fillColor}" data-width="${gpu.perf}"></div>
@@ -160,9 +168,9 @@ function buildServerCard(gpu) {
       </div>
       <div class="server-specs">
         <div class="server-spec highlight"><label>VRAM</label><span>${gpu.vram}</span></div>
-        <div class="server-spec highlight2"><label>TFLOPS INT8</label><span>${gpu.tflops}</span></div>
+        <div class="server-spec highlight2"><label>${wrapWithTooltip('TFLOPS INT8', 'tflops')}</label><span>${gpu.tflops}</span></div>
         <div class="server-spec highlight3"><label>${typeof t === "function" ? window.t("ui.bw") : "Ancho de Banda"}</label><span>${gpu.bandwidth}</span></div>
-        <div class="server-spec"><label>${typeof window.t === "function" ? window.t("ui.tdp") || "TDP" : "TDP"}</label><span>${gpu.tdp}</span></div>
+        <div class="server-spec"><label>${wrapWithTooltip(typeof window.t === "function" ? window.t("ui.tdp") || "TDP" : "TDP", 'tdp')}</label><span>${gpu.tdp}</span></div>
         <div class="server-spec"><label>${typeof t === "function" ? window.t("ui.interconnect") : "Interconexión"}</label><span>${gpu.interconnect}</span></div>
         <div class="server-spec"><label>${typeof t === "function" ? window.t("ui.use_case") : "Caso de Uso"}</label><span style="font-size:0.8rem">${gpu.use}</span></div>
         <div class="server-spec highlight-price"><label>${typeof window.t === "function" ? window.t("ui.price") : "Precio Estimado"}</label><span>${window.formatPrice(gpu.price)}</span></div>
@@ -301,9 +309,9 @@ window.renderCompareTable = function() {
       <tr>
         <th>${typeof t === "function" ? window.t("table.gpu") : "GPU"}</th>
         <th>${typeof t === "function" ? window.t("table.vram") : "Memoria"}</th>
-        <th>TFLOPS</th>
+        <th>${wrapWithTooltip('TFLOPS', 'tflops')}</th>
         <th>${typeof t === "function" ? window.t("table.bw") : "Ancho Banda"}</th>
-        <th>TDP</th>
+        <th>${wrapWithTooltip('TDP', 'tdp')}</th>
         <th>${typeof t === "function" ? window.t("table.price") : "Precio Est."}</th>
       </tr>
     </thead>
@@ -337,28 +345,53 @@ window.renderChart = function() {
   const tflopsData = displayData.map(g => parseFloat(g.tflops));
   const colors = displayData.map(g => g.brand === 'nvidia' ? 'rgba(118,185,0,0.8)' : (g.brand === 'amd' ? 'rgba(237,28,36,0.8)' : 'rgba(0,212,255,0.8)'));
 
-  canvas.width = canvas.parentElement.offsetWidth - 64;
-  canvas.height = 360;
+  const containerW = canvas.parentElement.offsetWidth - 64;
+  canvas.width = containerW;
+  // Adaptive height: taller when more bars, but capped
+  const baseHeight = 300;
+  const perBarExtra = Math.max(0, (displayData.length - 2) * 20);
+  canvas.height = Math.min(baseHeight + perBarExtra, 460);
 
   const maxVal = Math.max(...tflopsData, 10);
-  const padding = { top: 20, right: 40, bottom: 60, left: 80 };
+  const padding = { top: 30, right: 40, bottom: 70, left: 90 };
   const chartW = canvas.width - padding.left - padding.right;
   const chartH = canvas.height - padding.top - padding.bottom;
-  const barW = Math.min(chartW / labels.length * 0.4, 100);
+
+  // Bar width: cap at 120px, and on large screens with few bars don't stretch too wide
+  const maxBarW = 120;
+  const minBarW = 30;
+  const barW = Math.max(minBarW, Math.min(maxBarW, chartW / labels.length * 0.45));
   const gap = chartW / labels.length;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Determine text color from theme
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+  const textColor = isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.4)';
+  const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+
+  // Grid lines
   for (let i = 0; i <= 5; i++) {
     const y = padding.top + (chartH / 5) * i;
     const val = Math.round(maxVal * (1 - i / 5));
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.strokeStyle = gridColor;
     ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(padding.left, y); ctx.lineTo(padding.left + chartW, y); ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.fillStyle = textColor;
     ctx.font = '11px JetBrains Mono, monospace';
     ctx.textAlign = 'right';
     ctx.fillText(val.toLocaleString(), padding.left - 10, y + 4);
   }
+
+  // TFLOPS label on Y axis
+  ctx.save();
+  ctx.translate(16, padding.top + chartH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = textColor;
+  ctx.font = '10px Outfit, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('TFLOPS FP32', 0, 0);
+  ctx.restore();
 
   tflopsData.forEach((val, i) => {
     const x = padding.left + gap * i + (gap - barW) / 2;
@@ -373,23 +406,36 @@ window.renderChart = function() {
     ctx.roundRect(x, y, barW, barH, [8, 8, 0, 0]);
     ctx.fill();
 
-    ctx.fillStyle = '#fff';
+    // Value on top of bar
+    ctx.fillStyle = isDark ? '#fff' : '#111';
     ctx.font = 'bold 12px Outfit';
     ctx.textAlign = 'center';
     ctx.fillText(val.toLocaleString(), x + barW / 2, y - 8);
 
-    ctx.fillStyle = 'rgba(255,255,255,0.8)';
+    // Label: wrap long names over 2 lines
+    ctx.fillStyle = isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.7)';
     ctx.font = '11px Outfit';
-    ctx.fillText(labels[i], x + barW / 2, padding.top + chartH + 25);
+    const maxLabelW = Math.max(gap - 4, barW + 20);
+    const words = labels[i].split(' ');
+    let line1 = '', line2 = '';
+    let midIdx = Math.ceil(words.length / 2);
+    line1 = words.slice(0, midIdx).join(' ');
+    line2 = words.slice(midIdx).join(' ');
+    const labelY = padding.top + chartH + 22;
+    ctx.fillText(line1, x + barW / 2, labelY);
+    if (line2) ctx.fillText(line2, x + barW / 2, labelY + 14);
   });
 
-  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+  // Axes
+  ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+  ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(padding.left, padding.top);
   ctx.lineTo(padding.left, padding.top + chartH);
   ctx.lineTo(padding.left + chartW, padding.top + chartH);
   ctx.stroke();
 };
+
 
 // ===== TIMELINE =====
 window.renderTimeline = function() {
@@ -447,11 +493,12 @@ window.openGpuModal = function(name) {
     </div>
     <div class="modal-grid">
       <div class="modal-item"><label>${typeof window.t === "function" ? window.t("table.vram") : "Memoria VRAM"}</label><span>${gpu.vram || '-'}</span></div>
-      <div class="modal-item"><label>TFLOPS</label><span>${gpu.tflops || '-'}</span></div>
+      <div class="modal-item"><label>${wrapWithTooltip('TFLOPS', 'tflops')}</label><span>${gpu.tflops || '-'}</span></div>
       <div class="modal-item"><label>${typeof window.t === "function" ? window.t("ui.bw") : "Ancho de Banda"}</label><span>${gpu.bandwidth || gpu.bw || "-"}</span></div>
-      <div class="modal-item"><label>${typeof window.t === "function" ? window.t("ui.tdp") || "TDP / Consumo" : "TDP / Consumo"}</label><span>${gpu.tdp || '-'}</span></div>
+      <div class="modal-item"><label>${wrapWithTooltip(typeof window.t === "function" ? window.t("ui.tdp") || "TDP / Consumo" : "TDP / Consumo", 'tdp')}</label><span>${gpu.tdp || '-'}</span></div>
       ${gpu.price ? `<div class="modal-item"><label>${typeof window.t === "function" ? window.t("ui.price") : "Precio Estimado"}</label><span>${window.formatPrice(gpu.price)}</span></div>` : ''}
       ${gpu.tier ? `<div class="modal-item"><label>${typeof window.t === "function" ? window.t("table.cat") : "Gama"}</label><span style="text-transform: capitalize;">${typeof window.t === "function" ? window.t("ui.tier_" + gpu.tier) : gpu.tier}</span></div>` : ''}
+      <div class="modal-item"><label>${wrapWithTooltip('DLSS / FSR', 'dlss_fsr')}</label><span>${gpu.brand === 'nvidia' ? 'DLSS 3.5' : (gpu.brand === 'amd' ? 'FSR 3.1' : 'XeSS')}</span></div>
     </div>
     ${gpu.desc ? `<div style="margin-top: 1.5rem; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">${typeof gpu.desc === 'object' ? gpu.desc[window.currentLang || 'es'] : gpu.desc}</div>` : ''}
   `;
@@ -572,4 +619,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Init
   initComparisonSelectors();
   window.renderAll();
+
+  // Chart resize: redraw on window resize with debounce
+  let chartResizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(chartResizeTimer);
+    chartResizeTimer = setTimeout(() => {
+      if (document.getElementById('perf-chart')) window.renderChart();
+    }, 150);
+  });
 });
+

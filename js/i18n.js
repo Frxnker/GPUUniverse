@@ -121,6 +121,11 @@ const translations = {
       vram: "Memoria VRAM",
       bw: "Ancho de Banda",
       price: "Precio Est."
+    },
+    defs: {
+      tdp: "<strong>TDP (Thermal Design Power)</strong>: Representa el consumo máximo de energía y el calor generado que el sistema de refrigeración debe ser capaz de disipar.",
+      tflops: "<strong>TFLOPS (Teraflops)</strong>: Medida de potencia bruta que indica billones de operaciones por segundo. Útil para comparar GPUs de la misma arquitectura.",
+      dlss_fsr: "<strong>DLSS / FSR</strong>: Tecnologías de reescalado inteligente (AI) que aumentan drásticamente los FPS manteniendo una alta calidad de imagen."
     }
   },
   en: {
@@ -245,6 +250,11 @@ const translations = {
       vram: "VRAM Memory",
       bw: "Bandwidth",
       price: "Est. Price"
+    },
+    defs: {
+      tdp: "<strong>TDP (Thermal Design Power)</strong>: Represents the maximum power consumption and heat generated that the cooling system must be able to dissipate.",
+      tflops: "<strong>TFLOPS (Teraflops)</strong>: A measure of raw performance indicating trillions of operations per second. Useful for comparing GPUs of the same architecture.",
+      dlss_fsr: "<strong>DLSS / FSR</strong>: AI-powered upscaling technologies that drastically increase FPS while maintaining high image quality."
     }
   },
   fr: {
@@ -347,6 +357,11 @@ const translations = {
       vram: "Mémoire VRAM",
       bw: "Bande Passante",
       price: "Prix Est."
+    },
+    defs: {
+      tdp: "<strong>TDP (Thermal Design Power)</strong>: Représente la consommation d'énergie maximale et la chaleur générée que le système de refroidissement doit pouvoir dissiper.",
+      tflops: "<strong>TFLOPS (Teraflops)</strong>: Une mesure de performance brute indiquant des billions d'opérations par seconde. Utile pour comparer des GPU de la même architecture.",
+      dlss_fsr: "<strong>DLSS / FSR</strong>: Technologies de mise à l'échelle alimentées par l'IA qui augmentent considérablement les FPS tout en maintenant une qualité d'image élevée."
     }
   },
   de: {
@@ -449,6 +464,11 @@ const translations = {
       vram: "VRAM-Speicher",
       bw: "Bandbreite",
       price: "Geschätzter Preis"
+    },
+    defs: {
+      tdp: "<strong>TDP (Thermal Design Power)</strong>: Stellt die maximale Leistungsaufnahme und die erzeugte Wärme dar, die das Kühlsystem ableiten muss.",
+      tflops: "<strong>TFLOPS (Teraflops)</strong>: Ein Maß für die Rohleistung, das Billionen von Operationen pro Sekunde angibt. Nützlich zum Vergleich von GPUs derselben Architektur.",
+      dlss_fsr: "<strong>DLSS / FSR</strong>: KI-gestützte Upscaling-Technologien, die die FPS drastisch erhöhen und gleichzeitig eine hohe Bildqualität beibehalten."
     }
   },
   it: {
@@ -551,6 +571,11 @@ const translations = {
       vram: "Memoria VRAM",
       bw: "Larghezza di Banda",
       price: "Prezzo Stimato"
+    },
+    defs: {
+      tdp: "<strong>TDP (Thermal Design Power)</strong>: Rappresenta il consumo energetico massimo e il calore generato che il sistema di raffreddamento deve essere in grado di dissipare.",
+      tflops: "<strong>TFLOPS (Teraflops)</strong>: Una misura della potenza bruta che indica trilioni di operazioni al secondo. Utile per confrontare GPU della stessa architettura.",
+      dlss_fsr: "<strong>DLSS / FSR</strong>: Tecnologie di upscaling basate su IA che aumentano drasticamente gli FPS mantenendo un'elevata qualità dell'immagine."
     }
   },
   ru: {
@@ -653,6 +678,11 @@ const translations = {
       vram: "Память VRAM",
       bw: "Пропускная способность",
       price: "Ориент. цена"
+    },
+    defs: {
+      tdp: "<strong>TDP (Thermal Design Power)</strong>: Представляет собой максимальное энергопотребление и выделяемое тепло, которое система охлаждения должна быть способна рассеять.",
+      tflops: "<strong>TFLOPS (Teraflops)</strong>: Мера чистой производительности, указывающая на триллионы операций в секунду. Полезно для сравнения GPU одной архитектуры.",
+      dlss_fsr: "<strong>DLSS / FSR</strong>: Технологии масштабирования на базе ИИ, которые значительно повышают FPS при сохранении высокого качества изображения."
     }
   }
 };
