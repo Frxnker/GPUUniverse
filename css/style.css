@@ -2429,7 +2429,7 @@ body, #navbar, .gpu-card, .cat-card, .server-card,
   }
   
   .mobile-menu-btn {
-    display: none !important;
+    display: flex !important;
   }
 }
 /* ===== QUIZ SECTION ===== */
