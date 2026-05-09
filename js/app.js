@@ -1,7 +1,14 @@
 // ===== THEME TOGGLE =====
 (function initTheme() {
-  const saved = localStorage.getItem('gpu-universe-theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', saved);
+  const getPreferredTheme = () => window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  const saved = localStorage.getItem('gpu-universe-theme');
+  document.documentElement.setAttribute('data-theme', saved || getPreferredTheme());
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    if (!localStorage.getItem('gpu-universe-theme')) {
+      document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    }
+  });
 
   document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('theme-toggle');

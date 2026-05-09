@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="icon" href="data:,">
-  <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('gpu-universe-theme') || 'dark');</script>
+  <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('gpu-universe-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));</script>
 </head>
 <body>
 
