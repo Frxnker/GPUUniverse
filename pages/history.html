@@ -72,19 +72,77 @@
     </div>
   </section>
 
-  <!-- NEWS FEED SECTION -->
-  <section id="news-feed" class="reveal">
+  <!-- HALL OF FAME SECTION -->
+  <section id="hall-of-fame" class="reveal">
+    <div class="section-bg-accent accent-purple"></div>
     <div class="container">
       <div class="section-header">
-        <span class="section-label" data-i18n="news.label">📰 Actualidad</span>
-        <h2 data-i18n="news.title">Últimas Noticias de Hardware</h2>
-        <p data-i18n="news.subtitle">Sigue al día con los últimos lanzamientos y filtraciones del mundo de las GPUs.</p>
+        <span class="section-label" data-i18n="hof.label">🏆 Salón de la Fama</span>
+        <h2><span data-i18n="hof.title">GPUs</span> <span class="gradient-text-purple" data-i18n="hof.title_hl">Legendarias</span></h2>
+        <p data-i18n="hof.subtitle">Las tarjetas gráficas que marcaron un antes y un después en la historia del hardware.</p>
       </div>
-      <div class="news-grid" id="news-container">
-        <div class="loading-news">
-          <div class="spinner"></div>
-          <p>Cargando últimas novedades...</p>
+
+      <div class="hof-grid">
+        <!-- 3dfx Voodoo -->
+        <div class="hof-card">
+          <div class="hof-img-wrapper">
+            <img src="../assets/3dfx_voodoo.png" alt="3dfx Voodoo" class="hof-img">
+            <div class="hof-year">1996</div>
+          </div>
+          <div class="hof-content">
+            <h3>3dfx Voodoo Graphics</h3>
+            <p class="hof-desc">La tarjeta que inició la revolución del 3D. Antes de ella, los juegos se renderizaban principalmente por software con gráficos simples; después, entramos en la verdadera era tridimensional. Actuaba como una aceleradora 3D pura en conjunto con las tarjetas 2D existentes.</p>
+            <div class="hof-impact">
+              <strong>Impacto:</strong> Popularizó la aceleración gráfica en 3D para PC.
+            </div>
+          </div>
         </div>
+
+        <!-- GeForce 256 -->
+        <div class="hof-card">
+          <div class="hof-img-wrapper">
+            <img src="../assets/geforce_256.png" alt="NVIDIA GeForce 256" class="hof-img">
+            <div class="hof-year">1999</div>
+          </div>
+          <div class="hof-content">
+            <h3>NVIDIA GeForce 256</h3>
+            <p class="hof-desc">NVIDIA acuñó el término "GPU" (Graphics Processing Unit) con esta revolucionaria tarjeta. Fue pionera al integrar el cálculo de transformación e iluminación (T&L) directamente en el hardware, liberando así al procesador central de intensas cargas matemáticas.</p>
+            <div class="hof-impact">
+              <strong>Impacto:</strong> Considerada históricamente como la primera GPU.
+            </div>
+          </div>
+        </div>
+
+        <!-- Radeon HD 7970 -->
+        <div class="hof-card">
+          <div class="hof-img-wrapper">
+            <img src="../assets/radeon_hd_7970.png" alt="AMD Radeon HD 7970" class="hof-img">
+            <div class="hof-year">2011</div>
+          </div>
+          <div class="hof-content">
+            <h3>AMD Radeon HD 7970</h3>
+            <p class="hof-desc">La primera tarjeta gráfica en implementar la arquitectura GCN (Graphics Core Next). Su innovador diseño demostró ser excepcional, otorgándole una longevidad asombrosa y sirviendo como base tecnológica para múltiples consolas de videojuegos a lo largo de la década.</p>
+            <div class="hof-impact">
+              <strong>Impacto:</strong> Arquitectura de excepcional longevidad e influencia.
+            </div>
+          </div>
+        </div>
+
+        <!-- GTX 1080 Ti -->
+        <div class="hof-card">
+          <div class="hof-img-wrapper">
+            <img src="../assets/gtx_1080_ti.png" alt="NVIDIA GeForce GTX 1080 Ti" class="hof-img">
+            <div class="hof-year">2017</div>
+          </div>
+          <div class="hof-content">
+            <h3>NVIDIA GTX 1080 Ti</h3>
+            <p class="hof-desc">Para muchos entusiastas, es la GPU más legendaria de la era contemporánea. Construida sobre la increíblemente eficiente arquitectura Pascal, ofreció un salto generacional masivo en rendimiento que la mantuvo plenamente vigente frente a sus sucesoras durante años.</p>
+            <div class="hof-impact">
+              <strong>Impacto:</strong> El mayor salto de rendimiento intergeneracional en años.
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>

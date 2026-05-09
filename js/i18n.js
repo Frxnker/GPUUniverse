@@ -142,6 +142,12 @@ const translations = {
       bw: "Ancho de Banda",
       price: "Precio Est."
     },
+    hof: {
+      label: "🏆 Salón de la Fama",
+      title: "GPUs",
+      title_hl: "Legendarias",
+      subtitle: "Las tarjetas gráficas que marcaron un antes y un después en la historia del hardware."
+    },
     defs: {
       tdp: "<strong>TDP (Thermal Design Power)</strong>: Representa el consumo máximo de energía y el calor generado que el sistema de refrigeración debe ser capaz de disipar.",
       tflops: "<strong>TFLOPS (Teraflops)</strong>: Medida de potencia bruta que indica billones de operaciones por segundo. Útil para comparar GPUs de la misma arquitectura.",
@@ -291,6 +297,12 @@ const translations = {
       bw: "Bandwidth",
       price: "Est. Price"
     },
+    hof: {
+      label: "🏆 Hall of Fame",
+      title: "Legendary",
+      title_hl: "GPUs",
+      subtitle: "The graphics cards that marked a before and after in hardware history."
+    },
     defs: {
       tdp: "<strong>TDP (Thermal Design Power)</strong>: Represents the maximum power consumption and heat generated that the cooling system must be able to dissipate.",
       tflops: "<strong>TFLOPS (Teraflops)</strong>: A measure of raw performance indicating trillions of operations per second. Useful for comparing GPUs of the same architecture.",
@@ -417,6 +429,12 @@ const translations = {
       vram: "Mémoire VRAM",
       bw: "Bande Passante",
       price: "Prix Est."
+    },
+    hof: {
+      label: "🏆 Temple de la Renommée",
+      title: "GPUs",
+      title_hl: "Légendaires",
+      subtitle: "Les cartes graphiques qui ont marqué un avant et un après dans l'histoire du matériel."
     },
     defs: {
       tdp: "<strong>TDP (Thermal Design Power)</strong>: Représente la consommation d'énergie maximale et la chaleur générée que le système de refroidissement doit pouvoir dissiper.",
@@ -545,6 +563,12 @@ const translations = {
       bw: "Bandbreite",
       price: "Geschätzter Preis"
     },
+    hof: {
+      label: "🏆 Ruhmeshalle",
+      title: "Legendäre",
+      title_hl: "GPUs",
+      subtitle: "Die Grafikkarten, die ein Vorher und Nachher in der Hardware-Geschichte markierten."
+    },
     defs: {
       tdp: "<strong>TDP (Thermal Design Power)</strong>: Stellt die maximale Leistungsaufnahme und die erzeugte Wärme dar, die das Kühlsystem ableiten muss.",
       tflops: "<strong>TFLOPS (Teraflops)</strong>: Ein Maß für die Rohleistung, das Billionen von Operationen pro Sekunde angibt. Nützlich zum Vergleich von GPUs derselben Architektur.",
@@ -672,6 +696,12 @@ const translations = {
       bw: "Larghezza di Banda",
       price: "Prezzo Stimato"
     },
+    hof: {
+      label: "🏆 Hall of Fame",
+      title: "GPU",
+      title_hl: "Leggendarie",
+      subtitle: "Le schede grafiche che hanno segnato un prima e un dopo nella storia dell'hardware."
+    },
     defs: {
       tdp: "<strong>TDP (Thermal Design Power)</strong>: Rappresenta il consumo energetico massimo e il calore generato che il sistema di raffreddamento deve essere in grado di dissipare.",
       tflops: "<strong>TFLOPS (Teraflops)</strong>: Una misura della potenza bruta che indica trilioni di operazioni al secondo. Utile per confrontare GPU della stessa architettura.",
@@ -798,6 +828,12 @@ const translations = {
       vram: "Память VRAM",
       bw: "Пропускная способность",
       price: "Ориент. цена"
+    },
+    hof: {
+      label: "🏆 Зал славы",
+      title: "Легендарные",
+      title_hl: "GPU",
+      subtitle: "Видеокарты, которые оставили след в истории аппаратного обеспечения."
     },
     defs: {
       tdp: "<strong>TDP (Thermal Design Power)</strong>: Представляет собой максимальное энергопотребление и выделяемое тепло, которое система охлаждения должна быть способна рассеять.",
