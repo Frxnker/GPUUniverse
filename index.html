@@ -143,6 +143,96 @@
 
 
 
+  <!-- QUIZ FINDER -->
+  <section id="gpu-quiz" class="reveal">
+    <div class="container">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <span class="section-label" data-i18n="quiz.label">🎯 Recomendador</span>
+          <h2 data-i18n="quiz.title">¿No sabes qué GPU elegir?</h2>
+          <p data-i18n="quiz.subtitle">Responde 3 preguntas rápidas y te daremos las mejores opciones para ti.</p>
+        </div>
+        
+        <div id="quiz-box" class="quiz-box">
+          <!-- Intro State -->
+          <div id="quiz-intro" class="quiz-step active">
+            <div class="quiz-visual-icon">🚀</div>
+            <h3 data-i18n="quiz.intro_title">Encuentra tu GPU ideal</h3>
+            <p data-i18n="quiz.intro_desc">Hemos analizado más de 150 modelos para ayudarte a decidir.</p>
+            <button class="btn-quiz-start" onclick="startQuiz()" data-i18n="quiz.btn_start">Comenzar Cuestionario</button>
+          </div>
+
+          <!-- Question 1 -->
+          <div id="step-1" class="quiz-step">
+            <div class="quiz-progress"><div class="progress-fill" style="width: 33%"></div></div>
+            <h3 data-i18n="quiz.q1_title">1. ¿Cuál será el uso principal?</h3>
+            <div class="quiz-options">
+              <button class="quiz-opt" onclick="setQuizAns('use', 'gaming')">
+                <span class="opt-icon">🎮</span>
+                <span class="opt-text" data-i18n="quiz.q1_opt1">Gaming y Uso Diario</span>
+              </button>
+              <button class="quiz-opt" onclick="setQuizAns('use', 'work')">
+                <span class="opt-icon">🖥️</span>
+                <span class="opt-text" data-i18n="quiz.q1_opt2">Trabajo Pro / Render / IA</span>
+              </button>
+              <button class="quiz-opt" onclick="setQuizAns('use', 'mobile')">
+                <span class="opt-icon">💻</span>
+                <span class="opt-text" data-i18n="quiz.q1_opt3">Gaming en Portátil</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Question 2 -->
+          <div id="step-2" class="quiz-step">
+            <div class="quiz-progress"><div class="progress-fill" style="width: 66%"></div></div>
+            <h3 data-i18n="quiz.q2_title">2. ¿Cuál es tu presupuesto aproximado?</h3>
+            <div class="quiz-options">
+              <button class="quiz-opt" onclick="setQuizAns('budget', 'low')">
+                <span class="opt-icon">💸</span>
+                <span class="opt-text" data-i18n="quiz.q2_opt1">Económico (Menos de $400)</span>
+              </button>
+              <button class="quiz-opt" onclick="setQuizAns('budget', 'mid')">
+                <span class="opt-icon">💰</span>
+                <span class="opt-text" data-i18n="quiz.q2_opt2">Medio ($400 - $900)</span>
+              </button>
+              <button class="quiz-opt" onclick="setQuizAns('budget', 'high')">
+                <span class="opt-icon">💎</span>
+                <span class="opt-text" data-i18n="quiz.q2_opt3">Alto / Premium (+$900)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Question 3 -->
+          <div id="step-3" class="quiz-step">
+            <div class="quiz-progress"><div class="progress-fill" style="width: 100%"></div></div>
+            <h3 data-i18n="quiz.q3_title">3. ¿Qué resolución o carga de trabajo buscas?</h3>
+            <div class="quiz-options">
+              <button class="quiz-opt" onclick="setQuizAns('perf', '1080')">
+                <span class="opt-icon">📺</span>
+                <span class="opt-text" data-i18n="quiz.q3_opt1">1080p / Trabajo Ligero</span>
+              </button>
+              <button class="quiz-opt" onclick="setQuizAns('perf', '1440')">
+                <span class="opt-icon">🌈</span>
+                <span class="opt-text" data-i18n="quiz.q3_opt2">1440p / Trabajo Moderado</span>
+              </button>
+              <button class="quiz-opt" onclick="setQuizAns('perf', '4k')">
+                <span class="opt-icon">🎬</span>
+                <span class="opt-text" data-i18n="quiz.q3_opt3">4K / Render Pesado / IA</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Results State -->
+          <div id="quiz-results" class="quiz-step">
+            <h3 data-i18n="quiz.results_title">Nuestras recomendaciones</h3>
+            <div id="quiz-recommendations" class="recommendations-grid"></div>
+            <button class="btn-ghost" onclick="resetQuiz()" style="margin-top: 2rem;" data-i18n="quiz.btn_reset">Repetir Cuestionario</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- TIMELINE -->
   <section id="timeline">
     <div class="container">
@@ -198,6 +288,7 @@
     </div>
   </div>
 
+  <script src="js/quiz.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
