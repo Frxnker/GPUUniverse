@@ -2824,6 +2824,113 @@ body, #navbar, .gpu-card, .cat-card, .server-card,
   transform: rotate(-180deg);
 }
 
+/* ===== VALUE KING ===== */
+.value-filters {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.value-filter-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.value-filter-btn:hover {
+  background: rgba(124, 58, 255, 0.1);
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.value-filter-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(124, 58, 255, 0.3);
+}
+
+.value-chart-wrapper {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  margin-bottom: 3rem;
+  overflow-x: auto;
+}
+
+.value-ranking-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.value-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  transition: all 0.3s;
+}
+
+.value-item:hover {
+  transform: translateX(8px);
+  border-color: var(--accent);
+  background: rgba(124, 58, 255, 0.05);
+}
+
+.value-rank {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--text-muted);
+  opacity: 0.3;
+  min-width: 40px;
+}
+
+.value-item:nth-child(1) .value-rank { color: var(--gold); opacity: 1; }
+.value-item:nth-child(2) .value-rank { color: #ccc; opacity: 1; }
+.value-item:nth-child(3) .value-rank { color: #cd7f32; opacity: 1; }
+
+.value-info {
+  flex-grow: 1;
+}
+
+.value-name {
+  font-weight: 800;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.value-stats {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.value-score {
+  text-align: right;
+  font-weight: 900;
+  font-size: 1.4rem;
+  color: var(--accent2);
+}
+
+.value-score small {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
 /* ===== ARCHITECTURE MAP ===== */
 .arch-map-wrapper {
   overflow-x: auto;

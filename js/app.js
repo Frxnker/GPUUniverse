@@ -333,6 +333,7 @@ window.renderAll = function() {
   if (document.getElementById('compare-table')) renderCompareTable();
   if (document.getElementById('timeline-container')) renderTimeline();
   if (document.getElementById('perf-chart')) renderChart();
+  if (document.getElementById('value-chart')) renderValueChart();
   
   // Only re-observe newly rendered cards
   document.querySelectorAll('.gpu-grid .reveal, .server-showcase .reveal').forEach(el => {
@@ -616,6 +617,113 @@ window.renderArchMap = function() {
   document.querySelectorAll('#arch-map-container .reveal').forEach(el => revealObs.observe(el));
 };
 
+// ===== VALUE KING CHART =====
+window.valueCategory = 'all';
+
+window.renderValueChart = function() {
+  const canvas = document.getElementById('value-chart');
+  const listContainer = document.getElementById('value-ranking-list');
+  if (!canvas || !listContainer) return;
+
+  let gpus = [];
+  if (window.valueCategory === 'all') {
+    gpus = getAllGpus();
+  } else if (window.valueCategory === 'gaming') {
+    gpus = GAMING_GPUS;
+  } else if (window.valueCategory === 'workstation') {
+    gpus = WORKSTATION_GPUS;
+  } else if (window.valueCategory === 'server') {
+    gpus = SERVER_GPUS;
+  }
+
+  gpus = gpus.filter(g => {
+    const price = parseFloat((g.price || "0").replace(/[^0-9.]/g, ''));
+    const tflops = parseFloat(g.tflops) || 0;
+    return price > 0 && tflops > 0 && !g.name.toLowerCase().includes('laptop') && !g.name.toLowerCase().includes('mobile');
+  });
+
+  const valueData = gpus.map(g => {
+    const price = parseFloat((g.price || "0").replace(/[^0-9.]/g, ''));
+    const tflops = parseFloat(g.tflops) || 0;
+    const value = (tflops / price) * 1000; 
+    return { name: g.name, brand: g.brand, value: value, price: price, tflops: tflops };
+  }).sort((a, b) => b.value - a.value).slice(0, 10);
+
+  const ctx = canvas.getContext('2d');
+  const containerW = canvas.parentElement.offsetWidth - 40;
+  canvas.width = containerW;
+  canvas.height = Math.min(400, valueData.length * 40 + 100);
+
+  const padding = { top: 40, right: 30, bottom: 60, left: 140 };
+  const chartW = canvas.width - padding.left - padding.right;
+  const chartH = canvas.height - padding.top - padding.bottom;
+  const maxVal = Math.max(...valueData.map(v => v.value), 1);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Background grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.beginPath();
+  for (let i = 0; i <= 5; i++) {
+    const x = padding.left + (chartW * i / 5);
+    ctx.moveTo(x, padding.top);
+    ctx.lineTo(x, canvas.height - padding.bottom);
+  }
+  ctx.stroke();
+
+  const barH = Math.min(24, chartH / Math.max(1, valueData.length) - 10);
+  valueData.forEach((d, i) => {
+    const y = padding.top + (i * (chartH / valueData.length));
+    const barW = (d.value / maxVal) * chartW;
+    
+    const grad = ctx.createLinearGradient(padding.left, 0, padding.left + barW, 0);
+    if (d.brand === 'nvidia') { grad.addColorStop(0, '#76b900'); grad.addColorStop(1, '#adff2f'); }
+    else if (d.brand === 'amd') { grad.addColorStop(0, '#ed1c24'); grad.addColorStop(1, '#ff6a00'); }
+    else { grad.addColorStop(0, '#0070c0'); grad.addColorStop(1, '#00d4ff'); }
+
+    ctx.fillStyle = grad;
+    if (ctx.roundRect) ctx.beginPath(), ctx.roundRect(padding.left, y, barW, barH, 4), ctx.fill();
+    else ctx.fillRect(padding.left, y, barW, barH);
+
+    ctx.fillStyle = '#fff';
+    ctx.font = '700 11px Outfit';
+    ctx.textAlign = 'right';
+    ctx.fillText(d.name, padding.left - 15, y + barH/2 + 4);
+
+    ctx.textAlign = 'left';
+    ctx.font = '400 10px JetBrains Mono';
+    ctx.fillText(`${d.value.toFixed(1)} pts`, padding.left + barW + 10, y + barH/2 + 4);
+  });
+
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.textAlign = 'center';
+  ctx.font = '400 11px Outfit';
+  ctx.fillText('Puntuación: (TFLOPS / Precio) * 1000 — Relación potencia/precio actual.', canvas.width / 2, canvas.height - 20);
+
+  listContainer.innerHTML = valueData.map((d, i) => `
+    <div class="value-item reveal visible">
+      <div class="value-rank">#${i + 1}</div>
+      <div class="value-info">
+        <div class="value-name">${d.name}</div>
+        <div class="value-stats">${d.tflops} TFLOPS · ${window.formatPrice(d.price.toString())}</div>
+      </div>
+      <div class="value-score">${d.value.toFixed(1)} <small>pts</small></div>
+    </div>
+  `).join('');
+};
+
+// Initializer for Value Filters
+function initValueFilters() {
+  document.querySelectorAll('.value-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.value-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      window.valueCategory = btn.dataset.category;
+      window.renderValueChart();
+    });
+  });
+}
+
 // ===== TIMELINE =====
 window.renderTimeline = function() {
   const container = document.getElementById('timeline-container');
@@ -811,6 +919,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.renderAll();
   initNews();
   window.renderArchMap();
+  initValueFilters();
 
   // Chart resize: redraw on window resize with debounce
   let chartResizeTimer;
