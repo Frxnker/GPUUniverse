@@ -575,6 +575,47 @@ window.renderChart = function() {
 };
 
 
+// ===== ARCHITECTURE MAP =====
+window.renderArchMap = function() {
+  const container = document.getElementById('arch-map-container');
+  if (!container) return;
+
+  // Group by level
+  const levels = {};
+  ARCHITECTURES_DATA.forEach(arch => {
+    if (!levels[arch.level]) levels[arch.level] = [];
+    levels[arch.level].push(arch);
+  });
+
+  const maxLevel = Math.max(...Object.keys(levels).map(Number));
+  
+  let html = '';
+  for (let l = 1; l <= maxLevel; l++) {
+    if (!levels[l]) continue;
+    html += `
+      <div class="arch-level level-${l}">
+        ${levels[l].map(arch => `
+          <div class="arch-node brand-${arch.brand}" id="node-${arch.id}" data-parent="${arch.parent || ''}">
+            <div class="arch-node-header">
+              <span class="arch-year">${arch.year}</span>
+              <span class="arch-brand">${arch.brand.toUpperCase()}</span>
+            </div>
+            <div class="arch-node-name">${arch.name}</div>
+            <div class="arch-node-innovation">✨ ${arch.innovation}</div>
+            <div class="arch-node-desc">${arch.desc}</div>
+            ${arch.parent ? `<div class="arch-connector" data-from="node-${arch.parent}" data-to="node-${arch.id}"></div>` : ''}
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+  
+  container.innerHTML = html;
+  
+  // Re-observe for animations
+  document.querySelectorAll('#arch-map-container .reveal').forEach(el => revealObs.observe(el));
+};
+
 // ===== TIMELINE =====
 window.renderTimeline = function() {
   const container = document.getElementById('timeline-container');
@@ -769,6 +810,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFilters();
   window.renderAll();
   initNews();
+  window.renderArchMap();
 
   // Chart resize: redraw on window resize with debounce
   let chartResizeTimer;

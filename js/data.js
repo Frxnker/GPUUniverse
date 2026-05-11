@@ -437,4 +437,169 @@ const ALL_DOMESTIC_GPUS = [
   { brand: 'intel', name: 'Arc B580', arch: 'Battlemage', year: 2024, tier: 'mid', vram: '12 GB GDDR6', tflops: '24.6', bandwidth: '456 GB/s', tdp: '190W', price: '~$279' }
 ];
 
+const ARCHITECTURES_DATA = [
+  {
+    id: '3dfx-voodoo',
+    brand: '3dfx',
+    name: 'Voodoo Graphics',
+    year: '1996',
+    innovation: 'Aceleración 3D pura',
+    desc: 'Inició la era del 3D en PC. Requería una tarjeta 2D aparte conectada por cable VGA externo.',
+    level: 1,
+    parent: null
+  },
+  {
+    id: 'nv-tnt',
+    brand: 'nvidia',
+    name: 'RIVA TNT',
+    year: '1998',
+    innovation: 'TwiN Texel Engine',
+    desc: 'Capacidad de aplicar dos texturas por píxel en una sola pasada. Competidor directo de 3dfx.',
+    level: 1,
+    parent: null
+  },
+  {
+    id: 'nv-gf256',
+    brand: 'nvidia',
+    name: 'GeForce 256',
+    year: '1999',
+    innovation: 'Hardware T&L',
+    desc: 'Nace el término "GPU". Integró el motor de Transformación e Iluminación en el chip.',
+    level: 2,
+    parent: 'nv-tnt'
+  },
+  {
+    id: 'nv-gf3',
+    brand: 'nvidia',
+    name: 'GeForce 3',
+    year: '2001',
+    innovation: 'Shaders Programables',
+    desc: 'Introdujo el nfiniteFX Engine, permitiendo a los desarrolladores programar efectos visuales complejos.',
+    level: 3,
+    parent: 'nv-gf256'
+  },
+  {
+    id: 'nv-tesla',
+    brand: 'nvidia',
+    name: 'Tesla (G80)',
+    year: '2006',
+    innovation: 'Arquitectura Unificada',
+    desc: 'Eliminó la división entre Pixel y Vertex Shaders. Nace CUDA y el cómputo en GPU.',
+    level: 4,
+    parent: 'nv-gf3'
+  },
+  {
+    id: 'amd-gcn',
+    brand: 'amd',
+    name: 'GCN (Graphics Core Next)',
+    year: '2011',
+    innovation: 'Cómputo General Masivo',
+    desc: 'Arquitectura extremadamente longeva utilizada desde la HD 7970 hasta las consolas PS4/Xbox One.',
+    level: 4,
+    parent: null
+  },
+  {
+    id: 'nv-kepler',
+    brand: 'nvidia',
+    name: 'Kepler',
+    year: '2012',
+    innovation: 'Eficiencia energética extrema',
+    desc: 'Diseñada para maximizar el rendimiento por vatio. Base de las primeras supercomputadoras de IA.',
+    level: 5,
+    parent: 'nv-tesla'
+  },
+  {
+    id: 'nv-maxwell',
+    brand: 'nvidia',
+    name: 'Maxwell',
+    year: '2014',
+    innovation: 'Voxel Global Illumination',
+    desc: 'Perfeccionó la eficiencia de Kepler, duplicando el rendimiento por vatio.',
+    level: 6,
+    parent: 'nv-kepler'
+  },
+  {
+    id: 'nv-pascal',
+    brand: 'nvidia',
+    name: 'Pascal',
+    year: '2016',
+    innovation: 'FinFET 16nm y NVLink',
+    desc: 'El mayor salto de rendimiento en una década. Dominó el mercado con la legendaria GTX 1080 Ti.',
+    level: 7,
+    parent: 'nv-maxwell'
+  },
+  {
+    id: 'amd-rdna1',
+    brand: 'amd',
+    name: 'RDNA',
+    year: '2019',
+    innovation: 'Jerarquía de Caché Rediseñada',
+    desc: 'AMD abandona GCN para crear una arquitectura optimizada específicamente para gaming.',
+    level: 7,
+    parent: 'amd-gcn'
+  },
+  {
+    id: 'nv-turing',
+    brand: 'nvidia',
+    name: 'Turing',
+    year: '2018',
+    innovation: 'Ray Tracing en Tiempo Real',
+    desc: 'Introdujo los RT Cores y Tensor Cores. Nace el Ray Tracing comercial y el DLSS.',
+    level: 8,
+    parent: 'nv-pascal'
+  },
+  {
+    id: 'nv-ampere',
+    brand: 'nvidia',
+    name: 'Ampere',
+    year: '2020',
+    innovation: 'RT Cores 2ª Gen / Tensors 3ª Gen',
+    desc: 'Duplicó el rendimiento en FP32 y llevó el Ray Tracing a un nivel maduro.',
+    level: 9,
+    parent: 'nv-turing'
+  },
+  {
+    id: 'amd-rdna2',
+    brand: 'amd',
+    name: 'RDNA 2',
+    year: '2020',
+    innovation: 'Infinity Cache',
+    desc: 'Añadió Ray Tracing por hardware y alcanzó frecuencias de reloj superiores a 2.5 GHz.',
+    level: 9,
+    parent: 'amd-rdna1'
+  },
+  {
+    id: 'nv-ada',
+    brand: 'nvidia',
+    name: 'Ada Lovelace',
+    year: '2022',
+    innovation: 'Generación de Frames (DLSS 3)',
+    desc: 'Eficiencia energética masiva y salto crítico en rendimiento de IA para juegos.',
+    level: 10,
+    parent: 'nv-ampere'
+  },
+  {
+    id: 'amd-rdna3',
+    brand: 'amd',
+    name: 'RDNA 3',
+    year: '2022',
+    innovation: 'Diseño Chiplet (MCD)',
+    desc: 'Primera GPU del mundo en usar chiplets, separando el cómputo de la memoria.',
+    level: 10,
+    parent: 'amd-rdna2'
+  },
+  {
+    id: 'nv-blackwell',
+    brand: 'nvidia',
+    name: 'Blackwell',
+    year: '2024/25',
+    innovation: 'Inferencia de IA de 2ª Generación',
+    desc: 'Arquitectura diseñada para dominar tanto el gaming 4K ultra como el entrenamiento de LLMs.',
+    level: 11,
+    parent: 'nv-ada'
+  }
+];
+
+
+
 // News are now loaded dynamically from RSS feeds in app.js
