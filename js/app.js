@@ -787,7 +787,11 @@ async function initNews() {
   const FEEDS = [
     'https://videocardz.com/feed',
     'https://www.techpowerup.com/rss/news',
-    'https://www.anandtech.com/rss/'
+    'https://www.anandtech.com/rss/',
+    'https://www.tomshardware.com/feeds/all',
+    'https://www.pcgamer.com/rss/',
+    'https://www.guru3d.com/index.php?ct=news&action=rss',
+    'https://wccftech.com/category/hardware/feed/'
   ];
 
   try {
@@ -798,10 +802,6 @@ async function initNews() {
     const results = await Promise.all(fetchPromises);
     let allItems = [];
     
-    if (typeof MANUAL_NEWS !== 'undefined') {
-      allItems = [...MANUAL_NEWS];
-    }
-
     results.forEach(data => {
       if (data.status === 'ok') {
         allItems = [...allItems, ...data.items];
@@ -822,23 +822,30 @@ async function initNews() {
       }
 
       container.innerHTML = uniqueItems.map(item => {
-        // Intento de extraer imagen de varias fuentes
         let imageUrl = item.thumbnail || (item.enclosure && item.enclosure.link);
         
-        // Si no hay imagen, intentamos buscarla en el contenido HTML de la descripción
         if (!imageUrl && item.description) {
           const imgMatch = item.description.match(/<img[^>]+src="([^">]+)"/);
           if (imgMatch) imageUrl = imgMatch[1];
         }
 
-        // Fallback final si sigue sin haber imagen
         if (!imageUrl) {
           imageUrl = 'https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&q=80&w=400';
         }
 
         const cleanDesc = (item.description || "").replace(/<[^>]*>?/gm, '').substring(0, 120);
         const pubDate = new Date(item.pubDate).toLocaleDateString(undefined, { day: 'numeric', month: 'long' });
-        const source = item.link.includes('videocardz') ? 'VideoCardz' : (item.link.includes('techpowerup') ? 'TechPowerUp' : 'AnandTech');
+        
+        // Detect source from link
+        let source = 'Hardware News';
+        const link = item.link.toLowerCase();
+        if (link.includes('videocardz')) source = 'VideoCardz';
+        else if (link.includes('techpowerup')) source = 'TechPowerUp';
+        else if (link.includes('anandtech')) source = 'AnandTech';
+        else if (link.includes('tomshardware')) source = "Tom's Hardware";
+        else if (link.includes('pcgamer')) source = 'PC Gamer';
+        else if (link.includes('guru3d')) source = 'Guru3D';
+        else if (link.includes('wccftech')) source = 'Wccftech';
         
         return `
           <div class="news-card">
