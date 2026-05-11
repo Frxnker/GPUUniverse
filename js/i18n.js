@@ -109,12 +109,10 @@ const translations = {
       label_target: "Comparar con..."
     },
     footer: {
-      desc: "La base de datos interactiva más completa sobre aceleradores gráficos.",
-      explore_title: "Explorar",
-      legal_title: "Legal",
-      terms: "Términos de Uso",
-      privacy: "Privacidad",
-      rights: "© 2026 GPU Universe. Todos los derechos reservados."
+      tagline: "La guía definitiva de GPUs 2026",
+      categories: "Categorías",
+      brands: "Marcas",
+      bottom: "© 2026 GPU Universe — Información actualizada sobre hardware gráfico"
     },
     ui: {
       tier_ultra: "Entusiasta",
@@ -152,6 +150,23 @@ const translations = {
       tdp: "<strong>TDP (Thermal Design Power)</strong>: Representa el consumo máximo de energía y el calor generado que el sistema de refrigeración debe ser capaz de disipar.",
       tflops: "<strong>TFLOPS (Teraflops)</strong>: Medida de potencia bruta que indica billones de operaciones por segundo. Útil para comparar GPUs de la misma arquitectura.",
       dlss_fsr: "<strong>DLSS / FSR</strong>: Tecnologías de reescalado inteligente (AI) que aumentan drásticamente los FPS manteniendo una alta calidad de imagen."
+    },
+    arch_map: {
+      label: "🌳 Árbol Genealógico",
+      title: "Mapa de",
+      title_hl: "Arquitecturas",
+      subtitle: "La evolución técnica desde los chips pioneros hasta Blackwell y RDNA 4."
+    },
+    value: {
+      label: "💎 Value King",
+      title: "Rendimiento por",
+      title_hl: "Precio",
+      desc: "¿Qué tarjeta ofrece más potencia por cada moneda invertida?",
+      all: "Todos",
+      gaming: "Gaming",
+      workstation: "Workstation",
+      server: "IA / Servidor",
+      score_desc: "Puntuación: (TFLOPS / Precio) * 1000 — Relación potencia/precio actual."
     }
   },
   en: {
@@ -264,12 +279,10 @@ const translations = {
       label_target: "Compare with..."
     },
     footer: {
-      desc: "The most comprehensive interactive database on graphics accelerators.",
-      explore_title: "Explore",
-      legal_title: "Legal",
-      terms: "Terms of Use",
-      privacy: "Privacy Policy",
-      rights: "© 2026 GPU Universe. All rights reserved."
+      tagline: "The Ultimate GPU Guide 2026",
+      categories: "Categories",
+      brands: "Brands",
+      bottom: "© 2026 GPU Universe — Up-to-date graphics hardware information"
     },
     ui: {
       tier_ultra: "Enthusiast",
@@ -307,6 +320,23 @@ const translations = {
       tdp: "<strong>TDP (Thermal Design Power)</strong>: Represents the maximum power consumption and heat generated that the cooling system must be able to dissipate.",
       tflops: "<strong>TFLOPS (Teraflops)</strong>: A measure of raw performance indicating trillions of operations per second. Useful for comparing GPUs of the same architecture.",
       dlss_fsr: "<strong>DLSS / FSR</strong>: AI-powered upscaling technologies that drastically increase FPS while maintaining high image quality."
+    },
+    arch_map: {
+      label: "🌳 Family Tree",
+      title: "Architecture",
+      title_hl: "Map",
+      subtitle: "Technical evolution from pioneering chips to Blackwell and RDNA 4."
+    },
+    value: {
+      label: "💎 Value King",
+      title: "Performance per",
+      title_hl: "Price",
+      desc: "Which card offers more power for every currency unit spent?",
+      all: "All",
+      gaming: "Gaming",
+      workstation: "Workstation",
+      server: "AI / Server",
+      score_desc: "Score: (TFLOPS / Price) * 1000 — Current power/price ratio."
     }
   },
   fr: {
@@ -419,12 +449,10 @@ const translations = {
       label_target: "Comparer avec..."
     },
     footer: {
-      desc: "La base de données interactive la plus complète sur les accélérateurs graphiques.",
-      explore_title: "Explorer",
-      legal_title: "Légal",
-      terms: "Conditions d'utilisation",
-      privacy: "Confidentialité",
-      rights: "© 2026 GPU Universe. Tous droits réservés."
+      tagline: "Le Guide Ultime des GPUs 2026",
+      categories: "Catégories",
+      brands: "Marques",
+      bottom: "© 2026 GPU Universe — Informations à jour sur le matériel graphique"
     },
     ui: {
       tier_ultra: "Enthousiaste",
@@ -462,6 +490,23 @@ const translations = {
       tdp: "<strong>TDP (Thermal Design Power)</strong>: Représente la consommation d'énergie maximale et la chaleur générée que le système de refroidissement doit pouvoir dissiper.",
       tflops: "<strong>TFLOPS (Teraflops)</strong>: Une mesure de performance brute indiquant des billions d'opérations par seconde. Utile pour comparer des GPU de la même architecture.",
       dlss_fsr: "<strong>DLSS / FSR</strong>: Technologies de mise à l'échelle alimentées par l'IA qui augmentent considérablement les FPS tout en maintenant une qualité d'image élevée."
+    },
+    arch_map: {
+      label: "🌳 Arbre Généalogique",
+      title: "Carte des",
+      title_hl: "Architectures",
+      subtitle: "Évolution technique des puces pionnières à Blackwell et RDNA 4."
+    },
+    value: {
+      label: "💎 Value King",
+      title: "Performance par",
+      title_hl: "Prix",
+      desc: "Quelle carte offre le plus de puissance pour chaque unité monétaire dépensée ?",
+      all: "Tous",
+      gaming: "Gaming",
+      workstation: "Station de Travail",
+      server: "IA / Serveur",
+      score_desc: "Score : (TFLOPS / Prix) * 1000 — Rapport puissance/prix actuel."
     }
   },
   de: {
@@ -574,12 +619,10 @@ const translations = {
       label_target: "Vergleichen mit..."
     },
     footer: {
-      desc: "Die umfassendste interaktive Datenbank für Grafikbeschleuniger.",
-      explore_title: "Entdecken",
-      legal_title: "Rechtliches",
-      terms: "Nutzungsbedingungen",
-      privacy: "Datenschutz",
-      rights: "© 2026 GPU Universe. Alle Rechte vorbehalten."
+      tagline: "Der ultimative GPU-Leitfaden 2026",
+      categories: "Kategorien",
+      brands: "Marken",
+      bottom: "© 2026 GPU Universe — Aktuelle Informationen zu Grafikhardware"
     },
     ui: {
       tier_ultra: "Enthusiast",
@@ -617,6 +660,23 @@ const translations = {
       tdp: "<strong>TDP (Thermal Design Power)</strong>: Stellt die maximale Leistungsaufnahme und die erzeugte Wärme dar, die das Kühlsystem ableiten muss.",
       tflops: "<strong>TFLOPS (Teraflops)</strong>: Ein Maß für die Rohleistung, das Billionen von Operationen pro Sekunde angibt. Nützlich zum Vergleich von GPUs derselben Architektur.",
       dlss_fsr: "<strong>DLSS / FSR</strong>: KI-gestützte Upscaling-Technologien, die die FPS drastisch erhöhen und gleichzeitig eine hohe Bildqualität beibehalten."
+    },
+    arch_map: {
+      label: "🌳 Stammbaum",
+      title: "Architektur-",
+      title_hl: "Karte",
+      subtitle: "Technische Entwicklung von Pionier-Chips bis Blackwell und RDNA 4."
+    },
+    value: {
+      label: "💎 Value King",
+      title: "Leistung pro",
+      title_hl: "Preis",
+      desc: "Welche Karte bietet mehr Leistung für jede investierte Währungseinheit?",
+      all: "Alle",
+      gaming: "Gaming",
+      workstation: "Workstation",
+      server: "KI / Server",
+      score_desc: "Bewertung: (TFLOPS / Preis) * 1000 — Aktuelles Preis-Leistungs-Verhältnis."
     }
   },
   it: {
@@ -729,12 +789,10 @@ const translations = {
       label_target: "Confronta con..."
     },
     footer: {
-      desc: "Il database interattivo più completo sugli acceleratori grafici.",
-      explore_title: "Esplora",
-      legal_title: "Legale",
-      terms: "Termini di Utilizzo",
-      privacy: "Privacy",
-      rights: "© 2026 GPU Universe. Tutti i diritti riservati."
+      tagline: "La Guida Definitiva alle GPU 2026",
+      categories: "Categorie",
+      brands: "Marche",
+      bottom: "© 2026 GPU Universe — Informazioni aggiornate sull'hardware grafico"
     },
     ui: {
       tier_ultra: "Entusiasta",
@@ -772,6 +830,23 @@ const translations = {
       tdp: "<strong>TDP (Thermal Design Power)</strong>: Rappresenta il consumo energetico massimo e il calore generato che il sistema di raffreddamento deve essere in grado di dissipare.",
       tflops: "<strong>TFLOPS (Teraflops)</strong>: Una misura della potenza bruta che indica trilioni di operazioni al secondo. Utile per confrontare GPU della stessa architettura.",
       dlss_fsr: "<strong>DLSS / FSR</strong>: Tecnologie di upscaling basate su IA che aumentano drasticamente gli FPS mantenendo un'elevata qualità dell'immagine."
+    },
+    arch_map: {
+      label: "🌳 Albero Genealogico",
+      title: "Mappa delle",
+      title_hl: "Architetture",
+      subtitle: "Evoluzione tecnica dai chip pionieristici a Blackwell e RDNA 4."
+    },
+    value: {
+      label: "💎 Value King",
+      title: "Rapporto",
+      title_hl: "Qualità-Prezzo",
+      desc: "Quale scheda offre più potenza per ogni unità monetaria spesa?",
+      all: "Tutti",
+      gaming: "Gaming",
+      workstation: "Workstation",
+      server: "IA / Server",
+      score_desc: "Punteggio: (TFLOPS / Prezzo) * 1000 — Rapporto potenza/prezzo attuale."
     }
   },
   ru: {
@@ -884,12 +959,10 @@ const translations = {
       label_target: "Сравнить с..."
     },
     footer: {
-      desc: "Самая полная интерактивная база данных графических ускорителей.",
-      explore_title: "Обзор",
-      legal_title: "Правовая информация",
-      terms: "Условия использования",
-      privacy: "Политика конфиденциальности",
-      rights: "© 2026 GPU Universe. Все права защищены."
+      tagline: "Полное руководство по GPU 2026",
+      categories: "Категории",
+      brands: "Бренды",
+      bottom: "© 2026 GPU Universe — Актуальная информация о графическом оборудовании"
     },
     ui: {
       tier_ultra: "Энтузиаст",
@@ -927,6 +1000,23 @@ const translations = {
       tdp: "<strong>TDP (Thermal Design Power)</strong>: Представляет собой максимальное энергопотребление и выделяемое тепло, которое система охлаждения должна быть способна рассеять.",
       tflops: "<strong>TFLOPS (Teraflops)</strong>: Мера чистой производительности, указывающая на триллионы операций в секунду. Полезно для сравнения GPU одной архитектуры.",
       dlss_fsr: "<strong>DLSS / FSR</strong>: Технологии масштабирования на базе ИИ, которые значительно повышают FPS при сохранении высокого качества изображения."
+    },
+    arch_map: {
+      label: "🌳 Генеалогическое древо",
+      title: "Карта",
+      title_hl: "архитектур",
+      subtitle: "Техническая эволюция от первых чипов до Blackwell и RDNA 4."
+    },
+    value: {
+      label: "💎 Value King",
+      title: "Производительность",
+      title_hl: "на цену",
+      desc: "Какая карта предлагает больше мощности за каждую потраченную валютную единицу?",
+      all: "Все",
+      gaming: "Игры",
+      workstation: "Рабочие станции",
+      server: "ИИ / Сервер",
+      score_desc: "Баллы: (TFLOPS / Цена) * 1000 — Текущее соотношение мощности к цене."
     }
   }
 };

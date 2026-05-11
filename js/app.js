@@ -698,7 +698,7 @@ window.renderValueChart = function() {
   ctx.fillStyle = 'rgba(255,255,255,0.5)';
   ctx.textAlign = 'center';
   ctx.font = '400 11px Outfit';
-  ctx.fillText('Puntuación: (TFLOPS / Precio) * 1000 — Relación potencia/precio actual.', canvas.width / 2, canvas.height - 20);
+  ctx.fillText(window.t('value.score_desc'), canvas.width / 2, canvas.height - 20);
 
   listContainer.innerHTML = valueData.map((d, i) => `
     <div class="value-item reveal visible">
