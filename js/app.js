@@ -184,7 +184,7 @@ function buildServerCard(gpu) {
 }
 
 // ===== FILTER LOGIC =====
-window.activeFilters = { brand: 'all', vram: 'all', use: 'all', sort: 'perf' };
+window.activeFilters = { brand: 'all', vram: 'all', use: 'all', sort: 'perf', search: '' };
 
 function initFilters() {
   document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -204,6 +204,15 @@ function initFilters() {
 
 function applyGpuFilters(gpus) {
   return gpus.filter(gpu => {
+    // Search filter
+    if (window.activeFilters.search) {
+      const term = window.activeFilters.search;
+      const searchMatch = gpu.name.toLowerCase().includes(term) || 
+                          (gpu.arch && gpu.arch.toLowerCase().includes(term)) || 
+                          gpu.brand.toLowerCase().includes(term);
+      if (!searchMatch) return false;
+    }
+
     // Brand filter
     if (window.activeFilters.brand !== 'all' && gpu.brand !== window.activeFilters.brand) return false;
 
@@ -839,35 +848,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Search
   const searchInput = document.getElementById('gpu-search');
-  const searchResults = document.getElementById('search-results');
   if (searchInput) {
     let searchTimeout;
     searchInput.addEventListener('input', (e) => {
       clearTimeout(searchTimeout);
       searchTimeout = setTimeout(() => {
         const term = e.target.value.toLowerCase().trim();
-        if (term.length < 2) {
-          searchResults.classList.remove('active');
-          return;
-        }
-        const gpus = getAllGpus();
-        const filtered = gpus.filter(g => g.name.toLowerCase().includes(term) || g.arch.toLowerCase().includes(term));
-        if (filtered.length > 0) {
-          searchResults.innerHTML = filtered.slice(0, 8).map(g => `
-            <div class="search-result-item" onclick="openGpuModal('${g.name}')">
-              <span class="sr-name">${g.name}</span>
-              <span class="sr-arch">${g.brand.toUpperCase()} · ${g.year || g.arch}</span>
-            </div>
-          `).join('');
-          searchResults.classList.add('active');
-        } else {
-          searchResults.innerHTML = `<div style="padding: 0.5rem; color: #888; font-size: 0.8rem;">${typeof window.t === "function" ? window.t("ui.no_results") : "No se encontraron resultados"}</div>`;
-          searchResults.classList.add('active');
-        }
+        
+        // Update grid dynamically
+        window.activeFilters.search = term;
+        if (typeof window.renderAll === 'function') window.renderAll();
       }, 200);
-    });
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.search-container')) searchResults.classList.remove('active');
     });
   }
 

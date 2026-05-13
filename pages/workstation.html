@@ -34,10 +34,7 @@
         <li><a href="learn.html" data-i18n="nav.learn">Aprender</a></li>
       </ul>
       <div class="nav-actions">
-        <div class="search-container">
-          <input type="text" id="gpu-search" placeholder="Buscar GPU (ej. 1080)..." autocomplete="off" data-i18n="nav.search_placeholder">
-          <div id="search-results" class="search-results"></div>
-        </div>
+
         <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema" title="Cambiar tema claro/oscuro">
           <span class="icon-sun">☀️</span>
           <span class="icon-moon">🌙</span>
@@ -79,6 +76,12 @@
         <p data-i18n="sections.work_p">Potencia y precisión para profesionales del 3D, diseño, CAD e IA en escritorio</p>
       </div>
       <div class="filter-bar">
+        <div class="filter-group">
+          <label>Buscar</label>
+          <div class="search-container">
+            <input type="text" id="gpu-search" placeholder="Buscar GPU (ej. 1080)..." autocomplete="off" data-i18n="nav.search_placeholder" style="width: 220px; border-radius: 8px;">
+          </div>
+        </div>
         <div class="filter-group">
           <label data-i18n="filters.brand">Fabricante</label>
           <div class="filter-options" id="filter-brand">
