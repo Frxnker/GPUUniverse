@@ -6,6 +6,7 @@ const translations = {
       server: "Servidor",
       compare: "Comparar",
       history: "Historia",
+      learn: "Aprender",
       search_placeholder: "Buscar GPU (ej. 1080)...",
       explore: "Explorar"
     },
@@ -176,6 +177,7 @@ const translations = {
       server: "Server",
       compare: "Compare",
       history: "History",
+      learn: "Learn",
       search_placeholder: "Search GPU (e.g., 1080)...",
       explore: "Explore"
     },
@@ -346,6 +348,7 @@ const translations = {
       server: "Serveur",
       compare: "Comparer",
       history: "Histoire",
+      learn: "Apprendre",
       search_placeholder: "Rechercher GPU (ex. 1080)...",
       explore: "Explorer"
     },
@@ -516,6 +519,7 @@ const translations = {
       server: "Server",
       compare: "Vergleichen",
       history: "Geschichte",
+      learn: "Lernen",
       search_placeholder: "GPU suchen (z.B. 1080)...",
       explore: "Entdecken"
     },
@@ -686,6 +690,7 @@ const translations = {
       server: "Server",
       compare: "Confronta",
       history: "Storia",
+      learn: "Impara",
       search_placeholder: "Cerca GPU (es. 1080)...",
       explore: "Esplora"
     },
