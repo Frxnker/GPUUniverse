@@ -42,6 +42,25 @@ document.addEventListener('DOMContentLoaded', () => {
   accentLight.position.set(5, 5, 5);
   scene.add(accentLight);
 
+  function updateLighting() {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    ambientLight.intensity = isLight ? 1.2 : 0.4;
+    dirLight.intensity = isLight ? 1.0 : 0.6;
+    fillLight.intensity = isLight ? 0.8 : 0.4;
+    accentLight.intensity = isLight ? 0.8 : 0.5;
+  }
+  
+  // Observador para cambios de tema
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'data-theme') {
+        updateLighting();
+      }
+    });
+  });
+  observer.observe(document.documentElement, { attributes: true });
+  updateLighting();
+
   // Materiales
   const matPCB = new THREE.MeshStandardMaterial({ color: 0x112211, roughness: 0.8, metalness: 0.2 });
   const matDie = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.1, metalness: 0.8, emissive: 0x111111 });
@@ -70,6 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const interactableObjects = [];
 
   function createPart(mesh, name, group, data) {
+    // CLONE material so changing color doesn't affect other instances
+    mesh.material = mesh.material.clone();
+    
     mesh.castShadow = true;
     mesh.receiveShadow = true;
     mesh.userData = { name: name };
@@ -105,6 +127,18 @@ document.addEventListener('DOMContentLoaded', () => {
     ]
   });
   pcie.position.set(-2, -0.35, 3.8);
+
+  // Backplate
+  const backplateGeo = new THREE.BoxGeometry(16, 0.1, 8);
+  const backplate = createPart(new THREE.Mesh(backplateGeo, matBracket), 'Backplate', layerPCB, {
+    title: 'Backplate (Placa Trasera)',
+    desc: 'Protege la parte posterior del PCB, previene que la tarjeta se doble (sagging) y a menudo ayuda pasivamente a disipar el calor de la VRAM montada en la parte posterior.',
+    stats: [
+      { label: 'Material', value: 'Aluminio anodizado' },
+      { label: 'Función', value: 'Estructural / Disipación pasiva' }
+    ]
+  });
+  backplate.position.set(0, -0.15, 0);
 
   // GPU Die (El Chip Principal)
   const dieGeo = new THREE.BoxGeometry(2.5, 0.1, 2.5);
@@ -277,13 +311,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const mouse = new THREE.Vector2();
   let selectedMesh = null;
   const originalColors = new Map();
+  
+  // Re-añadido para pausar la auto-rotación
   let isDragging = false;
-
   controls.addEventListener('start', () => { isDragging = true; });
-  controls.addEventListener('end', () => { setTimeout(() => isDragging = false, 50); });
+  controls.addEventListener('end', () => { isDragging = false; });
+  
+  let mouseDownPos = { x: 0, y: 0 };
 
-  window.addEventListener('click', (event) => {
-    if (isDragging) return;
+  window.addEventListener('pointerdown', (event) => {
+    mouseDownPos.x = event.clientX;
+    mouseDownPos.y = event.clientY;
+  });
+
+  window.addEventListener('pointerup', (event) => {
+    const dist = Math.hypot(event.clientX - mouseDownPos.x, event.clientY - mouseDownPos.y);
+    if (dist > 5) return; // Si se movió más de 5px, fue un arrastre (drag), no un click
 
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
