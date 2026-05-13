@@ -137,7 +137,7 @@ function buildGpuCard(gpu) {
   const brandMap = { nvidia: 'NVIDIA', amd: 'AMD', intel: 'Intel', apple: 'Apple' };
   const tierMap = { entry: 'Entrada', mid: 'Gama Media', high: 'Alto', ultra: 'Ultra' };
   return `
-    <div class="gpu-card reveal" onclick="openGpuModal('${gpu.name}')" style="cursor: pointer;">
+    <div class="gpu-card reveal">
       <div class="gpu-card-header">
         <span class="gpu-brand brand-${gpu.brand}">${brandMap[gpu.brand]}</span>
         <span class="gpu-tier tier-${gpu.tier}">${typeof window.t === "function" && window.t("ui.tier_" + gpu.tier) !== "ui.tier_" + gpu.tier ? window.t("ui.tier_" + gpu.tier) : tierMap[gpu.tier]}</span>
@@ -163,7 +163,7 @@ function buildGpuCard(gpu) {
 
 function buildServerCard(gpu) {
   return `
-    <div class="server-card ${gpu.cssClass} reveal" onclick="openGpuModal('${gpu.name}')" style="cursor: pointer;">
+    <div class="server-card ${gpu.cssClass} reveal">
       <div class="server-meta">
         <span class="server-badge">${gpu.brand.toUpperCase()}</span>
         <div class="server-name">${gpu.name}</div>
@@ -197,9 +197,21 @@ function initFilters() {
       btn.classList.add('active');
 
       window.activeFilters[type] = value;
+      // Reset limits when filtering
+      for (let k in window.gridLimits) window.gridLimits[k] = 12;
       window.renderAll();
     });
   });
+
+  const searchInput = document.getElementById('gpu-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      window.activeFilters.search = e.target.value.toLowerCase();
+      // Reset limits when searching
+      for (let k in window.gridLimits) window.gridLimits[k] = 12;
+      window.renderAll();
+    });
+  }
 }
 
 function applyGpuFilters(gpus) {
@@ -234,7 +246,19 @@ function applyGpuFilters(gpus) {
       const tflopsNum = parseFloat(gpu.tflops);
 
       if (use === 'rt') {
-        if (tflopsNum < 20 && gpu.tier === 'entry') return false;
+        const name = gpu.name.toUpperCase();
+        const arch = (gpu.arch || "").toLowerCase();
+        if (gpu.brand === 'nvidia') {
+          if (!name.includes('RTX')) return false;
+        } else if (gpu.brand === 'amd') {
+          const isRdna2Plus = arch.includes('rdna 2') || arch.includes('rdna 3') || arch.includes('rdna 4');
+          const isRx6000Plus = name.includes('RX 6') || name.includes('RX 7') || name.includes('RX 8') || name.includes('RX 9');
+          if (!isRdna2Plus && !isRx6000Plus) return false;
+        } else if (gpu.brand === 'intel') {
+          if (!name.includes('ARC') && !name.includes('B580')) return false;
+        } else if (gpu.brand === 'apple') {
+          if (!name.includes('M3') && !name.includes('M4')) return false;
+        }
       } else if (use === 'video') {
         if (vramNum < 12) return false;
       } else if (use === 'ia') {
@@ -273,14 +297,64 @@ function sortGpus(gpus, sortBy) {
   });
 }
 
+
+window.gridLimits = {
+  gaming: 12,
+  workstation: 12,
+  mobile: 12,
+  server: 12
+};
+
+function renderWithPagination(container, sortedItems, limitKey, buildCardFn) {
+  const currentLimit = window.gridLimits[limitKey];
+  const visibleItems = sortedItems.slice(0, currentLimit);
+  
+  if (!sortedItems.length) {
+    container.innerHTML = `<div class="no-results-msg" style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);" data-i18n="ui.no_results">No se encontraron resultados</div>`;
+  } else {
+    container.innerHTML = visibleItems.map(buildCardFn).join('');
+  }
+  
+  // Manage "Load More" button
+  let btnContainer = document.getElementById(`${container.id}-load-more`);
+  if (!btnContainer) {
+    btnContainer = document.createElement('div');
+    btnContainer.id = `${container.id}-load-more`;
+    btnContainer.className = 'load-more-container';
+    container.parentNode.insertBefore(btnContainer, container.nextSibling);
+  }
+  
+  if (sortedItems.length > currentLimit) {
+    btnContainer.innerHTML = `<button class="btn-load-more" onclick="loadMore('${limitKey}')">Ver más GPUs <span class="arrow">↓</span></button>`;
+  } else {
+    btnContainer.innerHTML = '';
+  }
+
+  // Observe new elements for reveal animation
+  if (window.revealObs) {
+    container.querySelectorAll('.reveal').forEach(el => window.revealObs.observe(el));
+  }
+}
+
+window.loadMore = function(limitKey) {
+  window.gridLimits[limitKey] += 12;
+  window.renderAll();
+};
+
 // ===== RENDER LOGIC =====
 
 
 window.renderAll = function() {
   const gg = document.getElementById('gaming-grid');
   if (gg) {
-    let dataSource = (typeof ALL_DOMESTIC_GPUS !== 'undefined') ? ALL_DOMESTIC_GPUS : GAMING_GPUS;
-    dataSource = dataSource.filter(g => !g.name.toLowerCase().includes('laptop') && !g.name.toLowerCase().includes('mobile'));
+    const allGpus = getAllGpus();
+    let dataSource = allGpus.filter(g => {
+      const name = g.name.toLowerCase();
+      const isMobile = name.includes('laptop') || name.includes('mobile');
+      const isWorkstation = typeof WORKSTATION_GPUS !== 'undefined' && WORKSTATION_GPUS.some(w => w.name === g.name);
+      const isServer = typeof SERVER_GPUS !== 'undefined' && SERVER_GPUS.some(s => s.name === g.name);
+      return !isMobile && !isWorkstation && !isServer;
+    });
     
     const maxTflops = Math.max(...dataSource.map(g => parseFloat(g.tflops) || 0), 1);
     
@@ -296,7 +370,7 @@ window.renderAll = function() {
     
     const filtered = applyGpuFilters(prepared);
     const sorted = sortGpus(filtered, window.activeFilters.sort);
-    gg.innerHTML = sorted.length ? sorted.map(buildGpuCard).join('') : `<div class="no-results-msg" style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);" data-i18n="ui.no_results">No se encontraron resultados</div>`;
+    renderWithPagination(gg, sorted, 'gaming', buildGpuCard);
   }
   
   const wg = document.getElementById('workstation-grid');
@@ -313,13 +387,17 @@ window.renderAll = function() {
     });
     const filtered = applyGpuFilters(prepared);
     const sorted = sortGpus(filtered, window.activeFilters.sort);
-    wg.innerHTML = sorted.length ? sorted.map(buildGpuCard).join('') : `<div class="no-results-msg" style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);" data-i18n="ui.no_results">No se encontraron resultados</div>`;
+    renderWithPagination(wg, sorted, 'workstation', buildGpuCard);
   }
   
   const mg = document.getElementById('mobile-grid');
   if (mg) {
-    let dataSource = (typeof ALL_DOMESTIC_GPUS !== 'undefined') ? ALL_DOMESTIC_GPUS : (typeof MOBILE_GPUS !== 'undefined' ? MOBILE_GPUS : []);
-    dataSource = dataSource.filter(g => g.name.toLowerCase().includes('laptop') || g.name.toLowerCase().includes('mobile') || (typeof MOBILE_GPUS !== 'undefined' && MOBILE_GPUS.includes(g)));
+    const allGpus = getAllGpus();
+    let dataSource = allGpus.filter(g => 
+      g.name.toLowerCase().includes('laptop') || 
+      g.name.toLowerCase().includes('mobile') || 
+      (typeof MOBILE_GPUS !== 'undefined' && MOBILE_GPUS.some(m => m.name === g.name))
+    );
     
     const maxTflops = Math.max(...dataSource.map(g => parseFloat(g.tflops) || 0), 1);
     const prepared = dataSource.map(g => {
@@ -333,14 +411,14 @@ window.renderAll = function() {
     });
     const filtered = applyGpuFilters(prepared);
     const sorted = sortGpus(filtered, window.activeFilters.sort);
-    mg.innerHTML = sorted.length ? sorted.map(buildGpuCard).join('') : `<div class="no-results-msg" style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);" data-i18n="ui.no_results">No se encontraron resultados</div>`;
+    renderWithPagination(mg, sorted, 'mobile', buildGpuCard);
   }
   
   const sg = document.getElementById('server-grid');
   if (sg) {
     const filtered = applyGpuFilters(SERVER_GPUS);
     const sorted = sortGpus(filtered, window.activeFilters.sort);
-    sg.innerHTML = sorted.length ? sorted.map(buildServerCard).join('') : `<div class="no-results-msg" style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);" data-i18n="ui.no_results">No se encontraron resultados</div>`;
+    renderWithPagination(sg, sorted, 'server', buildServerCard);
   }
   
   if (document.getElementById('compare-table')) renderCompareTable();
@@ -786,7 +864,7 @@ function getAllGpus() {
   return Array.from(new Map(all.map(item => [item.name, item])).values());
 }
 
-window.openGpuModal = function(name) {
+window.openGpuModal = function(name, event) {
   const gpus = getAllGpus();
   const gpu = gpus.find(g => g.name === name);
   if (!gpu) return;
@@ -794,6 +872,25 @@ window.openGpuModal = function(name) {
   const brandMap = { nvidia: 'NVIDIA', amd: 'AMD', intel: 'Intel', apple: 'Apple' };
   const modalBody = document.getElementById('modal-body');
   const modalOverlay = document.getElementById('gpu-modal');
+  const modalContent = modalOverlay.querySelector('.modal-content');
+  
+  // Position logic
+  if (event && event.currentTarget) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const modalHeight = 500; // Estimated height for positioning
+    
+    let topPos = rect.top;
+    
+    // Ensure it doesn't go below screen
+    if (topPos + modalHeight > viewportHeight) {
+      topPos = Math.max(20, viewportHeight - modalHeight - 40);
+    }
+    
+    modalContent.style.marginTop = topPos + 'px';
+  } else {
+    modalContent.style.marginTop = 'auto';
+  }
   
   modalBody.innerHTML = `
     <div class="modal-header">
@@ -807,7 +904,11 @@ window.openGpuModal = function(name) {
       <div class="modal-item"><label>${wrapWithTooltip(typeof window.t === "function" ? window.t("ui.tdp") || "TDP / Consumo" : "TDP / Consumo", 'tdp')}</label><span>${gpu.tdp || '-'}</span></div>
       ${gpu.price ? `<div class="modal-item"><label>${typeof window.t === "function" ? window.t("ui.price") : "Precio Estimado"}</label><span>${window.formatPrice(gpu.price)}</span></div>` : ''}
       ${gpu.tier ? `<div class="modal-item"><label>${typeof window.t === "function" ? window.t("table.cat") : "Gama"}</label><span style="text-transform: capitalize;">${typeof window.t === "function" ? window.t("ui.tier_" + gpu.tier) : gpu.tier}</span></div>` : ''}
-      <div class="modal-item"><label>${wrapWithTooltip('DLSS / FSR', 'dlss_fsr')}</label><span>${gpu.brand === 'nvidia' ? 'DLSS 3.5' : (gpu.brand === 'amd' ? 'FSR 3.1' : 'XeSS')}</span></div>
+      <div class="modal-item"><label>${wrapWithTooltip('DLSS / FSR', 'dlss_fsr')}</label><span>${
+        gpu.brand === 'nvidia' 
+          ? (gpu.name.toUpperCase().includes('RTX') ? 'DLSS 4.5' : 'N/A') 
+          : (gpu.brand === 'amd' ? (gpu.arch && gpu.arch.toLowerCase().includes('rdna 4') ? 'FSR 4.0' : 'FSR 3.1') : 'XeSS')
+      }</span></div>
     </div>
     ${gpu.desc ? `<div style="margin-top: 1.5rem; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">${typeof gpu.desc === 'object' ? gpu.desc[window.currentLang || 'es'] : gpu.desc}</div>` : ''}
   `;

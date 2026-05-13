@@ -38,7 +38,7 @@ function renderQuizResults() {
     const results = calculateRecommendations();
     
     container.innerHTML = results.map(gpu => `
-        <div class="rec-card" onclick="openGpuModal('${gpu.name}')" style="cursor:pointer">
+        <div class="rec-card">
             <span class="rec-tag">${gpu.brand.toUpperCase()}</span>
             <div class="rec-name">${gpu.name}</div>
             <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">${gpu.arch}</div>

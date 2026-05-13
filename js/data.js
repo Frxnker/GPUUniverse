@@ -4,12 +4,12 @@ const GAMING_GPUS = [
   {
     brand: 'nvidia', name: 'RTX 5090', arch: 'Blackwell / GB202',
     tier: 'ultra', vram: '32 GB GDDR7', tflops: '209.8', bandwidth: '1792 GB/s',
-    tdp: '575W', price: '~$3499', perf: 100, fillColor: 'fill-gold'
+    tdp: '575W', price: '2499€', perf: 100, fillColor: 'fill-gold'
   },
   {
     brand: 'nvidia', name: 'RTX 5080', arch: 'Blackwell / GB203',
     tier: 'high', vram: '16 GB GDDR7', tflops: '102.5', bandwidth: '1024 GB/s',
-    tdp: '350W', price: '~$1499', perf: 85, fillColor: 'fill-purple'
+    tdp: '350W', price: '1299€', perf: 85, fillColor: 'fill-purple'
   },
   {
     brand: 'nvidia', name: 'RTX 5070 Ti', arch: 'Blackwell / GB205',
@@ -19,22 +19,22 @@ const GAMING_GPUS = [
   {
     brand: 'nvidia', name: 'RTX 5070', arch: 'Blackwell / GB205',
     tier: 'high', vram: '12 GB GDDR7', tflops: '50.2', bandwidth: '576 GB/s',
-    tdp: '220W', price: '~$749', perf: 64, fillColor: 'fill-purple'
+    tdp: '220W', price: '699€', perf: 64, fillColor: 'fill-purple'
   },
   {
     brand: 'nvidia', name: 'RTX 4090', arch: 'Ada Lovelace / AD102',
     tier: 'ultra', vram: '24 GB GDDR6X', tflops: '82.6', bandwidth: '1008 GB/s',
-    tdp: '450W', price: '~$2599', perf: 82, fillColor: 'fill-gold'
+    tdp: '450W', price: '1849€', perf: 82, fillColor: 'fill-gold'
   },
   {
     brand: 'nvidia', name: 'RTX 4080 SUPER', arch: 'Ada Lovelace / AD103',
     tier: 'high', vram: '16 GB GDDR6X', tflops: '52.2', bandwidth: '736 GB/s',
-    tdp: '320W', price: '~$1199', perf: 70, fillColor: 'fill-purple'
+    tdp: '320W', price: '1049€', perf: 70, fillColor: 'fill-purple'
   },
   {
     brand: 'amd', name: 'RX 7900 XTX', arch: 'RDNA 3 / Navi 31',
     tier: 'high', vram: '24 GB GDDR6', tflops: '61.4', bandwidth: '960 GB/s',
-    tdp: '355W', price: '~$949', perf: 68, fillColor: 'fill-purple'
+    tdp: '355W', price: '989€', perf: 68, fillColor: 'fill-purple'
   },
   {
     brand: 'amd', name: 'RX 9070 XT', arch: 'RDNA 4 / Navi 48',
@@ -44,17 +44,17 @@ const GAMING_GPUS = [
   {
     brand: 'nvidia', name: 'RTX 4070 Ti SUPER', arch: 'Ada Lovelace / AD103',
     tier: 'high', vram: '16 GB GDDR6X', tflops: '40.0', bandwidth: '672 GB/s',
-    tdp: '285W', price: '~$799', perf: 60, fillColor: 'fill-purple'
+    tdp: '285W', price: '849€', perf: 60, fillColor: 'fill-purple'
   },
   {
     brand: 'nvidia', name: 'RTX 4070 SUPER', arch: 'Ada Lovelace / AD104',
     tier: 'mid', vram: '12 GB GDDR6X', tflops: '35.5', bandwidth: '504 GB/s',
-    tdp: '220W', price: '~$599', perf: 52, fillColor: 'fill-blue'
+    tdp: '220W', price: '619€', perf: 52, fillColor: 'fill-blue'
   },
   {
     brand: 'amd', name: 'RX 7800 XT', arch: 'RDNA 3 / Navi 32',
     tier: 'mid', vram: '16 GB GDDR6', tflops: '37.3', bandwidth: '624 GB/s',
-    tdp: '263W', price: '~$449', perf: 48, fillColor: 'fill-blue'
+    tdp: '263W', price: '519€', perf: 48, fillColor: 'fill-blue'
   },
   {
     brand: 'nvidia', name: 'RTX 3090 Ti', arch: 'Ampere / GA102',
@@ -79,7 +79,7 @@ const GAMING_GPUS = [
   {
     brand: 'nvidia', name: 'RTX 4060', arch: 'Ada Lovelace / AD107',
     tier: 'entry', vram: '8 GB GDDR6', tflops: '15.1', bandwidth: '272 GB/s',
-    tdp: '115W', price: '~$299', perf: 30, fillColor: 'fill-green'
+    tdp: '115W', price: '299€', perf: 30, fillColor: 'fill-green'
   },
   {
     brand: 'nvidia', name: 'RTX 5060', arch: 'Blackwell / GB207',
@@ -94,7 +94,7 @@ const GAMING_GPUS = [
   {
     brand: 'nvidia', name: 'RTX 3060', arch: 'Ampere / GA106',
     tier: 'mid', vram: '12 GB GDDR6', tflops: '12.7', bandwidth: '360 GB/s',
-    tdp: '170W', price: '~$289', perf: 26, fillColor: 'fill-blue'
+    tdp: '170W', price: '295€', perf: 26, fillColor: 'fill-blue'
   },
   {
     brand: 'amd', name: 'RX 6600 XT', arch: 'RDNA 2 / Navi 23',
@@ -168,6 +168,11 @@ const MOBILE_GPUS = [
     tdp: '35-115W', price: '~$1499+', perf: 55, fillColor: 'fill-blue'
   },
   {
+    brand: 'nvidia', name: 'RTX 5060 Laptop', arch: 'Blackwell / GB207',
+    tier: 'mid', vram: '8 GB GDDR7', tflops: '16.8', bandwidth: '256 GB/s',
+    tdp: '35-115W', price: '~$1199+', perf: 42, fillColor: 'fill-blue'
+  },
+  {
     brand: 'nvidia', name: 'RTX 4090 Laptop', arch: 'Ada Lovelace / AD103',
     tier: 'ultra', vram: '16 GB GDDR6', tflops: '39.7', bandwidth: '432 GB/s',
     tdp: '80-150W', price: '~$2499+', perf: 65, fillColor: 'fill-gold'
@@ -178,14 +183,39 @@ const MOBILE_GPUS = [
     tdp: '60-150W', price: '~$1899+', perf: 55, fillColor: 'fill-purple'
   },
   {
+    brand: 'nvidia', name: 'RTX 4070 Laptop', arch: 'Ada Lovelace / AD106',
+    tier: 'mid', vram: '8 GB GDDR6', tflops: '15.6', bandwidth: '256 GB/s',
+    tdp: '35-115W', price: '~$1299+', perf: 40, fillColor: 'fill-blue'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 4060 Laptop', arch: 'Ada Lovelace / AD107',
+    tier: 'mid', vram: '8 GB GDDR6', tflops: '11.5', bandwidth: '128 GB/s',
+    tdp: '35-115W', price: '~$1099+', perf: 32, fillColor: 'fill-blue'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 4050 Laptop', arch: 'Ada Lovelace / AD107',
+    tier: 'entry', vram: '6 GB GDDR6', tflops: '9.0', bandwidth: '192 GB/s',
+    tdp: '35-115W', price: '~$799+', perf: 22, fillColor: 'fill-green'
+  },
+  {
     brand: 'amd', name: 'RX 7900M', arch: 'RDNA 3 / Navi 31',
     tier: 'high', vram: '16 GB GDDR6', tflops: '38.5', bandwidth: '576 GB/s',
     tdp: '180W', price: '~$1799+', perf: 58, fillColor: 'fill-purple'
   },
   {
-    brand: 'nvidia', name: 'RTX 4070 Laptop', arch: 'Ada Lovelace / AD106',
-    tier: 'mid', vram: '8 GB GDDR6', tflops: '15.6', bandwidth: '256 GB/s',
-    tdp: '35-115W', price: '~$1299+', perf: 40, fillColor: 'fill-blue'
+    brand: 'amd', name: 'RX 7800M', arch: 'RDNA 3 / Navi 32',
+    tier: 'high', vram: '12 GB GDDR6', tflops: '28.2', bandwidth: '432 GB/s',
+    tdp: '120-150W', price: '~$1499+', perf: 48, fillColor: 'fill-purple'
+  },
+  {
+    brand: 'amd', name: 'RX 7600M XT', arch: 'RDNA 3 / Navi 33',
+    tier: 'mid', vram: '8 GB GDDR6', tflops: '13.1', bandwidth: '288 GB/s',
+    tdp: '75-120W', price: '~$1199+', perf: 30, fillColor: 'fill-blue'
+  },
+  {
+    brand: 'intel', name: 'Arc A770M', arch: 'Alchemist',
+    tier: 'high', vram: '16 GB GDDR6', tflops: '13.5', bandwidth: '512 GB/s',
+    tdp: '120-150W', price: '~$1299+', perf: 35, fillColor: 'fill-purple'
   },
   {
     brand: 'intel', name: 'Arc A730M', arch: 'Alchemist',
@@ -193,9 +223,44 @@ const MOBILE_GPUS = [
     tdp: '80-120W', price: '~$899+', perf: 25, fillColor: 'fill-blue'
   },
   {
-    brand: 'nvidia', name: 'RTX 4050 Laptop', arch: 'Ada Lovelace / AD107',
-    tier: 'entry', vram: '6 GB GDDR6', tflops: '9.0', bandwidth: '192 GB/s',
-    tdp: '35-115W', price: '~$799+', perf: 20, fillColor: 'fill-green'
+    brand: 'intel', name: 'Arc A570M', arch: 'Alchemist',
+    tier: 'mid', vram: '8 GB GDDR6', tflops: '8.4', bandwidth: '256 GB/s',
+    tdp: '75-95W', price: '~$749+', perf: 18, fillColor: 'fill-blue'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 3080 Ti Laptop', arch: 'Ampere / GA103',
+    tier: 'high', vram: '16 GB GDDR6', tflops: '18.7', bandwidth: '512 GB/s',
+    tdp: '80-150W', price: '~$2199+', perf: 45, fillColor: 'fill-purple'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 3070 Ti Laptop', arch: 'Ampere / GA104',
+    tier: 'mid', vram: '8 GB GDDR6', tflops: '14.1', bandwidth: '448 GB/s',
+    tdp: '80-125W', price: '~$1599+', perf: 38, fillColor: 'fill-blue'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 3060 Laptop', arch: 'Ampere / GA106',
+    tier: 'mid', vram: '6 GB GDDR6', tflops: '9.8', bandwidth: '336 GB/s',
+    tdp: '60-115W', price: '~$999+', perf: 28, fillColor: 'fill-blue'
+  },
+  {
+    brand: 'apple', name: 'M3 Max GPU (40-core)', arch: 'M3 Max',
+    tier: 'ultra', vram: 'Up to 128GB Unified', tflops: '14.2', bandwidth: '400 GB/s',
+    tdp: '30-60W', price: '~$3499+ (MacBook Pro)', perf: 50, fillColor: 'fill-gold'
+  },
+  {
+    brand: 'apple', name: 'M3 Pro GPU (18-core)', arch: 'M3 Pro',
+    tier: 'mid', vram: 'Up to 36GB Unified', tflops: '6.4', bandwidth: '150 GB/s',
+    tdp: '20-30W', price: '~$1999+ (MacBook Pro)', perf: 25, fillColor: 'fill-blue'
+  },
+  {
+    brand: 'nvidia', name: 'RTX 2080 Super Mobile', arch: 'Turing / TU104',
+    tier: 'high', vram: '8 GB GDDR6', tflops: '11.1', bandwidth: '448 GB/s',
+    tdp: '150-200W', price: 'Legacy', perf: 35, fillColor: 'fill-purple'
+  },
+  {
+    brand: 'amd', name: 'RX 6800M', arch: 'RDNA 2 / Navi 22',
+    tier: 'high', vram: '12 GB GDDR6', tflops: '11.8', bandwidth: '384 GB/s',
+    tdp: '145W+', price: 'Legacy', perf: 42, fillColor: 'fill-purple'
   }
 ];
 
@@ -402,20 +467,20 @@ const ALL_DOMESTIC_GPUS = [
   { brand: 'amd', name: 'Radeon RX 6500 XT', arch: 'RDNA 2', year: 2022, tier: 'entry', vram: '4 GB GDDR6', tflops: '5.77', bandwidth: '144.0 GB/s', tdp: '107W', price: '~$199' },
 
   // Generación 2022-2023 (Ada Lovelace / RDNA 3 / Alchemist)
-  { brand: 'nvidia', name: 'RTX 4090', arch: 'Ada Lovelace', year: 2022, tier: 'ultra', vram: '24 GB GDDR6X', tflops: '82.58', bandwidth: '1008 GB/s', tdp: '450W', price: '~$1599' },
-  { brand: 'nvidia', name: 'RTX 4080 SUPER', arch: 'Ada Lovelace', year: 2024, tier: 'high', vram: '16 GB GDDR6X', tflops: '52.22', bandwidth: '736 GB/s', tdp: '320W', price: '~$999' },
+  { brand: 'nvidia', name: 'RTX 4090', arch: 'Ada Lovelace', year: 2022, tier: 'ultra', vram: '24 GB GDDR6X', tflops: '82.58', bandwidth: '1008 GB/s', tdp: '450W', price: '1849€' },
+  { brand: 'nvidia', name: 'RTX 4080 SUPER', arch: 'Ada Lovelace', year: 2024, tier: 'high', vram: '16 GB GDDR6X', tflops: '52.22', bandwidth: '736 GB/s', tdp: '320W', price: '1049€' },
   { brand: 'nvidia', name: 'RTX 4080', arch: 'Ada Lovelace', year: 2022, tier: 'high', vram: '16 GB GDDR6X', tflops: '48.74', bandwidth: '716.8 GB/s', tdp: '320W', price: '~$1199' },
-  { brand: 'nvidia', name: 'RTX 4070 Ti SUPER', arch: 'Ada Lovelace', year: 2024, tier: 'high', vram: '16 GB GDDR6X', tflops: '40.0', bandwidth: '672 GB/s', tdp: '285W', price: '~$799' },
+  { brand: 'nvidia', name: 'RTX 4070 Ti SUPER', arch: 'Ada Lovelace', year: 2024, tier: 'high', vram: '16 GB GDDR6X', tflops: '40.0', bandwidth: '672 GB/s', tdp: '285W', price: '849€' },
   { brand: 'nvidia', name: 'RTX 4070 Ti', arch: 'Ada Lovelace', year: 2023, tier: 'high', vram: '12 GB GDDR6X', tflops: '40.09', bandwidth: '504 GB/s', tdp: '285W', price: '~$799' },
-  { brand: 'nvidia', name: 'RTX 4070 SUPER', arch: 'Ada Lovelace', year: 2024, tier: 'high', vram: '12 GB GDDR6X', tflops: '35.48', bandwidth: '504 GB/s', tdp: '220W', price: '~$599' },
+  { brand: 'nvidia', name: 'RTX 4070 SUPER', arch: 'Ada Lovelace', year: 2024, tier: 'high', vram: '12 GB GDDR6X', tflops: '35.48', bandwidth: '504 GB/s', tdp: '220W', price: '619€' },
   { brand: 'nvidia', name: 'RTX 4070', arch: 'Ada Lovelace', year: 2023, tier: 'high', vram: '12 GB GDDR6X', tflops: '29.15', bandwidth: '504 GB/s', tdp: '200W', price: '~$549' },
   { brand: 'nvidia', name: 'RTX 4060 Ti (16GB)', arch: 'Ada Lovelace', year: 2023, tier: 'mid', vram: '16 GB GDDR6', tflops: '22.06', bandwidth: '288 GB/s', tdp: '165W', price: '~$449' },
   { brand: 'nvidia', name: 'RTX 4060 Ti', arch: 'Ada Lovelace', year: 2023, tier: 'mid', vram: '8 GB GDDR6', tflops: '22.06', bandwidth: '288 GB/s', tdp: '160W', price: '~$399' },
   { brand: 'nvidia', name: 'RTX 4060', arch: 'Ada Lovelace', year: 2023, tier: 'mid', vram: '8 GB GDDR6', tflops: '15.11', bandwidth: '272 GB/s', tdp: '115W', price: '~$299' },
-  { brand: 'amd', name: 'Radeon RX 7900 XTX', arch: 'RDNA 3', year: 2022, tier: 'ultra', vram: '24 GB GDDR6', tflops: '61.42', bandwidth: '960 GB/s', tdp: '355W', price: '~$899' },
+  { brand: 'amd', name: 'Radeon RX 7900 XTX', arch: 'RDNA 3', year: 2022, tier: 'ultra', vram: '24 GB GDDR6', tflops: '61.42', bandwidth: '960 GB/s', tdp: '355W', price: '989€' },
   { brand: 'amd', name: 'Radeon RX 7900 XT', arch: 'RDNA 3', year: 2022, tier: 'ultra', vram: '20 GB GDDR6', tflops: '51.61', bandwidth: '800 GB/s', tdp: '315W', price: '~$749' },
   { brand: 'amd', name: 'Radeon RX 7900 GRE', arch: 'RDNA 3', year: 2024, tier: 'high', vram: '16 GB GDDR6', tflops: '45.98', bandwidth: '576 GB/s', tdp: '260W', price: '~$549' },
-  { brand: 'amd', name: 'Radeon RX 7800 XT', arch: 'RDNA 3', year: 2023, tier: 'high', vram: '16 GB GDDR6', tflops: '37.32', bandwidth: '624 GB/s', tdp: '263W', price: '~$499' },
+  { brand: 'amd', name: 'Radeon RX 7800 XT', arch: 'RDNA 3', year: 2023, tier: 'high', vram: '16 GB GDDR6', tflops: '37.32', bandwidth: '624 GB/s', tdp: '263W', price: '519€' },
   { brand: 'amd', name: 'Radeon RX 7700 XT', arch: 'RDNA 3', year: 2023, tier: 'mid', vram: '12 GB GDDR6', tflops: '35.17', bandwidth: '432 GB/s', tdp: '245W', price: '~$399' },
   { brand: 'amd', name: 'Radeon RX 7600 XT', arch: 'RDNA 3', year: 2024, tier: 'mid', vram: '16 GB GDDR6', tflops: '22.57', bandwidth: '288 GB/s', tdp: '190W', price: '~$329' },
   { brand: 'amd', name: 'Radeon RX 7600', arch: 'RDNA 3', year: 2023, tier: 'mid', vram: '8 GB GDDR6', tflops: '21.75', bandwidth: '288 GB/s', tdp: '165W', price: '~$269' },
@@ -424,12 +489,12 @@ const ALL_DOMESTIC_GPUS = [
   { brand: 'intel', name: 'Arc A580', arch: 'Alchemist', year: 2023, tier: 'entry', vram: '8 GB GDDR6', tflops: '12.0', bandwidth: '512 GB/s', tdp: '185W', price: '~$179' },
 
   // Generación 2024-2025 (Blackwell / RDNA 4 / Battlemage)
-  { brand: 'nvidia', name: 'RTX 5090', arch: 'Blackwell', year: 2025, tier: 'ultra', vram: '32 GB GDDR7', tflops: '209.8', bandwidth: '1792 GB/s', tdp: '575W', price: '~$3499' },
+  { brand: 'nvidia', name: 'RTX 5090', arch: 'Blackwell', year: 2025, tier: 'ultra', vram: '32 GB GDDR7', tflops: '209.8', bandwidth: '1792 GB/s', tdp: '575W', price: '2499€' },
   { brand: 'nvidia', name: 'RTX 5090 Laptop', arch: 'Blackwell', year: 2025, tier: 'ultra', vram: '16 GB GDDR7', tflops: '52.4', bandwidth: '512 GB/s', tdp: '175W', price: '~$3599+' },
-  { brand: 'nvidia', name: 'RTX 5080', arch: 'Blackwell', year: 2025, tier: 'high', vram: '16 GB GDDR7', tflops: '102.5', bandwidth: '1024 GB/s', tdp: '350W', price: '~$1499' },
+  { brand: 'nvidia', name: 'RTX 5080', arch: 'Blackwell', year: 2025, tier: 'high', vram: '16 GB GDDR7', tflops: '102.5', bandwidth: '1024 GB/s', tdp: '350W', price: '1299€' },
   { brand: 'nvidia', name: 'RTX 5080 Laptop', arch: 'Blackwell', year: 2025, tier: 'high', vram: '12 GB GDDR7', tflops: '38.2', bandwidth: '432 GB/s', tdp: '150W', price: '~$2199+' },
   { brand: 'nvidia', name: 'RTX 5070 Ti', arch: 'Blackwell', year: 2025, tier: 'high', vram: '16 GB GDDR7', tflops: '65.5', bandwidth: '640 GB/s', tdp: '275W', price: '~$899' },
-  { brand: 'nvidia', name: 'RTX 5070', arch: 'Blackwell', year: 2025, tier: 'high', vram: '12 GB GDDR7', tflops: '50.2', bandwidth: '576 GB/s', tdp: '220W', price: '~$749' },
+  { brand: 'nvidia', name: 'RTX 5070', arch: 'Blackwell', year: 2025, tier: 'high', vram: '12 GB GDDR7', tflops: '50.2', bandwidth: '576 GB/s', tdp: '220W', price: '699€' },
   { brand: 'nvidia', name: 'RTX 5070 Laptop', arch: 'Blackwell', year: 2025, tier: 'mid', vram: '8 GB GDDR7', tflops: '24.5', bandwidth: '320 GB/s', tdp: '115W', price: '~$1699+' },
   { brand: 'nvidia', name: 'RTX 5060 Ti', arch: 'Blackwell', year: 2025, tier: 'mid', vram: '8 GB GDDR7', tflops: '32.1', bandwidth: '448 GB/s', tdp: '170W', price: '~$549' },
   { brand: 'amd', name: 'Radeon RX 9070 XT', arch: 'RDNA 4', year: 2025, tier: 'high', vram: '16 GB GDDR6', tflops: '73.0', bandwidth: '640 GB/s', tdp: '304W', price: '~$649' },
