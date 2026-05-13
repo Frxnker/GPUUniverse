@@ -12,6 +12,10 @@
       const next = current === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
       localStorage.setItem('gpu-universe-theme', next);
+
+      // Re-render canvas charts so they pick up the new theme colors
+      if (typeof window.renderChart === 'function') window.renderChart();
+      if (typeof window.renderValueChart === 'function') window.renderValueChart();
     });
   });
 })();
@@ -661,8 +665,14 @@ window.renderValueChart = function() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  // Theme-aware colors
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+  const labelColor = isDark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.85)';
+  const mutedColor = isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)';
+  const gridColor  = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)';
+
   // Background grid
-  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.strokeStyle = gridColor;
   ctx.beginPath();
   for (let i = 0; i <= 5; i++) {
     const x = padding.left + (chartW * i / 5);
@@ -685,17 +695,20 @@ window.renderValueChart = function() {
     if (ctx.roundRect) ctx.beginPath(), ctx.roundRect(padding.left, y, barW, barH, 4), ctx.fill();
     else ctx.fillRect(padding.left, y, barW, barH);
 
-    ctx.fillStyle = '#fff';
+    // GPU name label (left side)
+    ctx.fillStyle = labelColor;
     ctx.font = '700 11px Outfit';
     ctx.textAlign = 'right';
     ctx.fillText(d.name, padding.left - 15, y + barH/2 + 4);
 
+    // Score label (right of bar)
     ctx.textAlign = 'left';
     ctx.font = '400 10px JetBrains Mono';
+    ctx.fillStyle = mutedColor;
     ctx.fillText(`${d.value.toFixed(1)} pts`, padding.left + barW + 10, y + barH/2 + 4);
   });
 
-  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.fillStyle = mutedColor;
   ctx.textAlign = 'center';
   ctx.font = '400 11px Outfit';
   ctx.fillText(window.t('value.score_desc'), canvas.width / 2, canvas.height - 20);

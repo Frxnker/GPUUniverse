@@ -1666,8 +1666,12 @@ section {
 }
 
 .compare-table .highlight-cell {
-  color: var(--accent2);
+  color: var(--accent);
   font-weight: 700;
+}
+
+[data-theme="light"] .compare-table .highlight-cell {
+  color: var(--accent);
 }
 
 /* ===== TIMELINE ===== */
@@ -1715,9 +1719,14 @@ section {
 .timeline-year {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.75rem;
-  color: var(--accent2);
+  color: var(--accent);
   margin-bottom: 0.35rem;
   font-weight: 700;
+  display: inline-block;
+  background: rgba(139, 69, 255, 0.12);
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(139, 69, 255, 0.25);
 }
 
 .timeline-item h4 {
@@ -3187,8 +3196,9 @@ body, #navbar, .gpu-card, .cat-card, .server-card,
 }
 
 .arch-year {
-  color: var(--accent2);
-  background: rgba(0, 212, 255, 0.1);
+  color: var(--accent);
+  background: rgba(139, 69, 255, 0.12);
+  border: 1px solid rgba(139, 69, 255, 0.2);
   padding: 0.2rem 0.6rem;
   border-radius: 4px;
 }
@@ -3225,19 +3235,7 @@ body, #navbar, .gpu-card, .cat-card, .server-card,
   display: none; /* We'll use a more robust way if needed, but for now flex gap works visually */
 }
 
-/* Level indicators */
-.arch-level::before {
-  content: attr(class);
-  position: absolute;
-  left: -100px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  opacity: 0.3;
-}
+/* Level indicators - removed ::before content:attr(class) which was rendering the class name as visible text */
 
 /* Brand specific accents */
 .arch-node.brand-nvidia { border-left: 4px solid #76b900; }
