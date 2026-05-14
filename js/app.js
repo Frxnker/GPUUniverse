@@ -4,21 +4,22 @@
   document.documentElement.setAttribute('data-theme', saved);
 
   document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('theme-toggle');
-    if (!btn) return;
+    const btns = document.querySelectorAll('.theme-toggle');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('gpu-universe-theme', next);
 
-    btn.addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('gpu-universe-theme', next);
-
-      // Re-render canvas charts so they pick up the new theme colors
-      if (typeof window.renderChart === 'function') window.renderChart();
-      if (typeof window.renderValueChart === 'function') window.renderValueChart();
+        // Re-render canvas charts so they pick up the new theme colors
+        if (typeof window.renderChart === 'function') window.renderChart();
+        if (typeof window.renderValueChart === 'function') window.renderValueChart();
+      });
     });
   });
 })();
+
 
 // ===== PARTICLES =====
 (function initParticles() {
