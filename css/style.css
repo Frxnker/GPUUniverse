@@ -2326,7 +2326,8 @@ html[lang="ru"] .nav-links a {
 .lang-dropdown {
   position: absolute;
   top: calc(100% + 10px);
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
   width: 160px;
   background: var(--lang-dropdown-bg);
   border: 1px solid var(--border);
@@ -2334,7 +2335,6 @@ html[lang="ru"] .nav-links a {
   padding: 0.5rem;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(10px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(20px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
@@ -2343,7 +2343,7 @@ html[lang="ru"] .nav-links a {
 .lang-switcher.active .lang-dropdown {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
 }
 
 .lang-option {
@@ -2398,17 +2398,19 @@ html[lang="ru"] .nav-links a {
 .theme-toggle .icon-sun,
 .theme-toggle .icon-moon {
   position: absolute;
+  top: 50%;
+  left: 50%;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
   line-height: 1;
 }
 
 /* Dark mode: show moon, hide sun */
-.theme-toggle .icon-sun { opacity: 0; transform: translateY(-16px) rotate(90deg); }
-.theme-toggle .icon-moon { opacity: 1; transform: translateY(0) rotate(0deg); }
+.theme-toggle .icon-sun { opacity: 0; transform: translate(-50%, -50%) translateY(-16px) rotate(90deg); }
+.theme-toggle .icon-moon { opacity: 1; transform: translate(-50%, -50%) translateY(0) rotate(0deg); }
 
 /* Light mode: show sun, hide moon */
-[data-theme="light"] .theme-toggle .icon-sun { opacity: 1; transform: translateY(0) rotate(0deg); }
-[data-theme="light"] .theme-toggle .icon-moon { opacity: 0; transform: translateY(16px) rotate(-90deg); }
+[data-theme="light"] .theme-toggle .icon-sun { opacity: 1; transform: translate(-50%, -50%) translateY(0) rotate(0deg); }
+[data-theme="light"] .theme-toggle .icon-moon { opacity: 0; transform: translate(-50%, -50%) translateY(16px) rotate(-90deg); }
 
 /* Light mode surface adjustments */
 [data-theme="light"] .gpu-card:hover {
@@ -2657,7 +2659,8 @@ body, #navbar, .gpu-card, .cat-card, .server-card,
 
   .menu-tools .lang-dropdown {
     width: 180px;
-    right: 0;
+    right: auto;
+    left: 50%;
   }
 
 
