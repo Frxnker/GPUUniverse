@@ -1,4 +1,4 @@
-// ===== THEME TOGGLE =====
+// ===== ALTERNAR TEMA =====
 (function initTheme() {
   const saved = localStorage.getItem('gpu-universe-theme') || 'dark';
   document.documentElement.setAttribute('data-theme', saved);
@@ -12,7 +12,7 @@
         document.documentElement.setAttribute('data-theme', next);
         localStorage.setItem('gpu-universe-theme', next);
 
-        // Re-render canvas charts so they pick up the new theme colors
+        // Vuelve a renderizar los gráficos del canvas para que usen los nuevos colores del tema
         if (typeof window.renderChart === 'function') window.renderChart();
         if (typeof window.renderValueChart === 'function') window.renderValueChart();
       });
@@ -21,7 +21,7 @@
 })();
 
 
-// ===== PARTICLES =====
+// ===== PARTÍCULAS =====
 (function initParticles() {
   const canvas = document.getElementById('particles-canvas');
   if (!canvas) return;
@@ -82,7 +82,7 @@
   draw();
 })();
 
-// ===== NAVBAR SCROLL =====
+// ===== DESPLAZAMIENTO DE LA BARRA DE NAVEGACIÓN =====
 const navbar = document.getElementById('navbar');
 if (navbar) {
   let isScrolling = false;
@@ -97,7 +97,7 @@ if (navbar) {
   });
 }
 
-// ===== UTILS =====
+// ===== UTILIDADES =====
 window.formatPrice = function(priceStr) {
   if (!priceStr || priceStr === 'N/A') return priceStr;
   
@@ -118,18 +118,18 @@ window.formatPrice = function(priceStr) {
   return `~${formatted}${symbol}`;
 };
 
-// ===== SCROLL REVEAL =====
+// ===== APARICIÓN AL HACER SCROLL =====
 const revealObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting) e.target.classList.add('visible');
   });
 }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-// ===== BUILD COMPONENTS =====
+// ===== CONSTRUCCIÓN DE COMPONENTES =====
 function wrapWithTooltip(label, defKey) {
   const def = (typeof window.t === 'function') ? window.t('defs.' + defKey) : '';
   if (!def || def === 'defs.' + defKey) {
-    return label; // Fallback: just render the label if translation not ready
+    return label; // Respaldo: solo renderiza la etiqueta si la traducción aún no está lista
   }
   return `<span class="has-tooltip">${label}<span class="info-icon">i</span><span class="tooltip-box">${def}</span></span>`;
 }
@@ -184,7 +184,7 @@ function buildServerCard(gpu) {
   `;
 }
 
-// ===== FILTER LOGIC =====
+// ===== LÓGICA DE FILTROS =====
 window.activeFilters = { brand: 'all', vram: 'all', use: 'all', sort: 'perf', search: '' };
 
 function initFilters() {
@@ -198,7 +198,7 @@ function initFilters() {
       btn.classList.add('active');
 
       window.activeFilters[type] = value;
-      // Reset limits when filtering
+      // Reinicia los límites al filtrar
       for (let k in window.gridLimits) window.gridLimits[k] = 12;
       window.renderAll();
     });
@@ -208,7 +208,7 @@ function initFilters() {
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       window.activeFilters.search = e.target.value.toLowerCase();
-      // Reset limits when searching
+      // Reinicia los límites al buscar
       for (let k in window.gridLimits) window.gridLimits[k] = 12;
       window.renderAll();
     });
@@ -217,7 +217,7 @@ function initFilters() {
 
 function applyGpuFilters(gpus) {
   return gpus.filter(gpu => {
-    // Search filter
+    // Filtro de búsqueda
     if (window.activeFilters.search) {
       const term = window.activeFilters.search;
       const searchMatch = gpu.name.toLowerCase().includes(term) || 
@@ -226,10 +226,10 @@ function applyGpuFilters(gpus) {
       if (!searchMatch) return false;
     }
 
-    // Brand filter
+    // Filtro por marca
     if (window.activeFilters.brand !== 'all' && gpu.brand !== window.activeFilters.brand) return false;
 
-    // VRAM filter
+    // Filtro por VRAM
     if (window.activeFilters.vram !== 'all') {
       const vramNum = parseInt(gpu.vram.split(' ')[0]);
       const targetVram = parseInt(window.activeFilters.vram);
@@ -240,7 +240,7 @@ function applyGpuFilters(gpus) {
       }
     }
 
-    // Usage filter
+    // Filtro por uso
     if (window.activeFilters.use !== 'all') {
       const use = window.activeFilters.use;
       const vramNum = parseInt(gpu.vram.split(' ')[0]);
@@ -316,7 +316,7 @@ function renderWithPagination(container, sortedItems, limitKey, buildCardFn) {
     container.innerHTML = visibleItems.map(buildCardFn).join('');
   }
   
-  // Manage "Load More" button
+  // Gestiona el botón de "Cargar más"
   let btnContainer = document.getElementById(`${container.id}-load-more`);
   if (!btnContainer) {
     btnContainer = document.createElement('div');
@@ -331,7 +331,7 @@ function renderWithPagination(container, sortedItems, limitKey, buildCardFn) {
     btnContainer.innerHTML = '';
   }
 
-  // Observe new elements for reveal animation
+  // Observa elementos nuevos para la animación de aparición
   if (window.revealObs) {
     container.querySelectorAll('.reveal').forEach(el => window.revealObs.observe(el));
   }
@@ -342,7 +342,7 @@ window.loadMore = function(limitKey) {
   window.renderAll();
 };
 
-// ===== RENDER LOGIC =====
+// ===== LÓGICA DE RENDERIZADO =====
 
 
 window.renderAll = function() {
@@ -427,7 +427,7 @@ window.renderAll = function() {
   if (document.getElementById('perf-chart')) renderChart();
   if (document.getElementById('value-chart')) renderValueChart();
   
-  // Only re-observe newly rendered cards
+  // Solo vuelve a observar las tarjetas recién renderizadas
   document.querySelectorAll('.gpu-grid .reveal, .server-showcase .reveal').forEach(el => {
     revealObs.observe(el);
   });
@@ -436,7 +436,7 @@ window.renderAll = function() {
   if (typeof window.applyTranslations === 'function') window.applyTranslations();
 };
 
-// ===== DYNAMIC COMPARISON =====
+// ===== COMPARACIÓN DINÁMICA =====
 window.gpuA = null;
 window.gpuB = null;
 
@@ -490,7 +490,7 @@ function initComparisonSelectors() {
   setupSelector(inputA, resultsA, badgeA, 'A');
   setupSelector(inputB, resultsB, badgeB, 'B');
 
-  // Set defaults
+  // Establece valores predeterminados
   window.selectForCompare('RTX 5090', 'A');
   window.selectForCompare('RX 7900 XTX', 'B');
 }
@@ -578,7 +578,7 @@ window.renderChart = function() {
 
   const containerW = canvas.parentElement.offsetWidth - 64;
   canvas.width = containerW;
-  // Adaptive height: taller when more bars, but capped
+  // Altura adaptable: más alta cuando hay más barras, pero limitada
   const baseHeight = 300;
   const perBarExtra = Math.max(0, (displayData.length - 2) * 20);
   canvas.height = Math.min(baseHeight + perBarExtra, 460);
@@ -588,7 +588,7 @@ window.renderChart = function() {
   const chartW = canvas.width - padding.left - padding.right;
   const chartH = canvas.height - padding.top - padding.bottom;
 
-  // Bar width: cap at 120px, and on large screens with few bars don't stretch too wide
+  // Ancho de barra: límite de 120px y en pantallas grandes con pocas barras no se estira demasiado
   const maxBarW = 120;
   const minBarW = 30;
   const barW = Math.max(minBarW, Math.min(maxBarW, chartW / labels.length * 0.45));
@@ -596,12 +596,12 @@ window.renderChart = function() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Determine text color from theme
+  // Determina el color del texto según el tema
   const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
   const textColor = isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.4)';
   const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
 
-  // Grid lines
+  // Líneas de la cuadrícula
   for (let i = 0; i <= 5; i++) {
     const y = padding.top + (chartH / 5) * i;
     const val = Math.round(maxVal * (1 - i / 5));
@@ -614,7 +614,7 @@ window.renderChart = function() {
     ctx.fillText(val.toLocaleString(), padding.left - 10, y + 4);
   }
 
-  // TFLOPS label on Y axis
+  // Etiqueta TFLOPS en el eje Y
   ctx.save();
   ctx.translate(16, padding.top + chartH / 2);
   ctx.rotate(-Math.PI / 2);
@@ -637,13 +637,13 @@ window.renderChart = function() {
     ctx.roundRect(x, y, barW, barH, [8, 8, 0, 0]);
     ctx.fill();
 
-    // Value on top of bar
+    // Valor encima de la barra
     ctx.fillStyle = isDark ? '#fff' : '#111';
     ctx.font = 'bold 12px Outfit';
     ctx.textAlign = 'center';
     ctx.fillText(val.toLocaleString(), x + barW / 2, y - 8);
 
-    // Label: wrap long names over 2 lines
+    // Etiqueta: ajusta nombres largos en 2 líneas
     ctx.fillStyle = isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.7)';
     ctx.font = '11px Outfit';
     const maxLabelW = Math.max(gap - 4, barW + 20);
@@ -657,7 +657,7 @@ window.renderChart = function() {
     if (line2) ctx.fillText(line2, x + barW / 2, labelY + 14);
   });
 
-  // Axes
+  // Ejes
   ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
   ctx.lineWidth = 1;
   ctx.beginPath();
@@ -668,12 +668,12 @@ window.renderChart = function() {
 };
 
 
-// ===== ARCHITECTURE MAP =====
+// ===== MAPA DE ARQUITECTURA =====
 window.renderArchMap = function() {
   const container = document.getElementById('arch-map-container');
   if (!container) return;
 
-  // Group by level
+  // Agrupa por nivel
   const levels = {};
   ARCHITECTURES_DATA.forEach(arch => {
     if (!levels[arch.level]) levels[arch.level] = [];
@@ -705,11 +705,11 @@ window.renderArchMap = function() {
   
   container.innerHTML = html;
   
-  // Re-observe for animations
+  // Vuelve a observar para animaciones
   document.querySelectorAll('#arch-map-container .reveal').forEach(el => revealObs.observe(el));
 };
 
-// ===== VALUE KING CHART =====
+// ===== GRÁFICO DEL VALOR DESTACADO =====
 window.valueCategory = 'all';
 
 window.renderValueChart = function() {
@@ -753,13 +753,13 @@ window.renderValueChart = function() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Theme-aware colors
+  // Colores adaptados al tema
   const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
   const labelColor = isDark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.85)';
   const mutedColor = isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)';
   const gridColor  = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)';
 
-  // Background grid
+  // Cuadrícula de fondo
   ctx.strokeStyle = gridColor;
   ctx.beginPath();
   for (let i = 0; i <= 5; i++) {
@@ -783,13 +783,13 @@ window.renderValueChart = function() {
     if (ctx.roundRect) ctx.beginPath(), ctx.roundRect(padding.left, y, barW, barH, 4), ctx.fill();
     else ctx.fillRect(padding.left, y, barW, barH);
 
-    // GPU name label (left side)
+    // Etiqueta del nombre de la GPU (izquierda)
     ctx.fillStyle = labelColor;
     ctx.font = '700 11px Outfit';
     ctx.textAlign = 'right';
     ctx.fillText(d.name, padding.left - 15, y + barH/2 + 4);
 
-    // Score label (right of bar)
+    // Etiqueta de puntuación (derecha de la barra)
     ctx.textAlign = 'left';
     ctx.font = '400 10px JetBrains Mono';
     ctx.fillStyle = mutedColor;

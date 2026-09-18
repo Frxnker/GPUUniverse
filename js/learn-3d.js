@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Configuración de la escena Three.js
+  // Configuración de la escena de Three.js
   const container = document.getElementById('canvas-container');
   if (!container) return;
 
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const interactableObjects = [];
 
   function createPart(mesh, name, group, data) {
-    // CLONE material so changing color doesn't affect other instances
+    // CLONA el material para que cambiar el color no afecte a otras instancias
     mesh.material = mesh.material.clone();
     
     mesh.castShadow = true;

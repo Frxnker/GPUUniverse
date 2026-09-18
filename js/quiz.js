@@ -1,5 +1,5 @@
 
-// ===== GPU QUIZ LOGIC =====
+// ===== LÓGICA DEL CUESTIONARIO DE GPU =====
 
 let quizAnswers = {
     use: '',
@@ -15,7 +15,7 @@ window.startQuiz = function() {
 window.setQuizAns = function(key, val) {
     quizAnswers[key] = val;
     
-    // Transition logic
+    // Lógica de transición
     const currentStepId = key === 'use' ? 'step-1' : (key === 'budget' ? 'step-2' : 'step-3');
     const nextStepId = key === 'use' ? 'step-2' : (key === 'budget' ? 'step-3' : 'quiz-results');
     
@@ -50,12 +50,12 @@ function renderQuizResults() {
 function calculateRecommendations() {
     let pool = [];
     
-    // 1. Filter by Use
+    // 1. Filtrar por uso
     if (quizAnswers.use === 'gaming') pool = GAMING_GPUS;
     else if (quizAnswers.use === 'work') pool = [...WORKSTATION_GPUS, ...SERVER_GPUS];
     else if (quizAnswers.use === 'mobile') pool = MOBILE_GPUS;
     
-    // 2. Budget Scoring (Convert price string to number)
+    // 2. Puntuación por presupuesto (convierte el texto del precio a número)
     const getPrice = (p) => parseFloat(p.replace(/[^0-9.]/g, '')) || 0;
     
     const budgetLimits = {
@@ -71,12 +71,12 @@ function calculateRecommendations() {
         return p >= minBudget && p <= maxBudget;
     });
 
-    // 3. Performance / Resolution matching
-    // We sort by 'perf' property or TFLOPS
+    // 3. Coincidencia de rendimiento / resolución
+    // Ordenamos por la propiedad 'perf' o por TFLOPS
     filtered.sort((a, b) => (b.perf || parseFloat(b.tflops)) - (a.perf || parseFloat(a.tflops)));
     
-    // Select top 2 or 3
-    if (quizAnswers.perf === '1080') return filtered.slice(-3).reverse(); // Cheaper/Entry options in that range
+    // Selecciona los mejores 2 o 3
+    if (quizAnswers.perf === '1080') return filtered.slice(-3).reverse(); // Opciones más baratas o de entrada para ese rango
     if (quizAnswers.perf === '1440') return filtered.slice(Math.floor(filtered.length/3), Math.floor(filtered.length/3) + 3);
-    return filtered.slice(0, 3); // Top performance for 4K
+    return filtered.slice(0, 3); // Máximo rendimiento para 4K
 }
