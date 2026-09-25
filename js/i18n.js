@@ -26,7 +26,7 @@ const translations = {
       sort_year: "Año"
     },
     quiz: {
-      label: "🎯 Recomendador",
+      label: "Recomendador",
       title: "¿No sabes qué GPU elegir?",
       subtitle: "Responde 3 preguntas rápidas y te daremos las mejores opciones para ti.",
       intro_title: "Encuentra tu GPU ideal",
@@ -48,7 +48,7 @@ const translations = {
       btn_reset: "Repetir Cuestionario"
     },
     hero: {
-      badge: "⚡ La Guía Definitiva 2026",
+      badge: "La Guía Definitiva 2026",
       title_1: "El Universo",
       title_2: "Completo de las GPUs",
       subtitle: "Desde tarjetas domésticas de entrada hasta los aceleradores de IA más potentes del planeta. Arquitecturas, benchmarks y comparativas.",
@@ -61,7 +61,7 @@ const translations = {
       scroll: "Scroll"
     },
     news: {
-      label: "📰 Actualidad",
+      label: "Actualidad",
       title: "Últimas Noticias de Hardware",
       subtitle: "Sigue al día con los últimos lanzamientos y filtraciones del mundo de las GPUs."
     },
@@ -80,27 +80,27 @@ const translations = {
       mobile_tag: "Portátil"
     },
     sections: {
-      gaming_label: "🎮 Gaming",
+      gaming_label: "Gaming",
       gaming_title: "GPUs",
       gaming_title_hl: "Domésticas",
       gaming_p: "Las mejores tarjetas gráficas para gaming, desde gama de entrada hasta lo más top del mercado",
-      work_label: "🖥️ Profesional",
+      work_label: "Profesional",
       work_title: "GPUs",
       work_title_hl: "Workstation",
       work_p: "Potencia y precisión para profesionales del 3D, diseño, CAD e IA en escritorio",
-      server_label: "🚀 Enterprise",
+      server_label: "Enterprise",
       server_title: "GPUs de",
       server_title_hl: "Servidor",
       server_p: "Los aceleradores más poderosos del planeta para IA, HPC y centros de datos",
-      mobile_label: "💻 Portátil",
+      mobile_label: "Portátil",
       mobile_title: "GPUs",
       mobile_title_hl: "para Laptops",
       mobile_p: "Tarjetas gráficas de alto rendimiento optimizadas para portátiles",
-      compare_label: "⚖️ Comparativa",
+      compare_label: "Comparativa",
       compare_title: "Rendimiento",
       compare_title_hl: "Comparado",
       compare_p: "Potencia de cómputo y memoria de los modelos más icónicos",
-      timeline_label: "📅 Historia",
+      timeline_label: "Historia",
       timeline_title: "Evolución de las",
       timeline_title_hl: "GPUs",
       timeline_p: "Desde los primeros aceleradores gráficos 2D en los años 80 hasta las supercomputadoras de IA actuales, la evolución de la Unidad de Procesamiento Gráfico (GPU) es una de las historias más fascinantes de la tecnología. Lo que empezó como un chip dedicado para renderizar píxeles en videojuegos, se ha convertido hoy en el cerebro indiscutible de la inteligencia artificial y el motor del cómputo paralelo masivo a nivel mundial."
@@ -142,7 +142,7 @@ const translations = {
       price: "Precio Est."
     },
     hof: {
-      label: "🏆 Salón de la Fama",
+      label: "Salón de la Fama",
       title: "GPUs",
       title_hl: "Legendarias",
       subtitle: "Las tarjetas gráficas que marcaron un antes y un después en la historia del hardware."
@@ -153,13 +153,13 @@ const translations = {
       dlss_fsr: "<strong>DLSS / FSR</strong>: Tecnologías de reescalado inteligente (AI) que aumentan drásticamente los FPS manteniendo una alta calidad de imagen."
     },
     arch_map: {
-      label: "🌳 Árbol Genealógico",
+      label: "Árbol Genealógico",
       title: "Mapa de",
       title_hl: "Arquitecturas",
       subtitle: "La evolución técnica desde los chips pioneros hasta Blackwell y RDNA 4."
     },
     value: {
-      label: "💎 Value King",
+      label: "Value King",
       title: "Rendimiento por",
       title_hl: "Precio",
       desc: "¿Qué tarjeta ofrece más potencia por cada moneda invertida?",
@@ -205,7 +205,7 @@ const translations = {
       stat_top: "La más potente",
       tab_desktop: "Escritorio",
       tab_laptop: "Portátiles",
-      laptop_note: "💡 El rendimiento real de una GPU de portátil depende del TGP (consumo) que fije cada fabricante."
+      laptop_note: "El rendimiento real de una GPU de portátil depende del TGP (consumo) que fije cada fabricante."
     }
   },
   en: {
@@ -235,7 +235,7 @@ const translations = {
       sort_year: "Year"
     },
     quiz: {
-      label: "🎯 Finder",
+      label: "Finder",
       title: "Not sure which GPU to choose?",
       subtitle: "Answer 3 quick questions and we'll give you the best options for you.",
       intro_title: "Find your ideal GPU",
@@ -257,7 +257,7 @@ const translations = {
       btn_reset: "Retake Quiz"
     },
     hero: {
-      badge: "⚡ The Ultimate Guide 2026",
+      badge: "The Ultimate Guide 2026",
       title_1: "The Complete",
       title_2: "GPU Universe",
       subtitle: "From entry-level domestic cards to the most powerful AI accelerators on the planet. Architectures, benchmarks, and comparisons.",
@@ -270,7 +270,7 @@ const translations = {
       scroll: "Scroll"
     },
     news: {
-      label: "📰 News",
+      label: "News",
       title: "Latest Hardware News",
       subtitle: "Stay up to date with the latest releases and leaks from the GPU world."
     },
@@ -289,27 +289,27 @@ const translations = {
       mobile_tag: "Portable"
     },
     sections: {
-      gaming_label: "🎮 Gaming",
+      gaming_label: "Gaming",
       gaming_title: "Domestic",
       gaming_title_hl: "GPUs",
       gaming_p: "The best graphics cards for gaming, from entry-level to the very top of the market",
-      work_label: "🖥️ Professional",
+      work_label: "Professional",
       work_title: "Workstation",
       work_title_hl: "GPUs",
       work_p: "Power and precision for 3D professionals, design, CAD, and desktop AI",
-      server_label: "🚀 Enterprise",
+      server_label: "Enterprise",
       server_title: "Server",
       server_title_hl: "GPUs",
       server_p: "The most powerful accelerators on the planet for AI, HPC, and data centers",
-      mobile_label: "💻 Laptop",
+      mobile_label: "Laptop",
       mobile_title: "Laptop",
       mobile_title_hl: "GPUs",
       mobile_p: "High-performance graphics cards optimized for laptops",
-      compare_label: "⚖️ Comparison",
+      compare_label: "Comparison",
       compare_title: "Performance",
       compare_title_hl: "Compared",
       compare_p: "Compute power and memory of the most iconic models",
-      timeline_label: "📅 History",
+      timeline_label: "History",
       timeline_title: "Evolution of",
       timeline_title_hl: "GPUs",
       timeline_p: "From the first 2D graphics accelerators in the 80s to today's AI supercomputers, the evolution of the Graphics Processing Unit (GPU) is one of the most fascinating stories in technology. What started as a dedicated chip for rendering pixels in video games has now become the undisputed brain of artificial intelligence and the engine of massive parallel computing worldwide."
@@ -351,7 +351,7 @@ const translations = {
       price: "Est. Price"
     },
     hof: {
-      label: "🏆 Hall of Fame",
+      label: "Hall of Fame",
       title: "Legendary",
       title_hl: "GPUs",
       subtitle: "The graphics cards that marked a before and after in hardware history."
@@ -362,13 +362,13 @@ const translations = {
       dlss_fsr: "<strong>DLSS / FSR</strong>: AI-powered upscaling technologies that drastically increase FPS while maintaining high image quality."
     },
     arch_map: {
-      label: "🌳 Family Tree",
+      label: "Family Tree",
       title: "Architecture",
       title_hl: "Map",
       subtitle: "Technical evolution from pioneering chips to Blackwell and RDNA 4."
     },
     value: {
-      label: "💎 Value King",
+      label: "Value King",
       title: "Performance per",
       title_hl: "Price",
       desc: "Which card offers more power for every currency unit spent?",
@@ -414,7 +414,7 @@ const translations = {
       stat_top: "Most powerful",
       tab_desktop: "Desktop",
       tab_laptop: "Laptops",
-      laptop_note: "💡 A laptop GPU's real performance depends on the TGP (power limit) set by each manufacturer."
+      laptop_note: "A laptop GPU's real performance depends on the TGP (power limit) set by each manufacturer."
     }
   },
   fr: {
@@ -444,7 +444,7 @@ const translations = {
       sort_year: "Année"
     },
     quiz: {
-      label: "🎯 Recommandateur",
+      label: "Recommandateur",
       title: "Vous ne savez pas quel GPU choisir ?",
       subtitle: "Répondez à 3 questions rapides et nous vous donnerons les meilleures options pour vous.",
       intro_title: "Trouvez votre GPU idéal",
@@ -466,7 +466,7 @@ const translations = {
       btn_reset: "Refaire le Quiz"
     },
     hero: {
-      badge: "⚡ Le Guide Ultime 2026",
+      badge: "Le Guide Ultime 2026",
       title_1: "L'Univers",
       title_2: "Complet des GPUs",
       subtitle: "Des cartes d'entrée de gamme domestiques aux accélérateurs d'IA les plus puissants au monde. Architectures, benchmarks et comparaisons.",
@@ -479,7 +479,7 @@ const translations = {
       scroll: "Défiler"
     },
     news: {
-      label: "📰 Actualités",
+      label: "Actualités",
       title: "Dernières Nouvelles Matériel",
       subtitle: "Restez à jour avec les derniers lancements et fuites du monde des GPU."
     },
@@ -498,27 +498,27 @@ const translations = {
       mobile_tag: "Portable"
     },
     sections: {
-      gaming_label: "🎮 Jeu",
+      gaming_label: "Jeu",
       gaming_title: "GPUs",
       gaming_title_hl: "Domestiques",
       gaming_p: "Les meilleures cartes graphiques pour le jeu, de l'entrée de gamme au très haut de gamme",
-      work_label: "🖥️ Professionnel",
+      work_label: "Professionnel",
       work_title: "GPUs",
       work_title_hl: "Station de Travail",
       work_p: "Puissance et précision pour les professionnels de la 3D, du design, du CAO et de l'IA sur bureau",
-      server_label: "🚀 Entreprise",
+      server_label: "Entreprise",
       server_title: "GPUs de",
       server_title_hl: "Serveur",
       server_p: "Les accélérateurs les plus puissants au monde pour l'IA, le HPC et les centres de données",
-      mobile_label: "💻 Portable",
+      mobile_label: "Portable",
       mobile_title: "GPUs",
       mobile_title_hl: "pour Portables",
       mobile_p: "Cartes graphiques hautes performances optimisées pour les ordinateurs portables",
-      compare_label: "⚖️ Comparaison",
+      compare_label: "Comparaison",
       compare_title: "Performance",
       compare_title_hl: "Comparée",
       compare_p: "Puissance de calcul et mémoire des modèles les plus emblématiques",
-      timeline_label: "📅 Histoire",
+      timeline_label: "Histoire",
       timeline_title: "Évolution des",
       timeline_title_hl: "GPUs",
       timeline_p: "Des premiers accélérateurs graphiques 2D dans les années 80 aux supercalculateurs d'IA actuels, l'évolution de l'Unité de Traitement Graphique (GPU) est l'une des histoires les plus fascinantes de la technologie. Ce qui a commencé comme une puce dédiée au rendu de pixels dans les jeux vidéo est devenu aujourd'hui le cerveau incontesté de l'intelligence artificielle et le moteur du calcul parallèle massif dans le monde entier."
@@ -560,7 +560,7 @@ const translations = {
       price: "Prix Est."
     },
     hof: {
-      label: "🏆 Temple de la Renommée",
+      label: "Temple de la Renommée",
       title: "GPUs",
       title_hl: "Légendaires",
       subtitle: "Les cartes graphiques qui ont marqué un avant et un après dans l'histoire du matériel."
@@ -571,13 +571,13 @@ const translations = {
       dlss_fsr: "<strong>DLSS / FSR</strong>: Technologies de mise à l'échelle alimentées par l'IA qui augmentent considérablement les FPS tout en maintenant une qualité d'image élevée."
     },
     arch_map: {
-      label: "🌳 Arbre Généalogique",
+      label: "Arbre Généalogique",
       title: "Carte des",
       title_hl: "Architectures",
       subtitle: "Évolution technique des puces pionnières à Blackwell et RDNA 4."
     },
     value: {
-      label: "💎 Value King",
+      label: "Value King",
       title: "Performance par",
       title_hl: "Prix",
       desc: "Quelle carte offre le plus de puissance pour chaque unité monétaire dépensée ?",
@@ -623,7 +623,7 @@ const translations = {
       stat_top: "La plus puissante",
       tab_desktop: "Bureau",
       tab_laptop: "Portables",
-      laptop_note: "💡 Les performances réelles d'un GPU portable dépendent du TGP (consommation) fixé par chaque fabricant."
+      laptop_note: "Les performances réelles d'un GPU portable dépendent du TGP (consommation) fixé par chaque fabricant."
     }
   },
   de: {
@@ -653,7 +653,7 @@ const translations = {
       sort_year: "Jahr"
     },
     quiz: {
-      label: "🎯 Empfehlungen",
+      label: "Empfehlungen",
       title: "Nicht sicher, welche GPU Sie wählen sollen?",
       subtitle: "Beantworten Sie 3 kurze Fragen und wir geben Ihnen die besten Optionen für Sie.",
       intro_title: "Finden Sie Ihre ideale GPU",
@@ -675,7 +675,7 @@ const translations = {
       btn_reset: "Quiz Wiederholen"
     },
     hero: {
-      badge: "⚡ Der ultimative Leitfaden 2026",
+      badge: "Der ultimative Leitfaden 2026",
       title_1: "Das Komplette",
       title_2: "GPU-Universum",
       subtitle: "Von Einsteiger-Grafikkarten bis zu den leistungsstärksten KI-Beschleunigern der Welt. Architekturen, Benchmarks und Vergleiche.",
@@ -688,7 +688,7 @@ const translations = {
       scroll: "Scrollen"
     },
     news: {
-      label: "📰 Nachrichten",
+      label: "Nachrichten",
       title: "Neueste Hardware-News",
       subtitle: "Bleiben Sie auf dem Laufenden mit den neuesten Veröffentlichungen und Leaks aus der GPU-Welt."
     },
@@ -707,27 +707,27 @@ const translations = {
       mobile_tag: "Tragbar"
     },
     sections: {
-      gaming_label: "🎮 Gaming",
+      gaming_label: "Gaming",
       gaming_title: "Heimanwender",
       gaming_title_hl: "GPUs",
       gaming_p: "Die besten Grafikkarten für Gaming, vom Einsteigermodell bis zur absoluten Spitzenklasse",
-      work_label: "🖥️ Professionell",
+      work_label: "Professionell",
       work_title: "Workstation",
       work_title_hl: "GPUs",
       work_p: "Leistung und Präzision für 3D-Profis, Design, CAD und Desktop-KI",
-      server_label: "🚀 Enterprise",
+      server_label: "Enterprise",
       server_title: "Server",
       server_title_hl: "GPUs",
       server_p: "Die leistungsstärksten Beschleuniger der Welt für KI, HPC und Rechenzentren",
-      mobile_label: "💻 Laptop",
+      mobile_label: "Laptop",
       mobile_title: "Laptop",
       mobile_title_hl: "GPUs",
       mobile_p: "Leistungsstarke Grafikkarten optimiert für Laptops",
-      compare_label: "⚖️ Vergleich",
+      compare_label: "Vergleich",
       compare_title: "Leistung im",
       compare_title_hl: "Vergleich",
       compare_p: "Rechenleistung und Speicher der ikonischsten Modelle",
-      timeline_label: "📅 Geschichte",
+      timeline_label: "Geschichte",
       timeline_title: "Entwicklung der",
       timeline_title_hl: "GPUs",
       timeline_p: "Von den ersten 2D-Grafikbeschleunigern in den 80ern bis zu den heutigen KI-Supercomputern ist die Entwicklung der Graphics Processing Unit (GPU) eine der faszinierendsten Geschichten der Technologie. Was als dedizierter Chip zum Rendern von Pixeln in Videospielen begann, ist heute das unbestrittene Gehirn der künstlichen Intelligenz und der Motor des massiven Parallel-Computings weltweit geworden."
@@ -769,7 +769,7 @@ const translations = {
       price: "Geschätzter Preis"
     },
     hof: {
-      label: "🏆 Ruhmeshalle",
+      label: "Ruhmeshalle",
       title: "Legendäre",
       title_hl: "GPUs",
       subtitle: "Die Grafikkarten, die ein Vorher und Nachher in der Hardware-Geschichte markierten."
@@ -780,13 +780,13 @@ const translations = {
       dlss_fsr: "<strong>DLSS / FSR</strong>: KI-gestützte Upscaling-Technologien, die die FPS drastisch erhöhen und gleichzeitig eine hohe Bildqualität beibehalten."
     },
     arch_map: {
-      label: "🌳 Stammbaum",
+      label: "Stammbaum",
       title: "Architektur-",
       title_hl: "Karte",
       subtitle: "Technische Entwicklung von Pionier-Chips bis Blackwell und RDNA 4."
     },
     value: {
-      label: "💎 Value King",
+      label: "Value King",
       title: "Leistung pro",
       title_hl: "Preis",
       desc: "Welche Karte bietet mehr Leistung für jede investierte Währungseinheit?",
@@ -832,7 +832,7 @@ const translations = {
       stat_top: "Die stärkste",
       tab_desktop: "Desktop",
       tab_laptop: "Laptops",
-      laptop_note: "💡 Die tatsächliche Leistung einer Laptop-GPU hängt von der TGP (Leistungsaufnahme) ab, die jeder Hersteller festlegt."
+      laptop_note: "Die tatsächliche Leistung einer Laptop-GPU hängt von der TGP (Leistungsaufnahme) ab, die jeder Hersteller festlegt."
     }
   },
   it: {
@@ -862,7 +862,7 @@ const translations = {
       sort_year: "Anno"
     },
     quiz: {
-      label: "🎯 Suggerimenti",
+      label: "Suggerimenti",
       title: "Non sai quale GPU scegliere?",
       subtitle: "Rispondi a 3 brevi domande e ti daremo le opzioni migliori per te.",
       intro_title: "Trova la tua GPU ideale",
@@ -884,7 +884,7 @@ const translations = {
       btn_reset: "Ripeti Quiz"
     },
     hero: {
-      badge: "⚡ La Guida Definitiva 2026",
+      badge: "La Guida Definitiva 2026",
       title_1: "L'Universo",
       title_2: "Completo delle GPU",
       subtitle: "Dalle schede entry-level domestiche ai più potenti acceleratori di IA del pianeta. Architetture, benchmark e confronti.",
@@ -897,7 +897,7 @@ const translations = {
       scroll: "Scorri"
     },
     news: {
-      label: "📰 Notizie",
+      label: "Notizie",
       title: "Ultime Notizie Hardware",
       subtitle: "Rimani aggiornato con gli ultimi lanci e leak dal mondo delle GPU."
     },
@@ -916,27 +916,27 @@ const translations = {
       mobile_tag: "Portatile"
     },
     sections: {
-      gaming_label: "🎮 Gaming",
+      gaming_label: "Gaming",
       gaming_title: "GPU",
       gaming_title_hl: "Domestiche",
       gaming_p: "Le migliori schede grafiche per il gaming, dall'entry-level al top del mercato",
-      work_label: "🖥️ Professionale",
+      work_label: "Professionale",
       work_title: "GPU",
       work_title_hl: "Workstation",
       work_p: "Potenza e precisione per i professionisti del 3D, design, CAD e IA desktop",
-      server_label: "🚀 Enterprise",
+      server_label: "Enterprise",
       server_title: "GPU per",
       server_title_hl: "Server",
       server_p: "Gli acceleratori più potenti del pianeta per IA, HPC e data center",
-      mobile_label: "💻 Laptop",
+      mobile_label: "Laptop",
       mobile_title: "GPU",
       mobile_title_hl: "per Laptop",
       mobile_p: "Schede grafiche ad alte prestazioni ottimizzate per laptop",
-      compare_label: "⚖️ Confronto",
+      compare_label: "Confronto",
       compare_title: "Prestazioni a",
       compare_title_hl: "Confronto",
       compare_p: "Potenza di calcolo e memoria dei modelli più iconici",
-      timeline_label: "📅 Storia",
+      timeline_label: "Storia",
       timeline_title: "Evoluzione delle",
       timeline_title_hl: "GPU",
       timeline_p: "Dai primi acceleratori grafici 2D negli anni '80 agli attuali supercomputer IA, l'evoluzione della Graphics Processing Unit (GPU) è una delle storie più affascinanti della tecnologia. Ciò che era iniziato come un chip dedicato al rendering dei pixel nei videogiochi, oggi è diventato il cervello indiscusso dell'intelligenza artificiale e il motore del calcolo parallelo massivo in tutto il mondo."
@@ -978,7 +978,7 @@ const translations = {
       price: "Prezzo Stimato"
     },
     hof: {
-      label: "🏆 Hall of Fame",
+      label: "Hall of Fame",
       title: "GPU",
       title_hl: "Leggendarie",
       subtitle: "Le schede grafiche che hanno segnato un prima e un dopo nella storia dell'hardware."
@@ -989,13 +989,13 @@ const translations = {
       dlss_fsr: "<strong>DLSS / FSR</strong>: Tecnologie di upscaling basate su IA che aumentano drasticamente gli FPS mantenendo un'elevata qualità dell'immagine."
     },
     arch_map: {
-      label: "🌳 Albero Genealogico",
+      label: "Albero Genealogico",
       title: "Mappa delle",
       title_hl: "Architetture",
       subtitle: "Evoluzione tecnica dai chip pionieristici a Blackwell e RDNA 4."
     },
     value: {
-      label: "💎 Value King",
+      label: "Value King",
       title: "Rapporto",
       title_hl: "Qualità-Prezzo",
       desc: "Quale scheda offre più potenza per ogni unità monetaria spesa?",
@@ -1041,7 +1041,7 @@ const translations = {
       stat_top: "La più potente",
       tab_desktop: "Desktop",
       tab_laptop: "Portatili",
-      laptop_note: "💡 Le prestazioni reali di una GPU per portatili dipendono dal TGP (consumo) fissato da ogni produttore."
+      laptop_note: "Le prestazioni reali di una GPU per portatili dipendono dal TGP (consumo) fissato da ogni produttore."
     }
   },
   ru: {
@@ -1070,7 +1070,7 @@ const translations = {
       sort_year: "Год"
     },
     quiz: {
-      label: "🎯 Рекомендации",
+      label: "Рекомендации",
       title: "Не знаете, какую GPU выбрать?",
       subtitle: "Ответьте на 3 коротких вопроса, и мы предложим вам лучшие варианты.",
       intro_title: "Найдите вашу идеальную GPU",
@@ -1092,7 +1092,7 @@ const translations = {
       btn_reset: "Пройти заново"
     },
     hero: {
-      badge: "⚡ Полное руководство 2026",
+      badge: "Полное руководство 2026",
       title_1: "Полная вселенная",
       title_2: "GPU",
       subtitle: "От видеокарт начального уровня до самых мощных ИИ-ускорителей на планете. Архитектуры, тесты и сравнения.",
@@ -1105,7 +1105,7 @@ const translations = {
       scroll: "Прокрутка"
     },
     news: {
-      label: "📰 Новости",
+      label: "Новости",
       title: "Последние новости оборудования",
       subtitle: "Будьте в курсе последних запусков и утечек из мира GPU."
     },
@@ -1124,27 +1124,27 @@ const translations = {
       mobile_tag: "Портативные"
     },
     sections: {
-      gaming_label: "🎮 Игры",
+      gaming_label: "Игры",
       gaming_title: "Домашние",
       gaming_title_hl: "GPU",
       gaming_p: "Лучшие видеокарты для игр, от начального уровня до абсолютного топа рынка",
-      work_label: "🖥️ Профессиональные",
+      work_label: "Профессиональные",
       work_title: "Рабочие станции",
       work_title_hl: "GPU",
       work_p: "Мощность и точность для 3D-профессионалов, дизайна, САПР и настольного ИИ",
-      server_label: "🚀 Корпоративные",
+      server_label: "Корпоративные",
       server_title: "Серверные",
       server_title_hl: "GPU",
       server_p: "Самые мощные ускорители на планете для ИИ, HPC и дата-центров",
-      mobile_label: "💻 Ноутбуки",
+      mobile_label: "Ноутбуки",
       mobile_title: "GPU для",
       mobile_title_hl: "Ноутбуков",
       mobile_p: "Высокопроизводительные видеокарты, оптимизированные для ноутбуков",
-      compare_label: "⚖️ Сравнение",
+      compare_label: "Сравнение",
       compare_title: "Сравнение",
       compare_title_hl: "Производительности",
       compare_p: "Вычислительная мощность и память самых знаковых моделей",
-      timeline_label: "📅 История",
+      timeline_label: "История",
       timeline_title: "Эволюция",
       timeline_title_hl: "GPU",
       timeline_p: "От первых 2D графических ускорителей 80-х до сегодняшних ИИ-суперкомпьютеров, эволюция графических процессоров (GPU) — одна из самых увлекательных историй в технологиях. То, что началось как специализированный чип для рендеринга пикселей в видеоиграх, сегодня стало бесспорным мозгом искусственного интеллекта и двигателем массивно-параллельных вычислений во всем мире."
@@ -1186,7 +1186,7 @@ const translations = {
       price: "Ориент. цена"
     },
     hof: {
-      label: "🏆 Зал славы",
+      label: "Зал славы",
       title: "Легендарные",
       title_hl: "GPU",
       subtitle: "Видеокарты, которые оставили след в истории аппаратного обеспечения."
@@ -1197,13 +1197,13 @@ const translations = {
       dlss_fsr: "<strong>DLSS / FSR</strong>: Технологии масштабирования на базе ИИ, которые значительно повышают FPS при сохранении высокого качества изображения."
     },
     arch_map: {
-      label: "🌳 Генеалогическое древо",
+      label: "Генеалогическое древо",
       title: "Карта",
       title_hl: "архитектур",
       subtitle: "Техническая эволюция от первых чипов до Blackwell и RDNA 4."
     },
     value: {
-      label: "💎 Value King",
+      label: "Value King",
       title: "Производительность",
       title_hl: "на цену",
       desc: "Какая карта предлагает больше мощности за каждую потраченную валютную единицу?",
@@ -1249,7 +1249,7 @@ const translations = {
       stat_top: "Самая мощная",
       tab_desktop: "Настольные",
       tab_laptop: "Ноутбуки",
-      laptop_note: "💡 Реальная производительность мобильной GPU зависит от TGP (мощности), установленного производителем ноутбука."
+      laptop_note: "Реальная производительность мобильной GPU зависит от TGP (мощности), установленного производителем ноутбука."
     }
   }
 };

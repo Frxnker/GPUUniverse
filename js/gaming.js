@@ -55,7 +55,9 @@
       ...gpu,
       perfLabel: window.tr('catalog.perf_index', 'Índice gaming'),
       perfHint: window.tr(TABS[tab].hintKey, ''),
-      perfSuffix: ''
+      perfSuffix: '',
+      // Las GPUs de portátil van soldadas: sin contactos PCIe en la tarjeta
+      formFactor: tab
     };
   }
 

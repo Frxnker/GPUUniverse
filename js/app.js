@@ -21,67 +21,181 @@
 })();
 
 
-// ===== PARTÍCULAS =====
-(function initParticles() {
+// ===== FONDO: PISTAS DE CIRCUITO =====
+// Pistas de PCB a 0°/45°/90° con vías en los extremos y pulsos de señal que las recorren.
+// Las pistas se dibujan una vez en un lienzo aparte; cada fotograma solo pinta los pulsos.
+(function initCircuit() {
   const canvas = document.getElementById('particles-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  let W, H, particles = [];
-
-  function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  const isMobile = window.innerWidth < 768;
+  const board = document.createElement('canvas');
+  const bctx = board.getContext('2d');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const particleCount = isMobile ? 35 : 80;
-  const connectionDist = isMobile ? 90 : 120;
+  // Direcciones en pasos de 45°: índices pares = horizontal/vertical
+  const DIRS = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
+  let W = 0, H = 0, dpr = 1, traces = [], pulses = [], colors = {};
 
-  for (let i = 0; i < particleCount; i++) {
-    particles.push({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      r: Math.random() * 1.5 + 0.3,
-      dx: (Math.random() - 0.5) * (isMobile ? 0.2 : 0.3),
-      dy: (Math.random() - 0.5) * (isMobile ? 0.2 : 0.3),
-      alpha: Math.random() * 0.5 + 0.1
+  function readColors() {
+    const cs = getComputedStyle(document.documentElement);
+    colors = {
+      trace: cs.getPropertyValue('--trace-rgb').trim() || '25, 230, 180',
+      copper: cs.getPropertyValue('--copper-rgb').trim() || '240, 162, 74',
+      light: document.documentElement.getAttribute('data-theme') === 'light'
+    };
+  }
+
+  function segmentLength(a, b) {
+    return Math.hypot(b[0] - a[0], b[1] - a[1]);
+  }
+
+  function buildTraces() {
+    const step = W < 768 ? 30 : 38;
+    const cols = Math.ceil(W / step) + 1;
+    const rows = Math.ceil(H / step) + 1;
+    const used = new Set();
+    const target = Math.round((cols * rows) / (W < 768 ? 26 : 18));
+    traces = [];
+    for (let n = 0; n < target * 3 && traces.length < target; n++) {
+      let x = Math.floor(Math.random() * cols);
+      let y = Math.floor(Math.random() * rows);
+      if (used.has(x + ',' + y)) continue;
+      let dir = Math.floor(Math.random() * 4) * 2;
+      const cells = [[x, y]];
+      used.add(x + ',' + y);
+      const segments = 2 + Math.floor(Math.random() * 3);
+      for (let seg = 0; seg < segments; seg++) {
+        const len = 2 + Math.floor(Math.random() * 4);
+        let blocked = false;
+        for (let i = 0; i < len; i++) {
+          const nx = x + DIRS[dir][0];
+          const ny = y + DIRS[dir][1];
+          // Las pistas no se cruzan ni se salen de la pantalla
+          if (nx < 0 || ny < 0 || nx >= cols || ny >= rows || used.has(nx + ',' + ny)) { blocked = true; break; }
+          x = nx; y = ny;
+          used.add(x + ',' + y);
+        }
+        cells.push([x, y]);
+        if (blocked) break;
+        dir = (dir + (Math.random() < 0.5 ? 1 : 7)) % 8;
+      }
+      const pts = cells.filter((c, i) => i === 0 || c[0] !== cells[i - 1][0] || c[1] !== cells[i - 1][1])
+        .map(([cx, cy]) => [cx * step, cy * step]);
+      if (pts.length < 2) continue;
+      let length = 0;
+      for (let i = 1; i < pts.length; i++) length += segmentLength(pts[i - 1], pts[i]);
+      if (length < step * 2) continue;
+      traces.push({ pts, length, copper: Math.random() < 0.2 });
+    }
+  }
+
+  function drawBoard() {
+    board.width = Math.round(W * dpr);
+    board.height = Math.round(H * dpr);
+    bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    bctx.clearRect(0, 0, W, H);
+    bctx.lineCap = 'round';
+    bctx.lineJoin = 'round';
+    const alpha = colors.light ? 0.2 : 0.14;
+    traces.forEach(t => {
+      const rgb = t.copper ? colors.copper : colors.trace;
+      bctx.strokeStyle = `rgba(${rgb}, ${alpha})`;
+      bctx.lineWidth = 1.2;
+      bctx.beginPath();
+      t.pts.forEach(([px, py], i) => (i ? bctx.lineTo(px, py) : bctx.moveTo(px, py)));
+      bctx.stroke();
+      // Pad cuadrado al inicio y vía (anillo) al final
+      const [sx, sy] = t.pts[0];
+      bctx.fillStyle = `rgba(${rgb}, ${alpha * 1.5})`;
+      bctx.fillRect(sx - 2.5, sy - 2.5, 5, 5);
+      const [ex, ey] = t.pts[t.pts.length - 1];
+      bctx.beginPath();
+      bctx.arc(ex, ey, 3, 0, Math.PI * 2);
+      bctx.strokeStyle = `rgba(${rgb}, ${alpha * 1.8})`;
+      bctx.stroke();
     });
+  }
+
+  function pointAt(t, dist) {
+    for (let i = 1; i < t.pts.length; i++) {
+      const a = t.pts[i - 1];
+      const b = t.pts[i];
+      const len = segmentLength(a, b);
+      if (dist <= len) {
+        const k = dist / len;
+        return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k];
+      }
+      dist -= len;
+    }
+    return t.pts[t.pts.length - 1];
+  }
+
+  function newPulse(spread) {
+    const t = traces[Math.floor(Math.random() * traces.length)];
+    return { t, d: spread ? -Math.random() * 400 : -Math.random() * 120, speed: 0.7 + Math.random() * 1.1 };
   }
 
   function draw() {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
-    particles.forEach(p => {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(124, 58, 255, ${p.alpha})`;
-      ctx.fill();
-      p.x += p.dx; p.y += p.dy;
-      if (p.x < 0 || p.x > W) p.dx *= -1;
-      if (p.y < 0 || p.y > H) p.dy *= -1;
-    });
-
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < connectionDist) {
+    ctx.drawImage(board, 0, 0, W, H);
+    const headAlpha = colors.light ? 0.6 : 0.9;
+    pulses.forEach((p, idx) => {
+      p.d += p.speed;
+      if (p.d > p.t.length + 40) { pulses[idx] = newPulse(false); return; }
+      // Cabeza brillante con estela que se desvanece
+      for (let k = 7; k >= 0; k--) {
+        const dd = p.d - k * 5;
+        if (dd < 0 || dd > p.t.length) continue;
+        const [x, y] = pointAt(p.t, dd);
+        const a = headAlpha * (1 - k / 8);
+        if (k === 0) {
+          ctx.fillStyle = `rgba(${colors.trace}, ${a * 0.25})`;
           ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(124,58,255,${0.08 * (1 - dist / connectionDist)})`;
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
+          ctx.arc(x, y, 6, 0, Math.PI * 2);
+          ctx.fill();
         }
+        ctx.fillStyle = `rgba(${colors.trace}, ${a})`;
+        ctx.beginPath();
+        ctx.arc(x, y, k === 0 ? 2 : 1.4, 0, Math.PI * 2);
+        ctx.fill();
       }
-    }
-    // Con "reducir movimiento" se dibuja un único fotograma estático
+    });
     if (!reduceMotion) requestAnimationFrame(draw);
   }
+
+  function setup() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth;
+    // Alto de la pantalla completa: así mostrar/ocultar la barra del navegador móvil no obliga a redibujar
+    H = Math.max(window.innerHeight, (window.screen && window.screen.height) || 0);
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    canvas.style.height = H + 'px';
+    buildTraces();
+    drawBoard();
+    const count = reduceMotion || !traces.length ? 0 : (W < 768 ? 8 : 16);
+    pulses = Array.from({ length: count }, () => newPulse(true));
+  }
+
+  readColors();
+  setup();
   draw();
+
+  let lastWidth = W;
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    if (window.innerWidth === lastWidth) return;
+    lastWidth = window.innerWidth;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { setup(); if (reduceMotion) draw(); }, 200);
+  });
+
+  // Al cambiar de tema se repintan las pistas con los colores nuevos
+  new MutationObserver(() => {
+    readColors();
+    drawBoard();
+    if (reduceMotion) draw();
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 })();
 
 // ===== DESPLAZAMIENTO DE LA BARRA DE NAVEGACIÓN =====
@@ -207,6 +321,7 @@ function buildGpuCard(gpu) {
         <div class="gpu-price">${window.formatPrice(gpu.price)} <small>${typeof window.t === "function" ? window.t("ui.usd_approx") || "USD aprox." : "USD aprox."}</small></div>
         <button type="button" class="gpu-card-more" aria-label="${esc(window.tr('catalog.view_details', 'Detalles'))}: ${esc(gpu.name)}">${esc(window.tr('catalog.view_details', 'Detalles'))} <span aria-hidden="true">→</span></button>
       </div>
+      ${gpu.brand !== 'apple' && gpu.formFactor !== 'laptop' ? '<div class="gpu-card-fingers" aria-hidden="true"></div>' : ''}
     </article>
   `;
 }
@@ -387,7 +502,7 @@ function renderWithPagination(container, sortedItems, limitKey, buildCardFn) {
     const canReset = typeof window.resetFilters === 'function';
     container.innerHTML = `
       <div class="empty-state">
-        <div class="empty-state-icon" aria-hidden="true">🔍</div>
+        <div class="empty-state-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
         <p class="empty-state-title">${window.tr('catalog.no_results', window.tr('ui.no_results', 'No se encontraron resultados'))}</p>
         <p class="empty-state-hint">${window.tr('catalog.no_results_hint', '')}</p>
         ${canReset ? `<button type="button" class="btn-load-more" onclick="resetFilters()"><span aria-hidden="true">↺</span> ${window.tr('catalog.reset', 'Restablecer')}</button>` : ''}
@@ -674,7 +789,7 @@ window.renderChart = function() {
   ctx.translate(compact ? 10 : 16, padding.top + chartH / 2);
   ctx.rotate(-Math.PI / 2);
   ctx.fillStyle = textColor;
-  ctx.font = "10px 'Outfit', sans-serif";
+  ctx.font = "10px 'IBM Plex Sans', sans-serif";
   ctx.textAlign = 'center';
   ctx.fillText('TFLOPS FP32', 0, 0);
   ctx.restore();
@@ -695,13 +810,13 @@ window.renderChart = function() {
 
     // Valor encima de la barra
     ctx.fillStyle = isDark ? '#fff' : '#111';
-    ctx.font = "bold 12px 'Outfit', sans-serif";
+    ctx.font = "bold 12px 'IBM Plex Sans', sans-serif";
     ctx.textAlign = 'center';
     ctx.fillText(val.toLocaleString(), x + barW / 2, y - 8);
 
     // Etiqueta: ajusta nombres largos en 2 líneas
     ctx.fillStyle = isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.7)';
-    ctx.font = `${compact ? 10 : 11}px 'Outfit', sans-serif`;
+    ctx.font = `${compact ? 10 : 11}px 'IBM Plex Sans', sans-serif`;
     const words = labels[i].split(' ');
     const midIdx = Math.ceil(words.length / 2);
     const line1 = words.slice(0, midIdx).join(' ');
@@ -748,7 +863,7 @@ window.renderArchMap = function() {
               <span class="arch-brand">${arch.brand.toUpperCase()}</span>
             </div>
             <div class="arch-node-name">${arch.name}</div>
-            <div class="arch-node-innovation">✨ ${arch.innovation}</div>
+            <div class="arch-node-innovation">${arch.innovation}</div>
             <div class="arch-node-desc">${arch.desc}</div>
             ${arch.parent ? `<div class="arch-connector" data-from="node-${arch.parent}" data-to="node-${arch.id}"></div>` : ''}
           </div>
@@ -846,7 +961,7 @@ window.renderValueChart = function() {
     if (compactWidth) {
       // Nombre a la izquierda y puntuación a la derecha, sobre la barra
       ctx.fillStyle = labelColor;
-      ctx.font = "700 12px 'Outfit', sans-serif";
+      ctx.font = "700 12px 'IBM Plex Sans', sans-serif";
       ctx.textAlign = 'left';
       ctx.fillText(d.name, padding.left, rowY + 14);
       ctx.fillStyle = mutedColor;
@@ -858,7 +973,7 @@ window.renderValueChart = function() {
 
     // Etiqueta del nombre de la GPU (izquierda)
     ctx.fillStyle = labelColor;
-    ctx.font = "700 11px 'Outfit', sans-serif";
+    ctx.font = "700 11px 'IBM Plex Sans', sans-serif";
     ctx.textAlign = 'right';
     ctx.fillText(d.name, padding.left - 15, y + barH/2 + 4);
 
@@ -872,7 +987,7 @@ window.renderValueChart = function() {
   // Leyenda: en pantallas estrechas se parte en dos líneas por el guion largo
   ctx.fillStyle = mutedColor;
   ctx.textAlign = 'center';
-  ctx.font = `400 ${compactWidth ? 10 : 11}px 'Outfit', sans-serif`;
+  ctx.font = `400 ${compactWidth ? 10 : 11}px 'IBM Plex Sans', sans-serif`;
   const caption = window.t('value.score_desc');
   const captionParts = compactWidth ? caption.split(' — ') : [caption];
   captionParts.forEach((part, i) => {
@@ -1298,7 +1413,7 @@ async function initNews() {
       const summary = item.summary.length >= 160 ? item.summary.replace(/\s+\S*$/, '') + '…' : item.summary;
       const image = item.image
         ? `<img src="${esc(item.image)}" class="news-img" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`
-        : `<div class="news-img news-img-fallback" aria-hidden="true">📰</div>`;
+        : `<div class="news-img news-img-fallback" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5" rx=".5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></div>`;
       return `
         <article class="news-card">
           ${image}
@@ -1320,7 +1435,7 @@ async function initNews() {
         const fallback = document.createElement('div');
         fallback.className = 'news-img news-img-fallback';
         fallback.setAttribute('aria-hidden', 'true');
-        fallback.textContent = '📰';
+        fallback.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5" rx=".5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg>';
         img.replaceWith(fallback);
       }, { once: true });
     });

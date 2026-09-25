@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   controls.minDistance = 5;
 
   // Iluminación
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.55);
   scene.add(ambientLight);
 
   const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
@@ -34,11 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
   dirLight.shadow.mapSize.height = 2048;
   scene.add(dirLight);
 
-  const fillLight = new THREE.DirectionalLight(0x8b45ff, 0.4);
+  const fillLight = new THREE.DirectionalLight(0x19e6b4, 0.4);
   fillLight.position.set(-10, 0, -10);
   scene.add(fillLight);
 
-  const accentLight = new THREE.PointLight(0x00e5ff, 0.5, 50);
+  const accentLight = new THREE.PointLight(0x3cc8ff, 0.5, 50);
   accentLight.position.set(5, 5, 5);
   scene.add(accentLight);
 
@@ -386,9 +386,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Un poco de glow cian
-    mesh.material.color.setHex(0x00e5ff);
+    mesh.material.color.setHex(0x19e6b4);
     if (mesh.material.emissive) {
-        mesh.material.emissive.setHex(0x003344);
+        mesh.material.emissive.setHex(0x04382b);
     }
 
     // Actualizar Panel

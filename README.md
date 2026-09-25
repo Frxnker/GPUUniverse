@@ -13,14 +13,14 @@
 - 🌍 **Internacionalización (i18n)**: Soporte nativo para 6 idiomas (Español, Inglés, Francés, Alemán, Italiano y Ruso).
 - 🔍 **Buscador Inteligente**: Sistema de búsqueda global con autocompletado en todas las categorías.
 - ⚖️ **Comparador Dinámico**: Visualización de rendimiento entre generaciones (Ref: **RTX 5090**).
-- 📱 **Diseño Ultra-Premium**: Estética *Glassmorphism* con efectos de partículas y optimización a 60 FPS.
+- 📱 **Diseño "Silicio / PCB"**: Estética inspirada en el propio hardware (pistas de circuito animadas, tarjetas tipo componente con contactos PCIe, medidores LED), con tema claro y oscuro y adaptada a cualquier pantalla.
 - 💹 **Localización de Precios**: Conversión automática a EUR, USD o RUB.
 - 🛡️ **Estructura Optimizada**: Organización profesional por carpetas para facilitar el despliegue en GitHub Pages.
 
 ## 🚀 Tecnologías Utilizadas
 
 - **Frontend Core**: HTML5 Semántico, CSS3 Moderno, JavaScript ES6+ Vanilla.
-- **Visuales**: Canvas API, Google Fonts (*Outfit* y *JetBrains Mono*).
+- **Visuales**: Canvas API, Google Fonts (*Exo 2*, *IBM Plex Sans* y *JetBrains Mono*).
 
 ## 📁 Estructura del Proyecto
 
