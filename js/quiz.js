@@ -56,7 +56,7 @@ function calculateRecommendations() {
     else if (quizAnswers.use === 'mobile') pool = MOBILE_GPUS;
     
     // 2. Puntuación por presupuesto (convierte el texto del precio a número)
-    const getPrice = (p) => parseFloat(p.replace(/[^0-9.]/g, '')) || 0;
+    const getPrice = (p) => window.priceToUsd(p) || 0;
     
     const budgetLimits = {
         low: 400,

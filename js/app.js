@@ -36,6 +36,7 @@
   window.addEventListener('resize', resize);
 
   const isMobile = window.innerWidth < 768;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const particleCount = isMobile ? 35 : 80;
   const connectionDist = isMobile ? 90 : 120;
 
@@ -77,7 +78,8 @@
         }
       }
     }
-    requestAnimationFrame(draw);
+    // Con "reducir movimiento" se dibuja un único fotograma estático
+    if (!reduceMotion) requestAnimationFrame(draw);
   }
   draw();
 })();
@@ -98,24 +100,58 @@ if (navbar) {
 }
 
 // ===== UTILIDADES =====
+const USD_TO_EUR = 0.92;
+
+// Traduce una clave con texto de respaldo e interpolación de {variables}
+window.tr = function(key, fallback, vars) {
+  let text = typeof window.t === 'function' ? window.t(key) : key;
+  if (!text || text === key) text = fallback !== undefined ? fallback : key;
+  if (vars) Object.keys(vars).forEach(k => { text = text.split(`{${k}}`).join(vars[k]); });
+  return text;
+};
+
+window.escapeHtml = function(str) {
+  return String(str == null ? '' : str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+};
+
+// Los precios de data.js mezclan euros ("2499€") y dólares ("~$899"): se normalizan a USD
+window.priceToUsd = function(priceStr) {
+  const value = parseFloat(String(priceStr || '').replace(/[^0-9.]/g, ''));
+  if (isNaN(value)) return NaN;
+  return String(priceStr).includes('€') ? value / USD_TO_EUR : value;
+};
+
+window.parseVram = function(vramStr) {
+  const match = String(vramStr || '').match(/(\d+(?:\.\d+)?)\s*GB/i);
+  return match ? parseFloat(match[1]) : 0;
+};
+
+window.formatPerf = function(perf) {
+  const value = Number(perf) || 0;
+  if (value >= 10) return String(Math.round(value));
+  return value.toLocaleString(window.currentLang || 'es', { maximumFractionDigits: 1 });
+};
+
 window.formatPrice = function(priceStr) {
   if (!priceStr || priceStr === 'N/A') return priceStr;
-  
+
   const symbol = typeof window.t === 'function' ? window.t('ui.currency') : '$';
   const lang = window.currentLang || 'es';
-  
-  let numericValue = parseFloat(priceStr.replace(/[^0-9.]/g, ''));
-  if (isNaN(numericValue)) return priceStr;
 
-  const rates = { es: 0.92, en: 1, fr: 0.92, de: 0.92, it: 0.92, ru: 92.5 };
+  const usdValue = window.priceToUsd(priceStr);
+  if (isNaN(usdValue)) return priceStr;
+
+  const rates = { es: USD_TO_EUR, en: 1, fr: USD_TO_EUR, de: USD_TO_EUR, it: USD_TO_EUR, ru: 92.5 };
   const rate = rates[lang] || 1;
-  let converted = Math.round(numericValue * rate);
-  
-  let formatted = converted.toLocaleString(lang === 'ru' ? 'ru-RU' : 'es-ES');
-  
-  if (lang === 'ru') return `~${formatted} ${symbol}`;
-  if (lang === 'en') return `~$${formatted}`;
-  return `~${formatted}${symbol}`;
+  const converted = Math.round(usdValue * rate);
+  const plus = String(priceStr).includes('+') ? '+' : '';
+
+  const locales = { es: 'es-ES', en: 'en-US', fr: 'fr-FR', de: 'de-DE', it: 'it-IT', ru: 'ru-RU' };
+  const formatted = converted.toLocaleString(locales[lang] || 'es-ES');
+
+  if (lang === 'ru') return `~${formatted}${plus} ${symbol}`;
+  if (lang === 'en') return `~$${formatted}${plus}`;
+  return `~${formatted}${symbol}${plus}`;
 };
 
 // ===== APARICIÓN AL HACER SCROLL =====
@@ -134,17 +170,27 @@ function wrapWithTooltip(label, defKey) {
   return `<span class="has-tooltip">${label}<span class="info-icon">i</span><span class="tooltip-box">${def}</span></span>`;
 }
 
+const TIER_FILL = { entry: 'fill-green', mid: 'fill-blue', high: 'fill-purple', ultra: 'fill-gold' };
+
 function buildGpuCard(gpu) {
   const brandMap = { nvidia: 'NVIDIA', amd: 'AMD', intel: 'Intel', apple: 'Apple' };
   const tierMap = { entry: 'Entrada', mid: 'Gama Media', high: 'Alto', ultra: 'Ultra' };
+  const esc = window.escapeHtml;
+  const perf = Math.min(Number(gpu.perf) || 0, 100);
+  const perfLabel = gpu.perfLabel || window.tr('ui.relative_perf', 'Rendimiento relativo');
+  // gpu.perfHint permite explicar la escala del índice en un tooltip
+  const perfLabelHtml = gpu.perfHint
+    ? `<span class="has-tooltip">${esc(perfLabel)}<span class="info-icon">i</span><span class="tooltip-box">${gpu.perfHint}</span></span>`
+    : esc(perfLabel);
+  const perfSuffix = gpu.perfSuffix !== undefined ? gpu.perfSuffix : '%';
   return `
-    <div class="gpu-card reveal">
+    <article class="gpu-card reveal" data-open-gpu="${esc(gpu.name)}">
       <div class="gpu-card-header">
         <span class="gpu-brand brand-${gpu.brand}">${brandMap[gpu.brand]}</span>
         <span class="gpu-tier tier-${gpu.tier}">${typeof window.t === "function" && window.t("ui.tier_" + gpu.tier) !== "ui.tier_" + gpu.tier ? window.t("ui.tier_" + gpu.tier) : tierMap[gpu.tier]}</span>
       </div>
-      <div class="gpu-name">${gpu.name}</div>
-      <div class="gpu-arch">${gpu.arch}</div>
+      <h3 class="gpu-name">${esc(gpu.name)}</h3>
+      <div class="gpu-arch">${esc(gpu.arch)}${gpu.year ? ` · ${gpu.year}` : ''}</div>
       <div class="gpu-specs">
         <div class="spec-item"><label>${typeof t === "function" ? window.t("table.vram") : "VRAM"}</label><span>${gpu.vram}</span></div>
         <div class="spec-item"><label>${wrapWithTooltip('TFLOPS FP32', 'tflops')}</label><span>${gpu.tflops}</span></div>
@@ -152,13 +198,16 @@ function buildGpuCard(gpu) {
         <div class="spec-item"><label>${wrapWithTooltip(typeof window.t === "function" ? window.t("ui.tdp") || "TDP" : "TDP", 'tdp')}</label><span>${gpu.tdp}</span></div>
       </div>
       <div class="gpu-perf-bar">
-        <div class="gpu-perf-fill ${gpu.fillColor}" data-width="${gpu.perf}"></div>
+        <div class="gpu-perf-fill ${gpu.fillColor || TIER_FILL[gpu.tier] || 'fill-purple'}" data-width="${perf}"></div>
       </div>
       <div class="perf-label">
-        <span>${typeof window.t === "function" ? window.t("ui.relative_perf") || "Rendimiento relativo" : "Rendimiento relativo"}</span><span>${gpu.perf}%</span>
+        <span>${perfLabelHtml}</span><span class="perf-value">${perf ? window.formatPerf(perf) + perfSuffix : '—'}</span>
       </div>
-      <div class="gpu-price">${window.formatPrice(gpu.price)} <small>${typeof window.t === "function" ? window.t("ui.usd_approx") || "USD aprox." : "USD aprox."}</small></div>
-    </div>
+      <div class="gpu-card-footer">
+        <div class="gpu-price">${window.formatPrice(gpu.price)} <small>${typeof window.t === "function" ? window.t("ui.usd_approx") || "USD aprox." : "USD aprox."}</small></div>
+        <button type="button" class="gpu-card-more" aria-label="${esc(window.tr('catalog.view_details', 'Detalles'))}: ${esc(gpu.name)}">${esc(window.tr('catalog.view_details', 'Detalles'))} <span aria-hidden="true">→</span></button>
+      </div>
+    </article>
   `;
 }
 
@@ -185,44 +234,60 @@ function buildServerCard(gpu) {
 }
 
 // ===== LÓGICA DE FILTROS =====
-window.activeFilters = { brand: 'all', vram: 'all', use: 'all', sort: 'perf', search: '' };
+window.activeFilters = { brand: 'all', vram: 'all', era: 'all', use: 'all', sort: 'perf', sortDir: 'desc', search: '' };
+
+// Refleja el estado de activeFilters en los botones (clase, aria-pressed y sentido del orden)
+window.syncFilterButtons = function() {
+  document.querySelectorAll('.filter-btn[data-type]').forEach(btn => {
+    const isActive = String(window.activeFilters[btn.dataset.type]) === btn.dataset.value;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-pressed', isActive);
+    if (btn.dataset.type === 'sort') {
+      if (isActive) btn.dataset.dir = window.activeFilters.sortDir || 'desc';
+      else delete btn.dataset.dir;
+    }
+  });
+};
+
+function resetGridLimits() {
+  for (let k in window.gridLimits) window.gridLimits[k] = 12;
+}
 
 function initFilters() {
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const group = btn.parentElement;
       const type = btn.dataset.type;
       const value = btn.dataset.value;
 
-      group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      // Pulsar de nuevo el orden activo invierte el sentido
+      if (type === 'sort') {
+        const isSame = window.activeFilters.sort === value;
+        window.activeFilters.sortDir = isSame && window.activeFilters.sortDir !== 'asc' ? 'asc' : 'desc';
+      }
 
       window.activeFilters[type] = value;
-      // Reinicia los límites al filtrar
-      for (let k in window.gridLimits) window.gridLimits[k] = 12;
+      window.syncFilterButtons();
+      resetGridLimits();
       window.renderAll();
     });
   });
+  window.syncFilterButtons();
+}
 
-  const searchInput = document.getElementById('gpu-search');
-  if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      window.activeFilters.search = e.target.value.toLowerCase();
-      // Reinicia los límites al buscar
-      for (let k in window.gridLimits) window.gridLimits[k] = 12;
-      window.renderAll();
-    });
-  }
+// Un valor "min-max" filtra por rango (ej. "10-12"); si no, se mantiene la lógica anterior
+function matchesRange(value, filterValue) {
+  const [min, max] = filterValue.split('-').map(Number);
+  return value >= min && value <= max;
 }
 
 function applyGpuFilters(gpus) {
   return gpus.filter(gpu => {
-    // Filtro de búsqueda
+    // Filtro de búsqueda (ignora espacios: "4070ti" encuentra "RTX 4070 Ti")
     if (window.activeFilters.search) {
-      const term = window.activeFilters.search;
-      const searchMatch = gpu.name.toLowerCase().includes(term) || 
-                          (gpu.arch && gpu.arch.toLowerCase().includes(term)) || 
-                          gpu.brand.toLowerCase().includes(term);
+      const term = window.activeFilters.search.toLowerCase().trim();
+      const haystack = `${gpu.name} ${gpu.arch || ''} ${gpu.brand}`.toLowerCase();
+      const searchMatch = haystack.includes(term) ||
+                          haystack.replace(/\s+/g, '').includes(term.replace(/\s+/g, ''));
       if (!searchMatch) return false;
     }
 
@@ -231,19 +296,26 @@ function applyGpuFilters(gpus) {
 
     // Filtro por VRAM
     if (window.activeFilters.vram !== 'all') {
-      const vramNum = parseInt(gpu.vram.split(' ')[0]);
+      const vramNum = window.parseVram(gpu.vram);
       const targetVram = parseInt(window.activeFilters.vram);
-      if (['24', '32', '48', '80', '141', '192'].includes(window.activeFilters.vram)) {
+      if (window.activeFilters.vram.includes('-')) {
+        if (!matchesRange(vramNum, window.activeFilters.vram)) return false;
+      } else if (['24', '32', '48', '80', '141', '192'].includes(window.activeFilters.vram)) {
         if (vramNum < targetVram) return false;
       } else {
         if (vramNum !== targetVram) return false;
       }
     }
 
+    // Filtro por año de lanzamiento
+    if (window.activeFilters.era && window.activeFilters.era !== 'all') {
+      if (!matchesRange(parseInt(gpu.year) || 0, window.activeFilters.era)) return false;
+    }
+
     // Filtro por uso
     if (window.activeFilters.use !== 'all') {
       const use = window.activeFilters.use;
-      const vramNum = parseInt(gpu.vram.split(' ')[0]);
+      const vramNum = window.parseVram(gpu.vram);
       const tflopsNum = parseFloat(gpu.tflops);
 
       if (use === 'rt') {
@@ -274,27 +346,28 @@ function applyGpuFilters(gpus) {
   });
 }
 
-function sortGpus(gpus, sortBy) {
+const SORT_KEYS = {
+  perf: g => parseFloat(g.perf) || 0,
+  price: g => window.priceToUsd(g.price) || 0,
+  vram: g => window.parseVram(g.vram),
+  year: g => parseInt(g.year) || 0,
+  // Rendimiento por dólar: solo tiene sentido si la GPU tiene índice y precio
+  value: g => {
+    const price = window.priceToUsd(g.price);
+    return price > 0 ? (parseFloat(g.perf) || 0) / price : 0;
+  }
+};
+
+function sortGpus(gpus, sortBy, sortDir) {
+  const getKey = SORT_KEYS[sortBy];
+  if (!getKey) return [...gpus];
+  const direction = sortDir === 'asc' ? -1 : 1;
   return [...gpus].sort((a, b) => {
-    if (sortBy === 'perf') {
-      return (parseFloat(b.perf) || 0) - (parseFloat(a.perf) || 0);
-    }
-    if (sortBy === 'price') {
-      const priceA = parseFloat((a.price || "0").replace(/[^0-9.]/g, '')) || 0;
-      const priceB = parseFloat((b.price || "0").replace(/[^0-9.]/g, '')) || 0;
-      return priceB - priceA;
-    }
-    if (sortBy === 'vram') {
-      const vramA = parseInt((a.vram || "0").split(' ')[0]) || 0;
-      const vramB = parseInt((b.vram || "0").split(' ')[0]) || 0;
-      return vramB - vramA;
-    }
-    if (sortBy === 'year') {
-      const yearA = parseInt(a.year) || 0;
-      const yearB = parseInt(b.year) || 0;
-      return yearB - yearA;
-    }
-    return 0;
+    const keyA = getKey(a);
+    const keyB = getKey(b);
+    // Los modelos sin dato (precio "Legacy", sin año...) siempre al final
+    if ((keyA > 0) !== (keyB > 0)) return keyA > 0 ? -1 : 1;
+    return direction * (keyB - keyA);
   });
 }
 
@@ -311,7 +384,14 @@ function renderWithPagination(container, sortedItems, limitKey, buildCardFn) {
   const visibleItems = sortedItems.slice(0, currentLimit);
   
   if (!sortedItems.length) {
-    container.innerHTML = `<div class="no-results-msg" style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);" data-i18n="ui.no_results">No se encontraron resultados</div>`;
+    const canReset = typeof window.resetFilters === 'function';
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon" aria-hidden="true">🔍</div>
+        <p class="empty-state-title">${window.tr('catalog.no_results', window.tr('ui.no_results', 'No se encontraron resultados'))}</p>
+        <p class="empty-state-hint">${window.tr('catalog.no_results_hint', '')}</p>
+        ${canReset ? `<button type="button" class="btn-load-more" onclick="resetFilters()"><span aria-hidden="true">↺</span> ${window.tr('catalog.reset', 'Restablecer')}</button>` : ''}
+      </div>`;
   } else {
     container.innerHTML = visibleItems.map(buildCardFn).join('');
   }
@@ -326,7 +406,8 @@ function renderWithPagination(container, sortedItems, limitKey, buildCardFn) {
   }
   
   if (sortedItems.length > currentLimit) {
-    btnContainer.innerHTML = `<button class="btn-load-more" onclick="loadMore('${limitKey}')">Ver más GPUs <span class="arrow">↓</span></button>`;
+    const remaining = window.tr('catalog.remaining', '{n} restantes', { n: sortedItems.length - currentLimit });
+    btnContainer.innerHTML = `<button type="button" class="btn-load-more" onclick="loadMore('${limitKey}')">${window.tr('catalog.load_more', 'Ver más GPUs')} <small class="load-more-count">${remaining}</small> <span class="arrow" aria-hidden="true">↓</span></button>`;
   } else {
     btnContainer.innerHTML = '';
   }
@@ -346,34 +427,9 @@ window.loadMore = function(limitKey) {
 
 
 window.renderAll = function() {
-  const gg = document.getElementById('gaming-grid');
-  if (gg) {
-    const allGpus = getAllGpus();
-    let dataSource = allGpus.filter(g => {
-      const name = g.name.toLowerCase();
-      const isMobile = name.includes('laptop') || name.includes('mobile');
-      const isWorkstation = typeof WORKSTATION_GPUS !== 'undefined' && WORKSTATION_GPUS.some(w => w.name === g.name);
-      const isServer = typeof SERVER_GPUS !== 'undefined' && SERVER_GPUS.some(s => s.name === g.name);
-      return !isMobile && !isWorkstation && !isServer;
-    });
-    
-    const maxTflops = Math.max(...dataSource.map(g => parseFloat(g.tflops) || 0), 1);
-    
-    const prepared = dataSource.map(g => {
-      const tflops = parseFloat(g.tflops) || 0;
-      const calculatedPerf = Math.round((tflops / maxTflops) * 100);
-      return {
-        ...g,
-        perf: g.perf || calculatedPerf,
-        fillColor: g.fillColor || (g.perf ? 'fill-purple' : (calculatedPerf > 70 ? 'fill-gold' : (calculatedPerf > 40 ? 'fill-purple' : (calculatedPerf > 20 ? 'fill-blue' : 'fill-green'))))
-      };
-    });
-    
-    const filtered = applyGpuFilters(prepared);
-    const sorted = sortGpus(filtered, window.activeFilters.sort);
-    renderWithPagination(gg, sorted, 'gaming', buildGpuCard);
-  }
-  
+  // La página gaming (escritorio + portátiles) se gestiona en js/gaming.js
+  if (typeof window.renderGamingPage === 'function') window.renderGamingPage();
+
   const wg = document.getElementById('workstation-grid');
   if (wg) {
     const maxTflops = Math.max(...WORKSTATION_GPUS.map(g => parseFloat(g.tflops) || 0), 1);
@@ -387,38 +443,14 @@ window.renderAll = function() {
       };
     });
     const filtered = applyGpuFilters(prepared);
-    const sorted = sortGpus(filtered, window.activeFilters.sort);
+    const sorted = sortGpus(filtered, window.activeFilters.sort, window.activeFilters.sortDir);
     renderWithPagination(wg, sorted, 'workstation', buildGpuCard);
   }
-  
-  const mg = document.getElementById('mobile-grid');
-  if (mg) {
-    const allGpus = getAllGpus();
-    let dataSource = allGpus.filter(g => 
-      g.name.toLowerCase().includes('laptop') || 
-      g.name.toLowerCase().includes('mobile') || 
-      (typeof MOBILE_GPUS !== 'undefined' && MOBILE_GPUS.some(m => m.name === g.name))
-    );
-    
-    const maxTflops = Math.max(...dataSource.map(g => parseFloat(g.tflops) || 0), 1);
-    const prepared = dataSource.map(g => {
-      const tflops = parseFloat(g.tflops) || 0;
-      const calculatedPerf = Math.round((tflops / maxTflops) * 100);
-      return {
-        ...g,
-        perf: g.perf || calculatedPerf,
-        fillColor: g.fillColor || 'fill-blue'
-      };
-    });
-    const filtered = applyGpuFilters(prepared);
-    const sorted = sortGpus(filtered, window.activeFilters.sort);
-    renderWithPagination(mg, sorted, 'mobile', buildGpuCard);
-  }
-  
+
   const sg = document.getElementById('server-grid');
   if (sg) {
     const filtered = applyGpuFilters(SERVER_GPUS);
-    const sorted = sortGpus(filtered, window.activeFilters.sort);
+    const sorted = sortGpus(filtered, window.activeFilters.sort, window.activeFilters.sortDir);
     renderWithPagination(sg, sorted, 'server', buildServerCard);
   }
   
@@ -490,9 +522,10 @@ function initComparisonSelectors() {
   setupSelector(inputA, resultsA, badgeA, 'A');
   setupSelector(inputB, resultsB, badgeB, 'B');
 
-  // Establece valores predeterminados
-  window.selectForCompare('RTX 5090', 'A');
-  window.selectForCompare('RX 7900 XTX', 'B');
+  // Valores predeterminados (se pueden fijar desde la URL: compare.html?a=RTX%204090&b=...)
+  const params = new URLSearchParams(window.location.search);
+  window.selectForCompare(params.get('a') || 'RTX 5090', 'A');
+  window.selectForCompare(params.get('b') || 'RX 7900 XTX', 'B');
 }
 
 window.selectForCompare = function(name, side) {
@@ -525,36 +558,58 @@ window.selectForCompare = function(name, side) {
   window.renderChart();
 };
 
+// Ajusta el lienzo al ancho disponible y a la densidad de píxeles de la pantalla
+// (sin esto las gráficas se ven borrosas en móviles y pantallas retina)
+function fitCanvas(canvas, height) {
+  const parent = canvas.parentElement;
+  const cs = getComputedStyle(parent);
+  const width = Math.max(220, parent.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight));
+  const dpr = Math.min(window.devicePixelRatio || 1, 3);
+  canvas.width = Math.round(width * dpr);
+  canvas.height = Math.round(height * dpr);
+  canvas.style.width = width + 'px';
+  canvas.style.height = height + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, width, height };
+}
+
 window.renderCompareTable = function() {
   const table = document.getElementById('compare-table');
   if (!table) return;
-  
+
   const selectedGpus = [];
   if (window.gpuA) selectedGpus.push(window.gpuA);
   if (window.gpuB) selectedGpus.push(window.gpuB);
-  
+
   const displayData = selectedGpus.length > 0 ? selectedGpus : (typeof COMPARE_DATA !== 'undefined' ? COMPARE_DATA.slice(0, 4) : []);
+  // data-label: en móvil la tabla se muestra como tarjetas y cada celda lleva su título
+  const labels = {
+    vram: window.tr('table.vram', 'Memoria'),
+    bw: window.tr('table.bw', 'Ancho Banda'),
+    price: window.tr('table.price', 'Precio Est.')
+  };
 
   table.innerHTML = `
     <thead>
       <tr>
         <th>${typeof t === "function" ? window.t("table.gpu") : "GPU"}</th>
-        <th>${typeof t === "function" ? window.t("table.vram") : "Memoria"}</th>
+        <th>${labels.vram}</th>
         <th>${wrapWithTooltip('TFLOPS', 'tflops')}</th>
-        <th>${typeof t === "function" ? window.t("table.bw") : "Ancho Banda"}</th>
+        <th>${labels.bw}</th>
         <th>${wrapWithTooltip('TDP', 'tdp')}</th>
-        <th>${typeof t === "function" ? window.t("table.price") : "Precio Est."}</th>
+        <th>${labels.price}</th>
       </tr>
     </thead>
     <tbody>
       ${displayData.map(r => `
         <tr class="reveal visible">
           <td><strong>${r.name}</strong><br><small style="opacity:0.6">${r.brand.toUpperCase()} · ${r.arch}</small></td>
-          <td class="mono">${r.vram}</td>
-          <td class="mono highlight-cell">${parseFloat(r.tflops).toLocaleString()}</td>
-          <td class="mono">${r.bandwidth || (r.bw ? r.bw + ' GB/s' : '-')}</td>
-          <td class="mono">${r.tdp || '-'}</td>
-          <td class="mono">${window.formatPrice(r.price)}</td>
+          <td class="mono" data-label="${labels.vram}">${r.vram}</td>
+          <td class="mono highlight-cell" data-label="TFLOPS">${parseFloat(r.tflops).toLocaleString()}</td>
+          <td class="mono" data-label="${labels.bw}">${r.bandwidth || (r.bw ? r.bw + ' GB/s' : '-')}</td>
+          <td class="mono" data-label="TDP">${r.tdp || '-'}</td>
+          <td class="mono" data-label="${labels.price}">${window.formatPrice(r.price)}</td>
         </tr>
       `).join('')}
     </tbody>
@@ -564,37 +619,37 @@ window.renderCompareTable = function() {
 window.renderChart = function() {
   const canvas = document.getElementById('perf-chart');
   if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  
+
   const selectedGpus = [];
   if (window.gpuA) selectedGpus.push(window.gpuA);
   if (window.gpuB) selectedGpus.push(window.gpuB);
-  
+
   const displayData = selectedGpus.length > 0 ? selectedGpus : (typeof COMPARE_DATA !== 'undefined' ? COMPARE_DATA.slice(0, 4) : []);
 
   const labels = displayData.map(g => g.name);
   const tflopsData = displayData.map(g => parseFloat(g.tflops));
   const colors = displayData.map(g => g.brand === 'nvidia' ? 'rgba(118,185,0,0.8)' : (g.brand === 'amd' ? 'rgba(237,28,36,0.8)' : 'rgba(0,212,255,0.8)'));
 
-  const containerW = canvas.parentElement.offsetWidth - 64;
-  canvas.width = containerW;
   // Altura adaptable: más alta cuando hay más barras, pero limitada
   const baseHeight = 300;
   const perBarExtra = Math.max(0, (displayData.length - 2) * 20);
-  canvas.height = Math.min(baseHeight + perBarExtra, 460);
+  const { ctx, width, height } = fitCanvas(canvas, Math.min(baseHeight + perBarExtra, 460));
+  const compact = width < 440;
 
   const maxVal = Math.max(...tflopsData, 10);
-  const padding = { top: 30, right: 40, bottom: 70, left: 90 };
-  const chartW = canvas.width - padding.left - padding.right;
-  const chartH = canvas.height - padding.top - padding.bottom;
+  const padding = compact
+    ? { top: 30, right: 12, bottom: 64, left: 58 }
+    : { top: 30, right: 40, bottom: 70, left: 90 };
+  const chartW = width - padding.left - padding.right;
+  const chartH = height - padding.top - padding.bottom;
 
   // Ancho de barra: límite de 120px y en pantallas grandes con pocas barras no se estira demasiado
   const maxBarW = 120;
-  const minBarW = 30;
+  const minBarW = compact ? 24 : 30;
   const barW = Math.max(minBarW, Math.min(maxBarW, chartW / labels.length * 0.45));
   const gap = chartW / labels.length;
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, width, height);
 
   // Determina el color del texto según el tema
   const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
@@ -609,17 +664,17 @@ window.renderChart = function() {
     ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(padding.left, y); ctx.lineTo(padding.left + chartW, y); ctx.stroke();
     ctx.fillStyle = textColor;
-    ctx.font = '11px JetBrains Mono, monospace';
+    ctx.font = `${compact ? 10 : 11}px 'JetBrains Mono', monospace`;
     ctx.textAlign = 'right';
-    ctx.fillText(val.toLocaleString(), padding.left - 10, y + 4);
+    ctx.fillText(val.toLocaleString(), padding.left - (compact ? 6 : 10), y + 4);
   }
 
   // Etiqueta TFLOPS en el eje Y
   ctx.save();
-  ctx.translate(16, padding.top + chartH / 2);
+  ctx.translate(compact ? 10 : 16, padding.top + chartH / 2);
   ctx.rotate(-Math.PI / 2);
   ctx.fillStyle = textColor;
-  ctx.font = '10px Outfit, sans-serif';
+  ctx.font = "10px 'Outfit', sans-serif";
   ctx.textAlign = 'center';
   ctx.fillText('TFLOPS FP32', 0, 0);
   ctx.restore();
@@ -634,24 +689,23 @@ window.renderChart = function() {
     grad.addColorStop(1, 'rgba(0,0,0,0.2)');
     ctx.fillStyle = grad;
     ctx.beginPath();
-    ctx.roundRect(x, y, barW, barH, [8, 8, 0, 0]);
+    if (ctx.roundRect) ctx.roundRect(x, y, barW, barH, [8, 8, 0, 0]);
+    else ctx.rect(x, y, barW, barH);
     ctx.fill();
 
     // Valor encima de la barra
     ctx.fillStyle = isDark ? '#fff' : '#111';
-    ctx.font = 'bold 12px Outfit';
+    ctx.font = "bold 12px 'Outfit', sans-serif";
     ctx.textAlign = 'center';
     ctx.fillText(val.toLocaleString(), x + barW / 2, y - 8);
 
     // Etiqueta: ajusta nombres largos en 2 líneas
     ctx.fillStyle = isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.7)';
-    ctx.font = '11px Outfit';
-    const maxLabelW = Math.max(gap - 4, barW + 20);
+    ctx.font = `${compact ? 10 : 11}px 'Outfit', sans-serif`;
     const words = labels[i].split(' ');
-    let line1 = '', line2 = '';
-    let midIdx = Math.ceil(words.length / 2);
-    line1 = words.slice(0, midIdx).join(' ');
-    line2 = words.slice(midIdx).join(' ');
+    const midIdx = Math.ceil(words.length / 2);
+    const line1 = words.slice(0, midIdx).join(' ');
+    const line2 = words.slice(midIdx).join(' ');
     const labelY = padding.top + chartH + 22;
     ctx.fillText(line1, x + barW / 2, labelY);
     if (line2) ctx.fillText(line2, x + barW / 2, labelY + 14);
@@ -729,29 +783,34 @@ window.renderValueChart = function() {
   }
 
   gpus = gpus.filter(g => {
-    const price = parseFloat((g.price || "0").replace(/[^0-9.]/g, ''));
+    const price = window.priceToUsd(g.price) || 0;
     const tflops = parseFloat(g.tflops) || 0;
     return price > 0 && tflops > 0 && !g.name.toLowerCase().includes('laptop') && !g.name.toLowerCase().includes('mobile');
   });
 
   const valueData = gpus.map(g => {
-    const price = parseFloat((g.price || "0").replace(/[^0-9.]/g, ''));
+    const price = window.priceToUsd(g.price) || 0;
     const tflops = parseFloat(g.tflops) || 0;
     const value = (tflops / price) * 1000; 
     return { name: g.name, brand: g.brand, value: value, price: price, tflops: tflops };
   }).sort((a, b) => b.value - a.value).slice(0, 10);
 
-  const ctx = canvas.getContext('2d');
-  const containerW = canvas.parentElement.offsetWidth - 40;
-  canvas.width = containerW;
-  canvas.height = Math.min(400, valueData.length * 40 + 100);
+  // En pantallas estrechas el nombre va encima de cada barra en lugar de a la izquierda
+  const compactWidth = canvas.parentElement.clientWidth < 560;
+  const rowH = compactWidth ? 46 : 0;
+  const chartHeight = compactWidth
+    ? valueData.length * rowH + 70
+    : Math.min(400, valueData.length * 40 + 100);
+  const { ctx, width, height } = fitCanvas(canvas, chartHeight);
 
-  const padding = { top: 40, right: 30, bottom: 60, left: 140 };
-  const chartW = canvas.width - padding.left - padding.right;
-  const chartH = canvas.height - padding.top - padding.bottom;
+  const padding = compactWidth
+    ? { top: 16, right: 4, bottom: 54, left: 4 }
+    : { top: 40, right: 30, bottom: 60, left: 140 };
+  const chartW = width - padding.left - padding.right;
+  const chartH = height - padding.top - padding.bottom;
   const maxVal = Math.max(...valueData.map(v => v.value), 1);
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, width, height);
 
   // Colores adaptados al tema
   const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
@@ -765,15 +824,16 @@ window.renderValueChart = function() {
   for (let i = 0; i <= 5; i++) {
     const x = padding.left + (chartW * i / 5);
     ctx.moveTo(x, padding.top);
-    ctx.lineTo(x, canvas.height - padding.bottom);
+    ctx.lineTo(x, height - padding.bottom);
   }
   ctx.stroke();
 
-  const barH = Math.min(24, chartH / Math.max(1, valueData.length) - 10);
+  const barH = compactWidth ? 12 : Math.min(24, chartH / Math.max(1, valueData.length) - 10);
   valueData.forEach((d, i) => {
-    const y = padding.top + (i * (chartH / valueData.length));
-    const barW = (d.value / maxVal) * chartW;
-    
+    const rowY = padding.top + (i * (chartH / valueData.length));
+    const y = compactWidth ? rowY + 22 : rowY;
+    const barW = Math.max(2, (d.value / maxVal) * (compactWidth ? chartW : chartW - 60));
+
     const grad = ctx.createLinearGradient(padding.left, 0, padding.left + barW, 0);
     if (d.brand === 'nvidia') { grad.addColorStop(0, '#76b900'); grad.addColorStop(1, '#adff2f'); }
     else if (d.brand === 'amd') { grad.addColorStop(0, '#ed1c24'); grad.addColorStop(1, '#ff6a00'); }
@@ -783,23 +843,41 @@ window.renderValueChart = function() {
     if (ctx.roundRect) ctx.beginPath(), ctx.roundRect(padding.left, y, barW, barH, 4), ctx.fill();
     else ctx.fillRect(padding.left, y, barW, barH);
 
+    if (compactWidth) {
+      // Nombre a la izquierda y puntuación a la derecha, sobre la barra
+      ctx.fillStyle = labelColor;
+      ctx.font = "700 12px 'Outfit', sans-serif";
+      ctx.textAlign = 'left';
+      ctx.fillText(d.name, padding.left, rowY + 14);
+      ctx.fillStyle = mutedColor;
+      ctx.font = "400 11px 'JetBrains Mono', monospace";
+      ctx.textAlign = 'right';
+      ctx.fillText(`${d.value.toFixed(1)} pts`, width - padding.right, rowY + 14);
+      return;
+    }
+
     // Etiqueta del nombre de la GPU (izquierda)
     ctx.fillStyle = labelColor;
-    ctx.font = '700 11px Outfit';
+    ctx.font = "700 11px 'Outfit', sans-serif";
     ctx.textAlign = 'right';
     ctx.fillText(d.name, padding.left - 15, y + barH/2 + 4);
 
     // Etiqueta de puntuación (derecha de la barra)
     ctx.textAlign = 'left';
-    ctx.font = '400 10px JetBrains Mono';
+    ctx.font = "400 10px 'JetBrains Mono', monospace";
     ctx.fillStyle = mutedColor;
     ctx.fillText(`${d.value.toFixed(1)} pts`, padding.left + barW + 10, y + barH/2 + 4);
   });
 
+  // Leyenda: en pantallas estrechas se parte en dos líneas por el guion largo
   ctx.fillStyle = mutedColor;
   ctx.textAlign = 'center';
-  ctx.font = '400 11px Outfit';
-  ctx.fillText(window.t('value.score_desc'), canvas.width / 2, canvas.height - 20);
+  ctx.font = `400 ${compactWidth ? 10 : 11}px 'Outfit', sans-serif`;
+  const caption = window.t('value.score_desc');
+  const captionParts = compactWidth ? caption.split(' — ') : [caption];
+  captionParts.forEach((part, i) => {
+    ctx.fillText(part, width / 2, height - 20 - (captionParts.length - 1 - i) * 14);
+  });
 
   listContainer.innerHTML = valueData.map((d, i) => `
     <div class="value-item reveal visible">
@@ -854,7 +932,12 @@ const barObs = new IntersectionObserver(entries => {
 }, { threshold: 0.3 });
 
 // ===== SEARCH & MODAL LOGIC =====
+let allGpusCache = null;
+
+// Une todas las listas. Si un modelo aparece en varias (p. ej. "RTX 5090" en
+// ALL_DOMESTIC_GPUS y GAMING_GPUS), se fusionan sus datos en lugar de duplicarlo.
 function getAllGpus() {
+  if (allGpusCache) return allGpusCache;
   const all = [
     ...(typeof ALL_DOMESTIC_GPUS !== 'undefined' ? ALL_DOMESTIC_GPUS : []),
     ...GAMING_GPUS,
@@ -862,63 +945,87 @@ function getAllGpus() {
     ...SERVER_GPUS,
     ...(typeof MOBILE_GPUS !== 'undefined' ? MOBILE_GPUS : [])
   ];
-  return Array.from(new Map(all.map(item => [item.name, item])).values());
+  const keyOf = typeof gpuKey === 'function' ? gpuKey : (name => name);
+  const merged = new Map();
+  all.forEach(item => {
+    const key = keyOf(item.name);
+    merged.set(key, { ...(merged.get(key) || {}), ...item });
+  });
+  allGpusCache = Array.from(merged.values());
+  return allGpusCache;
 }
 
-window.openGpuModal = function(name, event) {
-  const gpus = getAllGpus();
-  const gpu = gpus.find(g => g.name === name);
-  if (!gpu) return;
+function getUpscaler(gpu) {
+  const name = gpu.name.toUpperCase();
+  const arch = (gpu.arch || '').toLowerCase();
+  if (gpu.brand === 'nvidia') return name.includes('RTX') ? 'DLSS 4.5' : 'FSR / XeSS';
+  if (gpu.brand === 'amd') return arch.includes('rdna 4') ? 'FSR 4' : 'FSR 3.1';
+  if (gpu.brand === 'apple') return 'MetalFX';
+  return 'XeSS';
+}
 
-  const brandMap = { nvidia: 'NVIDIA', amd: 'AMD', intel: 'Intel', apple: 'Apple' };
+let modalReturnFocus = null;
+
+// trigger: elemento que abrió el modal, para devolverle el foco al cerrar
+window.openGpuModal = function(name, trigger) {
+  const gpu = getAllGpus().find(g => g.name === name);
   const modalBody = document.getElementById('modal-body');
   const modalOverlay = document.getElementById('gpu-modal');
-  const modalContent = modalOverlay.querySelector('.modal-content');
-  
-  // Position logic
-  if (event && event.currentTarget) {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    const modalHeight = 500; // Estimated height for positioning
-    
-    let topPos = rect.top;
-    
-    // Ensure it doesn't go below screen
-    if (topPos + modalHeight > viewportHeight) {
-      topPos = Math.max(20, viewportHeight - modalHeight - 40);
-    }
-    
-    modalContent.style.marginTop = topPos + 'px';
-  } else {
-    modalContent.style.marginTop = 'auto';
-  }
-  
+  if (!gpu || !modalBody || !modalOverlay) return;
+
+  const esc = window.escapeHtml;
+  const brandMap = { nvidia: 'NVIDIA', amd: 'AMD', intel: 'Intel', apple: 'Apple' };
+  // Contenido adicional que puede aportar cada página (índice, alternativas...)
+  const extras = typeof window.gpuModalExtras === 'function' ? (window.gpuModalExtras(gpu) || {}) : {};
+  const comparePath = window.location.pathname.includes('/pages/') ? 'compare.html' : 'pages/compare.html';
+  const desc = gpu.desc ? (typeof gpu.desc === 'object' ? gpu.desc[window.currentLang || 'es'] : gpu.desc) : '';
+
   modalBody.innerHTML = `
     <div class="modal-header">
-      <div class="modal-title">${gpu.name}</div>
-      <div class="modal-subtitle">${brandMap[gpu.brand]} | ${gpu.arch} ${gpu.year ? '| Año: ' + gpu.year : ''}</div>
+      <div class="modal-badges">
+        <span class="gpu-brand brand-${gpu.brand}">${brandMap[gpu.brand] || esc(gpu.brand)}</span>
+        ${gpu.tier ? `<span class="gpu-tier tier-${gpu.tier}">${window.tr('ui.tier_' + gpu.tier, gpu.tier)}</span>` : ''}
+      </div>
+      <h2 class="modal-title" id="modal-title">${esc(gpu.name)}</h2>
+      <div class="modal-subtitle">${esc(gpu.arch)}${gpu.year ? ` · ${gpu.year}` : ''}</div>
     </div>
+    ${extras.top || ''}
     <div class="modal-grid">
-      <div class="modal-item"><label>${typeof window.t === "function" ? window.t("table.vram") : "Memoria VRAM"}</label><span>${gpu.vram || '-'}</span></div>
-      <div class="modal-item"><label>${wrapWithTooltip('TFLOPS', 'tflops')}</label><span>${gpu.tflops || '-'}</span></div>
-      <div class="modal-item"><label>${typeof window.t === "function" ? window.t("ui.bw") : "Ancho de Banda"}</label><span>${gpu.bandwidth || gpu.bw || "-"}</span></div>
-      <div class="modal-item"><label>${wrapWithTooltip(typeof window.t === "function" ? window.t("ui.tdp") || "TDP / Consumo" : "TDP / Consumo", 'tdp')}</label><span>${gpu.tdp || '-'}</span></div>
-      ${gpu.price ? `<div class="modal-item"><label>${typeof window.t === "function" ? window.t("ui.price") : "Precio Estimado"}</label><span>${window.formatPrice(gpu.price)}</span></div>` : ''}
-      ${gpu.tier ? `<div class="modal-item"><label>${typeof window.t === "function" ? window.t("table.cat") : "Gama"}</label><span style="text-transform: capitalize;">${typeof window.t === "function" ? window.t("ui.tier_" + gpu.tier) : gpu.tier}</span></div>` : ''}
-      <div class="modal-item"><label>${wrapWithTooltip('DLSS / FSR', 'dlss_fsr')}</label><span>${
-        gpu.brand === 'nvidia' 
-          ? (gpu.name.toUpperCase().includes('RTX') ? 'DLSS 4.5' : 'N/A') 
-          : (gpu.brand === 'amd' ? (gpu.arch && gpu.arch.toLowerCase().includes('rdna 4') ? 'FSR 4.0' : 'FSR 3.1') : 'XeSS')
-      }</span></div>
+      <div class="modal-item"><label>${window.tr('table.vram', 'Memoria VRAM')}</label><span>${esc(gpu.vram || '-')}</span></div>
+      <div class="modal-item"><label>${wrapWithTooltip('TFLOPS', 'tflops')}</label><span>${esc(gpu.tflops || '-')}</span></div>
+      <div class="modal-item"><label>${window.tr('ui.bw', 'Ancho de Banda')}</label><span>${esc(gpu.bandwidth || gpu.bw || '-')}</span></div>
+      <div class="modal-item"><label>${wrapWithTooltip(window.tr('ui.tdp', 'TDP / Consumo'), 'tdp')}</label><span>${esc(gpu.tdp || '-')}</span></div>
+      ${gpu.price ? `<div class="modal-item"><label>${window.tr('ui.price', 'Precio Estimado')}</label><span>${window.formatPrice(gpu.price)}</span></div>` : ''}
+      <div class="modal-item"><label>${wrapWithTooltip('DLSS / FSR', 'dlss_fsr')}</label><span>${getUpscaler(gpu)}</span></div>
     </div>
-    ${gpu.desc ? `<div style="margin-top: 1.5rem; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">${typeof gpu.desc === 'object' ? gpu.desc[window.currentLang || 'es'] : gpu.desc}</div>` : ''}
+    ${desc ? `<p class="modal-desc">${desc}</p>` : ''}
+    ${extras.bottom || ''}
+    <div class="modal-actions">
+      <a class="btn-modal-compare" href="${comparePath}?a=${encodeURIComponent(gpu.name)}"><span aria-hidden="true">⚖️</span> ${window.tr('catalog.compare', 'Comparar')}</a>
+    </div>
   `;
-  
+
+  const alreadyOpen = modalOverlay.classList.contains('active');
+  if (!alreadyOpen) {
+    const focusableTrigger = trigger && (trigger.matches('button, a[href]') ? trigger : trigger.querySelector('button, a[href]'));
+    modalReturnFocus = focusableTrigger || document.activeElement;
+  }
   modalOverlay.classList.add('active');
-  const searchResults = document.getElementById('search-results');
-  const searchInput = document.getElementById('gpu-search');
-  if (searchResults) searchResults.classList.remove('active');
-  if (searchInput) searchInput.value = '';
+  modalOverlay.setAttribute('aria-hidden', 'false');
+  modalOverlay.scrollTop = 0;
+  document.body.classList.add('modal-open');
+  const closeBtn = document.getElementById('modal-close');
+  if (closeBtn) closeBtn.focus({ preventScroll: true });
+};
+
+window.closeGpuModal = function() {
+  const modalOverlay = document.getElementById('gpu-modal');
+  if (!modalOverlay || !modalOverlay.classList.contains('active')) return;
+  modalOverlay.classList.remove('active');
+  modalOverlay.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
+  if (modalReturnFocus && document.contains(modalReturnFocus)) modalReturnFocus.focus({ preventScroll: true });
+  modalReturnFocus = null;
 };
 
 // ===== INITIALIZATION =====
@@ -929,14 +1036,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const navLinks = document.querySelector('.nav-links');
   
   const closeMenu = () => {
-    if (mobileBtn) mobileBtn.classList.remove('active');
+    if (mobileBtn) {
+      mobileBtn.classList.remove('active');
+      mobileBtn.setAttribute('aria-expanded', 'false');
+    }
     if (navLinks) navLinks.classList.remove('active');
     document.body.classList.remove('menu-open');
   };
 
   if (mobileBtn && navLinks) {
+    mobileBtn.setAttribute('aria-expanded', 'false');
     mobileBtn.addEventListener('click', () => {
-      mobileBtn.classList.toggle('active');
+      const isOpen = mobileBtn.classList.toggle('active');
+      mobileBtn.setAttribute('aria-expanded', String(isOpen));
       navLinks.classList.toggle('active');
       document.body.classList.toggle('menu-open');
     });
@@ -964,9 +1076,11 @@ document.addEventListener('DOMContentLoaded', () => {
       clearTimeout(searchTimeout);
       searchTimeout = setTimeout(() => {
         const term = e.target.value.toLowerCase().trim();
+        if (term === window.activeFilters.search) return;
         
         // Update grid dynamically
         window.activeFilters.search = term;
+        resetGridLimits();
         if (typeof window.renderAll === 'function') window.renderAll();
       }, 200);
     });
@@ -975,9 +1089,32 @@ document.addEventListener('DOMContentLoaded', () => {
   // Modal
   const modalClose = document.getElementById('modal-close');
   const modalOverlay = document.getElementById('gpu-modal');
-  if (modalClose) modalClose.addEventListener('click', () => modalOverlay.classList.remove('active'));
-  if (modalOverlay) modalOverlay.addEventListener('click', (e) => {
-    if (e.target === modalOverlay) modalOverlay.classList.remove('active');
+  if (modalClose) modalClose.addEventListener('click', window.closeGpuModal);
+  if (modalOverlay) {
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) window.closeGpuModal();
+    });
+    // Esc cierra y Tab no sale del modal mientras está abierto
+    document.addEventListener('keydown', (e) => {
+      if (!modalOverlay.classList.contains('active')) return;
+      if (e.key === 'Escape') {
+        window.closeGpuModal();
+      } else if (e.key === 'Tab') {
+        const focusables = modalOverlay.querySelectorAll('button, a[href], input, [tabindex]:not([tabindex="-1"])');
+        if (!focusables.length) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+  }
+
+  // Cualquier elemento con data-open-gpu (tarjetas, alternativas del modal) abre el detalle
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('[data-open-gpu]');
+    if (!trigger || e.target.closest('.has-tooltip')) return;
+    if (document.getElementById('gpu-modal')) window.openGpuModal(trigger.dataset.openGpu, trigger);
   });
 
   // Counters
@@ -1037,105 +1174,167 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Chart resize: redraw on window resize with debounce
   let chartResizeTimer;
+  let lastResizeWidth = window.innerWidth;
   window.addEventListener('resize', () => {
+    // En móvil, mostrar/ocultar la barra del navegador cambia solo la altura: no hace falta redibujar
+    if (window.innerWidth === lastResizeWidth) return;
+    lastResizeWidth = window.innerWidth;
     clearTimeout(chartResizeTimer);
     chartResizeTimer = setTimeout(() => {
       if (document.getElementById('perf-chart')) window.renderChart();
+      if (document.getElementById('value-chart')) window.renderValueChart();
     }, 150);
   });
 });
 
+// ===== NOTICIAS =====
+// Feeds comprobados con rss2json (VideoCardz, Guru3D y AnandTech ya no responden)
+const NEWS_FEEDS = [
+  'https://www.techpowerup.com/rss/news',
+  'https://www.tomshardware.com/feeds/tag/gpus',
+  'https://wccftech.com/category/hardware/feed/',
+  'https://www.pcgamer.com/rss/'
+];
+const NEWS_SOURCES = { techpowerup: 'TechPowerUp', tomshardware: "Tom's Hardware", wccftech: 'Wccftech', pcgamer: 'PC Gamer' };
+const GPU_NEWS_PATTERN = /\b(gpus?|graphics|geforce|radeon|rtx|gtx|arc|nvidia|amd|intel|vram|gddr\d?|dlss|fsr|xess|blackwell|rdna|battlemage|ray tracing)\b/i;
+const NEWS_CACHE_KEY = 'gpu-universe-news';
+const NEWS_CACHE_MS = 30 * 60 * 1000;
+const NEWS_COUNT = 6;
+
+// rss2json devuelve fechas "YYYY-MM-DD HH:MM:SS" en UTC, que Safari no sabe interpretar
+function parseNewsDate(dateStr) {
+  const date = new Date(String(dateStr || '').replace(' ', 'T') + 'Z');
+  return isNaN(date) ? new Date(dateStr) : date;
+}
+
+function formatNewsDate(date) {
+  if (isNaN(date)) return '';
+  const lang = window.currentLang || 'es';
+  const hours = (Date.now() - date.getTime()) / 3600000;
+  if (hours >= 0 && hours < 48 && typeof Intl.RelativeTimeFormat === 'function') {
+    const rtf = new Intl.RelativeTimeFormat(lang, { numeric: 'auto' });
+    return hours < 1 ? rtf.format(-Math.max(1, Math.round(hours * 60)), 'minute') : rtf.format(-Math.round(hours), 'hour');
+  }
+  return date.toLocaleDateString(lang, { day: 'numeric', month: 'long' });
+}
+
+function htmlToText(html) {
+  return (new DOMParser().parseFromString(String(html || ''), 'text/html').body.textContent || '').replace(/\s+/g, ' ').trim();
+}
+
+function safeUrl(url) {
+  return /^https?:\/\//i.test(String(url || '')) ? url : '';
+}
+
+async function fetchFeed(url) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  try {
+    const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`, { signal: controller.signal });
+    const data = await res.json();
+    return data.status === 'ok' ? data.items : [];
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function loadNewsItems() {
+  try {
+    const cached = JSON.parse(sessionStorage.getItem(NEWS_CACHE_KEY) || 'null');
+    if (cached && Date.now() - cached.time < NEWS_CACHE_MS && cached.items.length) return cached.items;
+  } catch (e) { /* sessionStorage no disponible */ }
+
+  // allSettled: si un feed falla, se muestran los demás
+  const results = await Promise.allSettled(NEWS_FEEDS.map(fetchFeed));
+  const seenTitles = new Set();
+  const items = results
+    .flatMap(r => (r.status === 'fulfilled' ? r.value : []))
+    .filter(item => item && item.title && safeUrl(item.link))
+    .filter(item => {
+      const key = item.title.toLowerCase();
+      if (seenTitles.has(key)) return false;
+      seenTitles.add(key);
+      return true;
+    })
+    .sort((a, b) => parseNewsDate(b.pubDate) - parseNewsDate(a.pubDate));
+
+  // Primero las noticias de GPUs; si no hay suficientes, se completa con el resto
+  const gpuNews = items.filter(item => GPU_NEWS_PATTERN.test(`${item.title} ${(item.categories || []).join(' ')}`));
+  const picked = [...gpuNews, ...items.filter(item => !gpuNews.includes(item))].slice(0, NEWS_COUNT).map(item => {
+    let image = item.thumbnail || (item.enclosure && item.enclosure.link) || '';
+    if (!image && item.description) {
+      const imgMatch = item.description.match(/<img[^>]+src="([^">]+)"/);
+      if (imgMatch) image = imgMatch[1];
+    }
+    const hostname = new URL(item.link).hostname;
+    const sourceKey = Object.keys(NEWS_SOURCES).find(k => hostname.includes(k));
+    return {
+      title: htmlToText(item.title),
+      link: item.link,
+      image: safeUrl(image),
+      date: item.pubDate,
+      source: sourceKey ? NEWS_SOURCES[sourceKey] : hostname.replace(/^www\./, ''),
+      summary: htmlToText(item.description).slice(0, 160)
+    };
+  });
+
+  if (picked.length) {
+    try { sessionStorage.setItem(NEWS_CACHE_KEY, JSON.stringify({ time: Date.now(), items: picked })); } catch (e) { /* sin caché */ }
+  }
+  return picked;
+}
+
 async function initNews() {
   const container = document.getElementById('news-container');
   if (!container) return;
-
-  const FEEDS = [
-    'https://videocardz.com/feed',
-    'https://www.techpowerup.com/rss/news',
-    'https://www.anandtech.com/rss/',
-    'https://www.tomshardware.com/feeds/all',
-    'https://www.pcgamer.com/rss/',
-    'https://www.guru3d.com/index.php?ct=news&action=rss',
-    'https://wccftech.com/category/hardware/feed/'
-  ];
+  const esc = window.escapeHtml;
 
   try {
-    const fetchPromises = FEEDS.map(url => 
-      fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`).then(r => r.json())
-    );
+    const items = await loadNewsItems();
+    if (!items.length) throw new Error('No news items found');
 
-    const results = await Promise.all(fetchPromises);
-    let allItems = [];
-    
-    results.forEach(data => {
-      if (data.status === 'ok') {
-        allItems = [...allItems, ...data.items];
-      }
-    });
-
-    allItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-
-    if (allItems.length > 0) {
-      const seenTitles = new Set();
-      const uniqueItems = [];
-      for (const item of allItems) {
-        if (!seenTitles.has(item.title.toLowerCase())) {
-          seenTitles.add(item.title.toLowerCase());
-          uniqueItems.push(item);
-        }
-        if (uniqueItems.length >= 8) break;
-      }
-
-      container.innerHTML = uniqueItems.map(item => {
-        let imageUrl = item.thumbnail || (item.enclosure && item.enclosure.link);
-        
-        if (!imageUrl && item.description) {
-          const imgMatch = item.description.match(/<img[^>]+src="([^">]+)"/);
-          if (imgMatch) imageUrl = imgMatch[1];
-        }
-
-        if (!imageUrl) {
-          imageUrl = 'https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&q=80&w=400';
-        }
-
-        const cleanDesc = (item.description || "").replace(/<[^>]*>?/gm, '').substring(0, 120);
-        const pubDate = new Date(item.pubDate).toLocaleDateString(undefined, { day: 'numeric', month: 'long' });
-        
-        // Detect source from link
-        let source = 'Hardware News';
-        const link = item.link.toLowerCase();
-        if (link.includes('videocardz')) source = 'VideoCardz';
-        else if (link.includes('techpowerup')) source = 'TechPowerUp';
-        else if (link.includes('anandtech')) source = 'AnandTech';
-        else if (link.includes('tomshardware')) source = "Tom's Hardware";
-        else if (link.includes('pcgamer')) source = 'PC Gamer';
-        else if (link.includes('guru3d')) source = 'Guru3D';
-        else if (link.includes('wccftech')) source = 'Wccftech';
-        
-        return `
-          <div class="news-card">
-            <img src="${imageUrl}" class="news-img" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&q=80&w=400'">
-            <div class="news-content">
-              <div class="news-date">
-                <span>📅</span> ${pubDate} · <strong>${source}</strong>
-              </div>
-              <h3>${item.title}</h3>
-              <p>${cleanDesc}...</p>
-              <a href="${item.link}" target="_blank" class="news-link">Leer más <span>→</span></a>
+    container.innerHTML = items.map(item => {
+      const date = parseNewsDate(item.date);
+      const summary = item.summary.length >= 160 ? item.summary.replace(/\s+\S*$/, '') + '…' : item.summary;
+      const image = item.image
+        ? `<img src="${esc(item.image)}" class="news-img" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`
+        : `<div class="news-img news-img-fallback" aria-hidden="true">📰</div>`;
+      return `
+        <article class="news-card">
+          ${image}
+          <div class="news-content">
+            <div class="news-date">
+              <time datetime="${isNaN(date) ? '' : date.toISOString()}">${esc(formatNewsDate(date))}</time> · <strong>${esc(item.source)}</strong>
             </div>
+            <h3><a href="${esc(item.link)}" target="_blank" rel="noopener noreferrer">${esc(item.title)}</a></h3>
+            <p>${esc(summary)}</p>
+            <a href="${esc(item.link)}" target="_blank" rel="noopener noreferrer" class="news-link" tabindex="-1" aria-hidden="true">${window.tr('catalog.news_read_more', 'Leer más')} <span>→</span></a>
           </div>
-        `;
-      }).join('');
-    } else {
-      throw new Error('No news items found');
-    }
+        </article>
+      `;
+    }).join('');
+
+    // Si una imagen falla, se sustituye por el marcador genérico
+    container.querySelectorAll('img.news-img').forEach(img => {
+      img.addEventListener('error', () => {
+        const fallback = document.createElement('div');
+        fallback.className = 'news-img news-img-fallback';
+        fallback.setAttribute('aria-hidden', 'true');
+        fallback.textContent = '📰';
+        img.replaceWith(fallback);
+      }, { once: true });
+    });
   } catch (error) {
-    console.error('Error loading news:', error);
+    console.warn('Error loading news:', error);
     container.innerHTML = `
-      <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">
-        <p>No se pudieron cargar las noticias reales en este momento.</p>
-        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Conectando con VideoCardz y TechPowerUp...</p>
+      <div class="news-empty">
+        <p>${window.tr('catalog.news_error', 'No se pudieron cargar las noticias en este momento.')}</p>
+        <button type="button" class="btn-load-more" id="news-retry"><span aria-hidden="true">↻</span> ${window.tr('catalog.news_retry', 'Reintentar')}</button>
       </div>
     `;
+    document.getElementById('news-retry')?.addEventListener('click', () => {
+      container.innerHTML = '<div class="loading-news"><div class="spinner"></div></div>';
+      initNews();
+    });
   }
 }
