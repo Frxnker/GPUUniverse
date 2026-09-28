@@ -7,7 +7,7 @@ const translations = {
       compare: "Comparar",
       history: "Historia",
       learn: "Aprender",
-      search_placeholder: "Buscar GPU (ej. 1080)...",
+      search_placeholder: "Buscar GPU",
       explore: "Explorar"
     },
     filters: {
@@ -216,7 +216,7 @@ const translations = {
       compare: "Compare",
       history: "History",
       learn: "Learn",
-      search_placeholder: "Search GPU (e.g., 1080)...",
+      search_placeholder: "Search GPU...",
       explore: "Explore"
     },
     filters: {
@@ -425,7 +425,7 @@ const translations = {
       compare: "Comparer",
       history: "Histoire",
       learn: "Apprendre",
-      search_placeholder: "Rechercher GPU (ex. 1080)...",
+      search_placeholder: "Rechercher GPU",
       explore: "Explorer"
     },
     filters: {
@@ -634,7 +634,7 @@ const translations = {
       compare: "Vergleichen",
       history: "Geschichte",
       learn: "Lernen",
-      search_placeholder: "GPU suchen (z.B. 1080)...",
+      search_placeholder: "GPU suchen",
       explore: "Entdecken"
     },
     filters: {
@@ -843,7 +843,7 @@ const translations = {
       compare: "Confronta",
       history: "Storia",
       learn: "Impara",
-      search_placeholder: "Cerca GPU (es. 1080)...",
+      search_placeholder: "Cerca GPU",
       explore: "Esplora"
     },
     filters: {
@@ -1052,7 +1052,7 @@ const translations = {
       compare: "Сравнение",
       history: "История",
       learn: "Обучение",
-      search_placeholder: "Поиск GPU (напр. 1080)...",
+      search_placeholder: "Поиск GPU",
       explore: "Обзор"
     },
     filters: {
