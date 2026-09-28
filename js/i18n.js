@@ -1051,6 +1051,7 @@ const translations = {
       server: "Серверы",
       compare: "Сравнение",
       history: "История",
+      learn: "Обучение",
       search_placeholder: "Поиск GPU (напр. 1080)...",
       explore: "Обзор"
     },
