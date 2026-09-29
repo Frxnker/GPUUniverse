@@ -37,27 +37,34 @@ function renderQuizResults() {
     const container = document.getElementById('quiz-recommendations');
     const results = calculateRecommendations();
     
-    container.innerHTML = results.map(gpu => `
-        <div class="rec-card">
+    const esc = window.escapeHtml;
+    if (!results.length) {
+        container.innerHTML = `<p class="quiz-empty">${esc(window.tr('quiz.no_results'))}</p>`;
+    } else {
+        container.innerHTML = results.map(gpu => {
+            const price = window.priceInfo(gpu);
+            return `
+        <button type="button" class="rec-card" data-open-gpu="${esc(gpu.name)}">
             <span class="rec-tag">${gpu.brand.toUpperCase()}</span>
-            <div class="rec-name">${gpu.name}</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">${gpu.arch}</div>
-            <div class="rec-price">${window.formatPrice(gpu.price)}</div>
-        </div>
-    `).join('');
+            <span class="rec-name">${esc(gpu.name)}</span>
+            <span class="rec-arch">${esc(gpu.arch)}</span>
+            <span class="rec-price${price.missing ? ' is-missing' : ''}">${esc(price.value)}</span>
+        </button>`;
+        }).join('');
+    }
+    if (window.GPUProgress) window.GPUProgress.track('quiz');
 }
 
 function calculateRecommendations() {
     let pool = [];
-    
+
     // 1. Filtrar por uso
-    if (quizAnswers.use === 'gaming') pool = GAMING_GPUS;
-    else if (quizAnswers.use === 'work') pool = [...WORKSTATION_GPUS, ...SERVER_GPUS];
-    else if (quizAnswers.use === 'mobile') pool = MOBILE_GPUS;
-    
-    // 2. Puntuación por presupuesto (convierte el texto del precio a número)
-    const getPrice = (p) => window.priceToUsd(p) || 0;
-    
+    if (quizAnswers.use === 'gaming') pool = DESKTOP_GPUS.filter(g => g.year >= 2022);
+    else if (quizAnswers.use === 'work') pool = WORKSTATION_GPUS;
+    else if (quizAnswers.use === 'mobile') pool = MOBILE_GPUS.filter(g => g.year >= 2023);
+
+    // 2. Presupuesto: precio de lanzamiento en dólares. Las GPUs de portátil no se venden por
+    // separado, así que para ellas el presupuesto se traduce en gamas.
     const budgetLimits = {
         low: 400,
         mid: 900,
@@ -65,9 +72,11 @@ function calculateRecommendations() {
     };
     const maxBudget = budgetLimits[quizAnswers.budget];
     const minBudget = quizAnswers.budget === 'mid' ? 400 : (quizAnswers.budget === 'high' ? 900 : 0);
-    
+    const laptopTiers = { low: ['entry', 'mid'], mid: ['mid', 'high'], high: ['high', 'ultra'] }[quizAnswers.budget];
+
     let filtered = pool.filter(g => {
-        const p = getPrice(g.price);
+        if (quizAnswers.use === 'mobile') return laptopTiers.includes(g.tier);
+        const p = window.gpuPrice(g);
         return p >= minBudget && p <= maxBudget;
     });
 

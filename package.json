@@ -1,5 +1,13 @@
 {
-  "dependencies": {
+  "name": "gpu-universe",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Portal estático de GPUs (HTML + CSS + JS sin compilación) desplegado en GitHub Pages",
+  "scripts": {
+    "start": "node scripts/serve.js",
+    "test": "node --test --test-reporter=spec \"tests/**/*.test.js\""
+  },
+  "devDependencies": {
     "jsdom": "^29.1.1"
   }
 }

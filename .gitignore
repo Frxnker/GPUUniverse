@@ -1,0 +1,17 @@
+# Dependencias (se instalan con `npm install`)
+node_modules/
+
+# Informes y capturas generados al revisar la web
+.lighthouseci/
+lighthouse-*.html
+lighthouse-*.json
+screenshots/
+
+# Configuración local de herramientas
+.claude/settings.local.json
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log

@@ -9,13 +9,12 @@
   const MY_GPU_KEY = 'gpu-universe-mygpu';
   const lang = () => window.currentLang || 'es';
   const fmt = (v, digits = 0) => Number(v).toLocaleString(lang(), { maximumFractionDigits: digits, minimumFractionDigits: digits });
-  const priceUsd = g => window.priceToUsd(g.price) || 0;
-  const priceText = usd => window.formatPrice('$' + Math.round(usd));
+  const priceUsd = g => window.gpuPrice(g);
+  const priceText = usd => window.formatPrice(usd);
 
   const pools = () => window.getGpuPools();
-  // GPUs de escritorio a la venta hoy: las del catálogo actual o lanzadas desde 2022
-  const currentNames = new Set(GAMING_GPUS.map(g => window.findGpu(g.name) ? window.findGpu(g.name).name : g.name));
-  const buyable = () => pools().desktop.filter(g => g.perf > 0 && priceUsd(g) > 0 && ((parseInt(g.year) || 0) >= 2022 || currentNames.has(g.name)));
+  // GPUs de escritorio recientes (lanzadas desde 2022) con índice gaming y precio de lanzamiento
+  const buyable = () => pools().desktop.filter(g => g.perf > 0 && priceUsd(g) > 0 && (parseInt(g.year) || 0) >= 2022);
 
   function rememberGpu(name) {
     try { localStorage.setItem(MY_GPU_KEY, name); } catch (e) { /* nada */ }
@@ -162,7 +161,7 @@
               </div>
             </div>
             <div class="tool-item-side">
-              <span class="tool-price">${window.formatPrice(o.g.price)}</span>
+              <span class="tool-price">${priceText(priceUsd(o.g))}</span>
               <button type="button" class="btn-text" data-compare-pair="${esc(gpu.name)}|${esc(o.g.name)}">${ICONS.compare}<span>${esc(T('tools.compare_both'))}</span></button>
             </div>
           </li>`).join('')}
@@ -340,7 +339,7 @@
               ${window.brandBadge(g)}
               <button type="button" class="tool-item-name" data-open-gpu="${esc(g.name)}">${esc(g.name)}</button>
               <span class="tool-item-vram">${esc(g.vram)}</span>
-              <span class="tool-price">${window.formatPrice(g.price)}</span>
+              <span class="tool-price">${priceText(priceUsd(g))}</span>
             </li>`).join('')}
         </ul>` : emptyState(ICONS.chip, T('tools.vram_none'))}
       ${mode === 'ai' ? `<p class="tool-note">${esc(T('tools.vram_ai_note'))}</p>` : ''}`;

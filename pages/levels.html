@@ -3,23 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GPU Universe — De Gaming a Servidor</title>
-  <meta name="description" content="Explora el universo completo de las GPUs: desde tarjetas gráficas domésticas hasta aceleradores de servidor de última generación." />
+  <title>Niveles, logros y retos — GPU Universe</title>
+  <meta name="description" content="Tu progreso en GPU Universe: nivel, experiencia, retos diarios sobre GPUs, logros y colores desbloqueables." />
+  <meta name="theme-color" content="#050807" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23050807'/%3E%3Crect x='9' y='9' width='14' height='14' rx='2' fill='none' stroke='%2319e6b4' stroke-width='2'/%3E%3Crect x='13' y='13' width='6' height='6' fill='%2319e6b4'/%3E%3Cpath d='M12 5v4M16 5v4M20 5v4M12 23v4M16 23v4M20 23v4M5 12h4M5 16h4M5 20h4M23 12h4M23 16h4M23 20h4' stroke='%2319e6b4' stroke-width='1.6'/%3E%3C/svg%3E" />
-  <meta name="theme-color" content="#050807" />
   <!-- Tema, color de acento e idioma antes de pintar (evita destellos) -->
   <script>(function(d){try{var s=localStorage;d.setAttribute('data-theme',s.getItem('gpu-universe-theme')||'dark');var a=s.getItem('gpu-universe-accent');if(a)d.setAttribute('data-accent',a);var l=s.getItem('gpu_lang');if(l)d.lang=l;}catch(e){d.setAttribute('data-theme','dark');}})(document.documentElement);</script>
 </head>
-<body>
+<body class="page-levels">
 
-  <!-- PARTÍCULAS DEL CANVAS -->
-  <canvas id="particles-canvas"></canvas>
+  <canvas id="particles-canvas" aria-hidden="true"></canvas>
 
-  <!-- NAVEGACIÓN -->
   <nav id="navbar">
     <div class="nav-inner">
       <a href="../index.html" class="nav-logo">
@@ -56,13 +54,13 @@
             </div>
           </li>
           <li><a href="gaming.html" data-i18n="nav.gaming">Gaming</a></li>
-          <li><a href="workstation.html" class="active" aria-current="page" data-i18n="nav.workstation">Workstation</a></li>
+          <li><a href="workstation.html" data-i18n="nav.workstation">Workstation</a></li>
           <li><a href="server.html" data-i18n="nav.server">Servidor</a></li>
           <li><a href="compare.html" data-i18n="nav.compare">Comparar</a></li>
           <li><a href="history.html" data-i18n="nav.history">Historia</a></li>
           <li><a href="learn.html" data-i18n="nav.learn">Aprender</a></li>
           <li><a href="tools.html" data-i18n="nav.tools">Herramientas</a></li>
-          <li><a href="levels.html" data-i18n="nav.levels">Niveles</a></li>
+          <li><a href="levels.html" class="active" aria-current="page" data-i18n="nav.levels">Niveles</a></li>
         </ul>
       </div>
 
@@ -107,84 +105,74 @@
     </div>
   </nav>
 
-
-  <div style="height: 100px;"></div>
-
-  <!-- WORKSTATION SECTION -->
-  <section id="workstation">
-    <div class="section-bg-accent accent-blue"></div>
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label" data-i18n="sections.work_label">Profesional</span>
-        <h2><span data-i18n="sections.work_title">GPUs</span> <span class="gradient-text-blue" data-i18n="sections.work_title_hl">Workstation</span></h2>
-        <p data-i18n="sections.work_p">Potencia y precisión para profesionales del 3D, diseño, CAD e IA en escritorio</p>
+  <main id="main">
+    <!-- CABECERA -->
+    <header class="page-hero page-hero-compact">
+      <div class="section-bg-accent accent-green"></div>
+      <div class="container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html" data-i18n="gaming_page.home">Inicio</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page" data-i18n="nav.levels">Niveles</span>
+        </nav>
+        <span class="section-label" data-i18n="levels.label">Tu progreso</span>
+        <h1><span data-i18n="levels.title">Niveles y</span> <span class="gradient-text" data-i18n="levels.title_hl">logros</span></h1>
+        <p class="page-hero-lead" data-i18n="levels.lead">Gana experiencia explorando GPUs, comparando y superando los retos. Tu progreso se guarda solo en este navegador.</p>
       </div>
-      <div class="filter-bar">
-        <div class="filter-group">
-          <label for="gpu-search" data-i18n="catalog.search_label">Buscar</label>
-          <div class="search-container">
-            <input type="text" id="gpu-search" placeholder="Buscar GPU (ej. 1080)..." autocomplete="off" data-i18n="nav.search_placeholder">
-          </div>
-        </div>
-        <div class="filter-group">
-          <label data-i18n="filters.brand">Fabricante</label>
-          <div class="filter-options" id="filter-brand">
-            <button class="filter-btn active" data-type="brand" data-value="all" data-i18n="filters.all">Todos</button>
-            <button class="filter-btn" data-type="brand" data-value="nvidia">NVIDIA</button>
-            <button class="filter-btn" data-type="brand" data-value="amd">AMD</button>
-            <button class="filter-btn" data-type="brand" data-value="apple">Apple</button>
-          </div>
-        </div>
-        <div class="filter-group">
-          <label data-i18n="filters.vram">VRAM</label>
-          <div class="filter-options" id="filter-vram">
-            <button class="filter-btn active" data-type="vram" data-value="all" data-i18n="filters.all">Todos</button>
-            <button class="filter-btn" data-type="vram" data-value="16">16GB</button>
-            <button class="filter-btn" data-type="vram" data-value="24">24GB</button>
-            <button class="filter-btn" data-type="vram" data-value="32">32GB</button>
-            <button class="filter-btn" data-type="vram" data-value="48">+48GB</button>
-          </div>
-        </div>
-        <div class="filter-group">
-          <label data-i18n="filters.usage">Uso</label>
-          <div class="filter-options" id="filter-usage">
-            <button class="filter-btn active" data-type="use" data-value="all" data-i18n="filters.all">Todos</button>
-            <button class="filter-btn" data-type="use" data-value="video" data-i18n="filters.video">Vídeo / 3D</button>
-            <button class="filter-btn" data-type="use" data-value="ia" data-i18n="filters.ia">IA / Deep Learning</button>
-          </div>
-        </div>
-        <div class="filter-group">
-          <label data-i18n="filters.sort">Ordenar por</label>
-          <div class="filter-options" id="filter-sort">
-            <button class="filter-btn active" data-type="sort" data-value="perf" data-i18n="filters.sort_perf">Rendimiento</button>
-            <button class="filter-btn" data-type="sort" data-value="price" data-i18n="filters.sort_price">Precio</button>
-            <button class="filter-btn" data-type="sort" data-value="vram" data-i18n="filters.sort_vram">VRAM</button>
-            <button class="filter-btn" data-type="sort" data-value="year" data-i18n="filters.sort_year">Año</button>
-          </div>
-        </div>
-      </div>
+    </header>
 
-      <p class="data-note" data-data-note></p>
-      <div class="gpu-grid" id="workstation-grid"></div>
-    </div>
-  </section>
+    <section id="levels-page" class="levels-page">
+      <div class="container">
+        <div class="levels-top">
+          <article class="profile-card" id="profile-card" aria-live="polite"></article>
+          <aside class="howto-card" aria-labelledby="howto-title">
+            <h2 class="levels-h" id="howto-title" data-i18n="levels.howto_title">Cómo ganar XP</h2>
+            <ul class="howto-list" id="howto-list"></ul>
+          </aside>
+        </div>
 
-  <!-- NEWS FEED SECTION -->
-  <section id="news-feed" class="reveal">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label" data-i18n="news.label">Actualidad</span>
-        <h2 data-i18n="news.title">Últimas Noticias de Hardware</h2>
-        <p data-i18n="news.subtitle">Sigue al día con los últimos lanzamientos y filtraciones del mundo de las GPUs.</p>
-      </div>
-      <div class="news-grid" id="news-container">
-        <div class="loading-news">
-          <div class="spinner"></div>
-          <p data-i18n="news.loading">Cargando últimas novedades…</p>
+        <div class="levels-section" id="games">
+          <div class="levels-section-head">
+            <h2 class="levels-h" data-i18n="levels.games_title">Retos</h2>
+            <p data-i18n="levels.games_desc">Pon a prueba lo que sabes de GPUs. Cada acierto suma XP y los retos nuevos se desbloquean al subir de nivel.</p>
+          </div>
+          <div class="games-grid" id="games-grid"></div>
+          <div class="game-stage" id="game-stage" hidden></div>
+        </div>
+
+        <div class="levels-section">
+          <div class="levels-section-head">
+            <h2 class="levels-h" data-i18n="levels.path_title">Camino de niveles</h2>
+          </div>
+          <ol class="level-path" id="level-path"></ol>
+        </div>
+
+        <div class="levels-section">
+          <div class="levels-section-head">
+            <h2 class="levels-h" data-i18n="levels.ach_title">Logros</h2>
+            <span class="tab-count" id="ach-progress"></span>
+          </div>
+          <ul class="ach-grid" id="ach-grid"></ul>
+        </div>
+
+        <div class="levels-section">
+          <div class="levels-section-head">
+            <h2 class="levels-h" id="colors-title" data-i18n="levels.colors_title">Color de los LED</h2>
+            <p data-i18n="levels.colors_desc">Cambia el color de acento de toda la web. Cada color se desbloquea al llegar a su nivel.</p>
+          </div>
+          <div class="color-grid" id="color-grid" role="group" aria-labelledby="colors-title"></div>
+        </div>
+
+        <div class="levels-section reset-section">
+          <div class="levels-section-head">
+            <h2 class="levels-h" data-i18n="levels.reset_title">Empezar de cero</h2>
+            <p data-i18n="levels.reset_desc">Borra tu nivel, XP, logros y récords de este navegador. Tus favoritos y comparaciones no se tocan.</p>
+          </div>
+          <div class="reset-zone" id="reset-zone"></div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
   <footer id="footer">
     <div class="footer-glow"></div>
@@ -224,7 +212,6 @@
   </footer>
 
   <!-- DETALLE DE GPU -->
-  <!-- DETALLE DE GPU -->
   <div id="gpu-modal" class="modal-overlay" aria-hidden="true">
     <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <button type="button" id="modal-close" class="modal-close" aria-label="Cerrar">&times;</button>
@@ -237,5 +224,6 @@
   <script src="../js/app.js"></script>
   <script src="../js/progress.js"></script>
   <script src="../js/features.js"></script>
+  <script src="../js/levels.js"></script>
 </body>
 </html>

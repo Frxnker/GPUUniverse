@@ -54,7 +54,8 @@
     { id: 'vram', key: 'compare2.m_vram', value: g => num(window.parseVram(g.vram)), fmt: v => fmtNum(v, 0), unit: 'GB', higher: true },
     { id: 'bw', key: 'compare2.m_bw', value: g => num(parseFloat(g.bandwidth || g.bw)), fmt: v => fmtNum(v, 0), unit: 'GB/s', higher: true },
     { id: 'tdp', key: 'compare2.m_tdp', value: g => num(window.parseTdp(g.tdp)), fmt: v => fmtNum(v, 0), unit: 'W', higher: false },
-    { id: 'price', key: 'compare2.m_price', value: g => num(window.priceToUsd(g.price)), fmt: v => window.formatPrice('$' + Math.round(v)), higher: false }
+    { id: 'price', key: 'compare2.m_price', value: g => num(window.gpuPrice(g)), fmt: v => window.formatPrice(v), higher: false },
+    { id: 'ai', key: 'compare2.m_ai', value: g => num(Number(g.ai)), fmt: v => fmtNum(v, 0), unit: 'TFLOPS', higher: true }
   ];
   let metric = 'perf';
 
@@ -103,7 +104,7 @@
     }
     els.chips.innerHTML = chips.join('');
     els.input.disabled = gpus.length >= MAX;
-    els.input.placeholder = gpus.length >= MAX ? T('fx.cmp_full') : T('compare2.add_placeholder');
+    els.input.placeholder = gpus.length >= MAX ? T('compare2.full_placeholder', { max: MAX }) : T('compare2.add_placeholder');
   }
 
   function renderPresets() {
@@ -184,11 +185,15 @@
         const v = window.gpuGamingIndex(g.name);
         return v ? `${window.formatPerf(v)}<small>/100</small>` : `<span class="muted" title="${esc(T('compare2.no_perf'))}">—</span>`;
       }),
-      metricRow('tflops', wrapWithTooltip('TFLOPS', 'tflops'), g => esc(g.tflops || '—')),
-      metricRow('vram', T('table.vram'), g => esc(g.vram || '—')),
-      metricRow('bw', T('ui.bw'), g => esc(g.bandwidth || (g.bw ? `${g.bw} GB/s` : '—'))),
-      metricRow('tdp', wrapWithTooltip(T('ui.tdp'), 'tdp'), g => esc(g.tdp || '—')),
-      metricRow('price', T('ui.price'), g => (priceOf(g) ? window.formatPrice(g.price) : '—')),
+      metricRow('tflops', wrapWithTooltip('TFLOPS FP32', 'tflops'), g => esc(window.specText(g.tflops))),
+      ...(gpus.some(g => g.ai) ? [metricRow('ai', wrapWithTooltip(esc(T('ui.ai_bf16')), 'ai'), g => (g.ai ? window.formatAi(g.ai) : '—'))] : []),
+      metricRow('vram', T('table.vram'), g => esc(window.specText(g.vram))),
+      metricRow('bw', T('ui.bw'), g => esc(window.specText(g.bandwidth))),
+      metricRow('tdp', wrapWithTooltip(T('ui.tdp'), 'tdp'), g => esc(window.specText(g.tdp))),
+      metricRow('price', wrapWithTooltip(esc(T('ui.msrp')), 'msrp'), g => {
+        const p = window.priceInfo(g);
+        return p.missing ? `<span class="muted">${esc(p.value)}</span>` : `${esc(p.value)}<small class="cell-sub">${esc(p.date)}</small>`;
+      }),
       ratioRow(T('compare2.row_perf_price'), valueRatio, T('compare2.ratio_hint')),
       ratioRow(T('compare2.row_perf_watt'), wattRatio, T('compare2.ratio_hint')),
       { label: wrapWithTooltip('DLSS / FSR', 'dlss_fsr'), cells: gpus.map(g => esc(getUpscaler(g))) }

@@ -228,7 +228,7 @@
               <button type="button" class="similar-item" data-open-gpu="${esc(g.name)}">
                 <span class="gpu-brand brand-${g.brand}">${brandMap[g.brand] || esc(g.brand)}</span>
                 <span class="similar-name">${esc(g.name)}</span>
-                <span class="similar-meta">${window.formatPerf(g.perf)} · ${window.formatPrice(g.price) || '—'}</span>
+                <span class="similar-meta">${window.formatPerf(g.perf)} · ${window.formatPrice(window.gpuPrice(g))}</span>
               </button>`).join('')}
           </div>
         </div>` : ''

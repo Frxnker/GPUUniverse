@@ -309,8 +309,9 @@
       </div>
       <button type="button" class="toast-close" aria-label="${esc(T('catalog.close'))}">${ICONS.close}</button>`;
     toastStack.appendChild(el);
-    // Máximo 4 avisos a la vez
-    while (toastStack.children.length > 4) toastStack.firstElementChild.remove();
+    // Máximo 3 avisos a la vez (2 en móvil, donde tapan más)
+    const maxToasts = window.matchMedia('(max-width: 560px)').matches ? 2 : 3;
+    while (toastStack.children.length > maxToasts) toastStack.firstElementChild.remove();
     const dismiss = () => {
       el.classList.add('is-leaving');
       setTimeout(() => el.remove(), 250);
@@ -600,7 +601,7 @@
               <button type="button" class="similar-item" data-open-gpu="${esc(g.name)}">
                 ${window.brandBadge(g)}
                 <span class="similar-name">${esc(g.name)}</span>
-                <span class="similar-meta">${window.formatPerf(g.perf)} · ${window.formatPrice(g.price) || '—'}</span>
+                <span class="similar-meta">${window.formatPerf(g.perf)} · ${window.formatPrice(window.gpuPrice(g))}</span>
               </button>`).join('')}
           </div>
         </div>` : ''
@@ -625,7 +626,6 @@
     const label = `${T('fx.drawer_title')} · ${T('fx.level', { n: info.level })} · ${levelTitle(info.level)} · ${detail}`;
     chip.setAttribute('aria-label', label);
     chip.title = label;
-  }
   }
 
   // ---------- Panel "Tu espacio" ----------
@@ -1063,14 +1063,27 @@
     setTimeout(() => document.getElementById('level-chip')?.classList.remove('is-levelup'), 1600);
   });
 
+  // Si se desbloquean varios logros a la vez, se agrupan en un solo aviso
+  let achToast = null;
+  let achIds = [];
   window.addEventListener('progress:achievement', e => {
     const id = e.detail.id;
     const def = Progress.achievementList().find(a => a.id === id);
-    toast({
+    const line = aid => `<strong>${esc(T(`levels.ach.${aid}.name`))}</strong> — ${esc(T(`levels.ach.${aid}.desc`))}`;
+    if (achToast && document.contains(achToast.el) && !achToast.el.classList.contains('is-leaving')) {
+      achIds.push(id);
+      achToast.el.querySelector('.toast-title').textContent = window.trPlural('fx.achievements', achIds.length);
+      achToast.el.querySelector('.toast-text').innerHTML = achIds.map(line).join('<br>');
+      achToast.el.querySelector('.toast-icon').innerHTML = ICONS.trophy;
+      achToast.restart();
+      return;
+    }
+    achIds = [id];
+    achToast = toast({
       icon: ICONS[def ? def.icon : 'trophy'],
       tone: 'achievement',
       title: T('fx.achievement'),
-      text: `<strong>${esc(T(`levels.ach.${id}.name`))}</strong> — ${esc(T(`levels.ach.${id}.desc`))}`,
+      text: line(id),
       timeout: 5000
     });
   });
@@ -1132,6 +1145,7 @@
       const kbd = search.querySelector('.nav-search-kbd');
       if (kbd) kbd.textContent = `${MOD} K`;
     }
+    document.getElementById('modal-close')?.setAttribute('aria-label', T('catalog.close'));
     updateLevelChip();
     if (tray) renderTray();
   }
