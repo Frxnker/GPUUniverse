@@ -63,7 +63,9 @@
     server: svg('<rect x="3" y="3" width="18" height="7" rx="1.5"/><rect x="3" y="14" width="18" height="7" rx="1.5"/><path d="M7 6.5h.01M7 17.5h.01M11 6.5h6M11 17.5h6"/>'),
     home: svg('<path d="M3 11 12 3l9 8M5 9.5V21h14V9.5"/>'),
     hourglass: svg('<path d="M6 3h12M6 21h12M7 3c0 5 5 5 5 9s-5 4-5 9M17 3c0 5-5 5-5 9s5 4 5 9"/>'),
-    sparkle: svg('<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>')
+    sparkle: svg('<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>'),
+    alert: svg('<path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4.5M12 17.2v.3"/>'),
+    offline: svg('<path d="M2 8.8a15 15 0 0 1 4.2-2.7M9.7 5.2A15 15 0 0 1 22 8.8M5 12.5a10 10 0 0 1 3.4-2.1M15.4 10.6A10 10 0 0 1 19 12.5M8.5 16a5 5 0 0 1 7 0M12 19.5h.01M3 3l18 18"/>')
   };
   window.GPUIcons = ICONS;
 
@@ -732,12 +734,12 @@
     const names = Store.get(drawerTab);
     if (!names.length) {
       const emptyIcon = { favorites: ICONS.heart, recent: ICONS.history, compare: ICONS.compare }[drawerTab];
-      list.innerHTML = `
-        <div class="drawer-empty">
-          <span class="drawer-empty-icon">${emptyIcon}</span>
-          <p>${esc(T(`fx.empty_${drawerTab}`))}</p>
-          <a class="btn-load-more" href="${pageHref('gaming')}">${esc(T('hero.btn_primary'))} ${ICONS.arrow}</a>
-        </div>`;
+      list.innerHTML = window.stateHtml({
+        icon: emptyIcon,
+        hint: T(`fx.empty_${drawerTab}`),
+        action: `<a class="btn-load-more" href="${pageHref('gaming')}">${esc(T('hero.btn_primary'))} ${ICONS.arrow}</a>`,
+        compact: true
+      });
       return;
     }
     let items = '';

@@ -348,7 +348,7 @@
 
   // ---------- Común ----------
   function emptyState(icon, text) {
-    return `<div class="tool-empty"><span class="tool-empty-icon">${icon}</span><p>${esc(text)}</p></div>`;
+    return window.stateHtml({ icon, hint: text });
   }
 
   document.addEventListener('click', e => {

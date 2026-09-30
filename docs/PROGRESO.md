@@ -182,6 +182,138 @@ tres páginas.
 
 ---
 
+## Fase 4 — Accesibilidad y experiencia de uso ✅
+
+**Qué cambia**
+
+*Barra (plantilla única `partials/nav.html`)*
+- Enlace «Saltar al contenido» (el primer elemento enfocable) hacia un `<main id="main">`, que
+  ahora existe en las 9 páginas. Sustituye al «Saltar al catálogo» que solo tenía Gaming.
+- `aria-label` traducidos (`data-i18n-aria`) para la navegación, el logo, el menú y la miga de pan.
+  - El logo en móvil (solo el icono) no tenía nombre accesible.
+  - La miga de pan decía «Breadcrumb» en todos los idiomas.
+- Botón de tema: la etiqueta dice qué hará («Cambiar a tema claro/oscuro») y se traduce.
+- **Selector de idioma** con el patrón de botón de menú.
+  - `aria-haspopup="menu"`, `aria-expanded` y `aria-controls`; opciones `menuitemradio` con
+    `aria-checked`.
+  - Teclado: flechas, Inicio/Fin, la inicial del idioma, Intro/Espacio para elegir, Esc (devuelve
+    el foco) y Tab (cierra).
+  - El nombre accesible del botón es «Idioma ES» (texto oculto + código visible).
+  - Se marca visualmente el idioma actual.
+- **Menú móvil**:
+  - Al abrirse, el foco entra en el panel y Tab da la vuelta dentro (trampa de foco).
+  - Una guarda con `focusin` cubre WebKit, que no pasa por los enlaces con Tab.
+  - Esc lo cierra y el foco vuelve al botón.
+  - Cerrado queda con `visibility: hidden`: antes sus 8 enlaces, fuera de la pantalla, seguían
+    recibiendo el foco.
+
+*Encabezados y regiones*
+- `<h1>` en Workstation, Servidor e Historia, que empezaban por `<h2>`.
+- Pie con `<h2>` (antes `<h4>`) y cronología con `<h2>` (antes `<h4>` bajo el `<h1>`).
+- Encabezados ocultos «Categorías» (portada) y «Catálogo de GPUs» (Gaming y Workstation).
+- Lienzo decorativo del fondo con `aria-hidden` en todas las páginas.
+- `alt` útil y traducible en la imagen del hero (`data-i18n-alt`). Indica que es una
+  ilustración generada con IA.
+
+*Contraste AA (tema claro y oscuro, con los 6 colores de LED)*
+- En tema claro, el texto pequeño en color de acento sobre fondos teñidos usa `--accent-deep`
+  (cada color desbloqueable define el suyo): etiquetas de sección, años del mapa de arquitecturas,
+  XP de la lista y mejor valor de la tabla de comparación.
+- Verde de éxito (`--green`) y verde NVIDIA más oscuros en tema claro.
+- Rojo AMD y verde NVIDIA propios para las marcas del mapa de arquitecturas.
+- Ranking de valor: los puestos 4.º a 7.º tenían un contraste de 1,5:1 en ambos temas; ahora
+  cumplen el 3:1 de texto grande.
+- Plata del 2.º puesto, «pts» y la nota «menos es mejor» (que medía 8,4 px): ahora 11 px y color
+  de texto secundario.
+- Contador de la pestaña activa: blanco sobre fondo oscurecido (3,35:1 → 6,97:1).
+- El resplandor del cuestionario baja de opacidad en tema claro.
+
+*Movimiento reducido*
+- La regla global usaba `transition-duration: 0.01ms`. Con eso, la transición por defecto
+  (`all`) también animaba la visibilidad heredada, y los menús recién abiertos no podían recibir el
+  foco.
+- Ahora es `transition: none`.
+- Además, los elementos de los menús ya no usan `transition: all`, sino las propiedades concretas.
+
+*Estados vacíos, de carga y de error*
+- Componente común `window.stateHtml` / `.state-msg`: icono enmarcado, título, explicación y
+  acción, con `role="status"`.
+- Lo usan el catálogo sin resultados, las herramientas, la comparación vacía, el panel «Tu
+  espacio», el recomendador y el error de noticias (en tono cobre).
+- Noticias: la misma sección en las 4 páginas que la tienen, ahora como plantilla compartida
+  (`partials/news.html`).
+  - Carga con tarjetas esqueleto y `aria-busy` en todas; antes, 3 páginas usaban un spinner.
+  - Error con icono y reintento. Sin conexión, lo dice: «Sin conexión: las noticias se cargan
+    desde internet».
+- Los botones «Restablecer» y «Ver más GPUs» ya no usan `onclick` en línea.
+
+*Fallos encontrados de paso*
+- **Recomendador**: proponía GPUs sin precio oficial (p. ej. «M5 Ultra GPU: sin precio oficial»)
+  para el presupuesto «menos de 400 $», porque su precio 0 pasaba el filtro. Ahora una GPU sin
+  precio no encaja en ningún presupuesto.
+- La ordenación ya no da `NaN` cuando falta el dato de TFLOPS.
+- **Idioma guardado corrupto**: con `gpu_lang` desconocido, `t()` lanzaba un error y la página
+  no se traducía. Ahora se valida el idioma (y el tema) y se usa español/oscuro.
+
+**Cómo se ha comprobado**
+- `tests/a11y.test.js`: 8 pruebas nuevas.
+  - Cada página tiene un `<h1>`, un `<main id="main">`, el enlace de salto como primer elemento
+    enfocable, encabezados sin saltos e imágenes con `alt`.
+  - Teclado del selector de idioma.
+  - Menú móvil con Esc.
+  - Etiqueta del tema traducida.
+  - Idioma/tema corruptos.
+  - Catálogo vacío con su botón.
+  - Noticias con error y sin conexión.
+  - Recomendador sin GPUs sin precio.
+- La prueba «en ruso no quedan etiquetas accesibles en español» deja de ser `todo` y pasa.
+- **axe-core 4 (WCAG 2.1 A/AA + buenas prácticas)**:
+  - Antes: 1.080 nodos con infracciones (820 fuera de regiones, 194 de contraste en tema claro,
+    24 de orden de encabezados, 18 enlaces sin nombre, 12 sin `main` y 12 sin `h1`).
+  - Después: **0 infracciones** en 108 vistas (9 páginas × es/ru/de × claro/oscuro ×
+    escritorio/móvil).
+  - Contraste: 0 infracciones además con los 5 colores de LED desbloqueables, en ambos temas.
+- **Teclado en navegador real** (Chrome, Firefox 155 y WebKit 26.6, con y sin movimiento
+  reducido): 69/69 comprobaciones.
+  - Enlace de salto; Tab dentro de `<main>`.
+  - Menú de idioma: flechas, Fin, Esc, inicial e Intro, que cambia a alemán y traduce las
+    etiquetas.
+  - Menú móvil: foco inicial, 14 × Tab sin salir, Mayús+Tab y Esc.
+  - axe sin infracciones con el menú de idioma, el menú móvil, el detalle de GPU, el buscador
+    Ctrl+K y el panel «Tu espacio» abiertos.
+  - Sin errores de consola.
+- **Revisión completa**: 324 vistas (Chrome, Firefox y WebKit × 9 páginas × escritorio y móvil
+  × claro y oscuro × es, ru y de), con noticias de prueba para no depender de rss2json.
+  - 0 errores de consola y 0 páginas con scroll horizontal.
+  - Solo quedan los dos avisos de Firefox que ya estaban en la referencia.
+- **Comparación visual** con la copia original (aleatoriedad fija, Chrome, 36 vistas).
+  - Cambian solo:
+    - los colores de contraste del tema claro;
+    - el aspecto unificado de los estados vacíos;
+    - la temporización (avisos de XP, giro del modelo 3D).
+  - El resto de cada página no cambia.
+- **Lighthouse móvil**:
+
+  | Página | Rendimiento | Accesibilidad | Buenas prácticas | SEO |
+  |---|---|---|---|---|
+  | Portada | 95 | **100** (antes 94) | 96* | 100 |
+  | Comparar | 95 | **100** (95) | 100 | 100 |
+  | Gaming | 95 | **100** (96) | 96* | 100 |
+  | Historia | 95 | **100** (93) | 100 | 100 |
+  | Aprender | 95 | **100** (96) | 100 | 100 |
+  | Niveles | 95 | **100** (95) | 100 | 100 |
+  | Servidor | 95 | **100** (93) | 96* | 100 |
+  | Herramientas | 95 | **100** (95) | 100 | 100 |
+  | Workstation | 95 | **100** (93) | 96* | 100 |
+
+  \* Buenas prácticas baja a 96 en las 4 páginas con noticias por los errores 429 de rss2json.
+  - El servicio gratuito sigue limitando las peticiones desde esta IP tras las pruebas: ahora
+    mismo responde 429 también a `curl`.
+  - La web muestra su estado de error con reintento.
+  - Ver «Riesgos» y la propuesta final de quitar esta dependencia.
+
+---
+
 ## Decisiones pendientes
 
 _Ninguna por ahora._

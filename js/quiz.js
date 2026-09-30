@@ -39,7 +39,7 @@ function renderQuizResults() {
     
     const esc = window.escapeHtml;
     if (!results.length) {
-        container.innerHTML = `<p class="quiz-empty">${esc(window.tr('quiz.no_results'))}</p>`;
+        container.innerHTML = window.stateHtml({ icon: window.GPUIcons ? window.GPUIcons.target : '', hint: window.tr('quiz.no_results') });
     } else {
         container.innerHTML = results.map(gpu => {
             const price = window.priceInfo(gpu);
@@ -74,15 +74,17 @@ function calculateRecommendations() {
     const minBudget = quizAnswers.budget === 'mid' ? 400 : (quizAnswers.budget === 'high' ? 900 : 0);
     const laptopTiers = { low: ['entry', 'mid'], mid: ['mid', 'high'], high: ['high', 'ultra'] }[quizAnswers.budget];
 
+    // Sin precio oficial (p = 0) no se puede decir que quepa en un presupuesto: no se recomienda
     let filtered = pool.filter(g => {
         if (quizAnswers.use === 'mobile') return laptopTiers.includes(g.tier);
         const p = window.gpuPrice(g);
-        return p >= minBudget && p <= maxBudget;
+        return p > 0 && p >= minBudget && p <= maxBudget;
     });
 
     // 3. Coincidencia de rendimiento / resolución
-    // Ordenamos por la propiedad 'perf' o por TFLOPS
-    filtered.sort((a, b) => (b.perf || parseFloat(b.tflops)) - (a.perf || parseFloat(a.tflops)));
+    // Ordenamos por la propiedad 'perf' o por TFLOPS (las que no tienen ninguno de los dos, al final)
+    const power = g => g.perf || parseFloat(g.tflops) || 0;
+    filtered.sort((a, b) => power(b) - power(a));
     
     // Selecciona los mejores 2 o 3
     if (quizAnswers.perf === '1080') return filtered.slice(-3).reverse(); // Opciones más baratas o de entrada para ese rango

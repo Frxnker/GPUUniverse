@@ -1,16 +1,28 @@
 // ===== ALTERNAR TEMA =====
 (function initTheme() {
-  const saved = localStorage.getItem('gpu-universe-theme') || 'dark';
+  // Solo "light" o "dark": un valor guardado desconocido vuelve al tema oscuro
+  let saved = 'dark';
+  try { saved = localStorage.getItem('gpu-universe-theme') === 'light' ? 'light' : 'dark'; } catch (e) { /* almacenamiento no disponible */ }
   document.documentElement.setAttribute('data-theme', saved);
 
+  // La etiqueta del botón dice qué hará al pulsarlo ("Cambiar a tema claro" en el tema oscuro)
+  const updateLabels = () => {
+    if (typeof window.t !== 'function') return;
+    const key = document.documentElement.getAttribute('data-theme') === 'light' ? 'a11y.theme_to_dark' : 'a11y.theme_to_light';
+    document.querySelectorAll('.theme-toggle').forEach(btn => btn.setAttribute('aria-label', window.t(key)));
+  };
+  window.addEventListener('i18n:change', updateLabels);
+
   document.addEventListener('DOMContentLoaded', () => {
+    updateLabels();
     const btns = document.querySelectorAll('.theme-toggle');
     btns.forEach(btn => {
       btn.addEventListener('click', () => {
         const current = document.documentElement.getAttribute('data-theme');
         const next = current === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('gpu-universe-theme', next);
+        try { localStorage.setItem('gpu-universe-theme', next); } catch (e) { /* sin persistencia */ }
+        updateLabels();
 
         // Vuelve a renderizar los gráficos del canvas para que usen los nuevos colores del tema
         if (typeof window.renderChart === 'function') window.renderChart();
@@ -254,6 +266,19 @@ window.tr = function(key, fallback, vars) {
 
 window.escapeHtml = function(str) {
   return String(str == null ? '' : str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+};
+
+// Estado vacío o de error, igual en toda la web: icono, título, explicación y acción opcional.
+// title/hint son texto (se escapan); icon y action, HTML ya construido por el código.
+window.stateHtml = function({ icon = '', title = '', hint = '', action = '', tone = '', compact = false } = {}) {
+  const esc = window.escapeHtml;
+  const cls = ['state-msg', tone === 'error' ? 'is-error' : '', compact ? 'is-compact' : ''].filter(Boolean).join(' ');
+  return `<div class="${cls}" role="status">`
+    + (icon ? `<span class="state-msg-icon" aria-hidden="true">${icon}</span>` : '')
+    + (title ? `<p class="state-msg-title">${esc(title)}</p>` : '')
+    + (hint ? `<p class="state-msg-hint">${esc(hint)}</p>` : '')
+    + action
+    + '</div>';
 };
 
 // Texto de un campo multilingüe de data.js ({ es, en, ... }) en el idioma actual
@@ -564,13 +589,12 @@ function renderWithPagination(container, sortedItems, limitKey, buildCardFn) {
   
   if (!sortedItems.length) {
     const canReset = typeof window.resetFilters === 'function';
-    container.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-state-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
-        <p class="empty-state-title">${window.tr('catalog.no_results', window.tr('ui.no_results', 'No se encontraron resultados'))}</p>
-        <p class="empty-state-hint">${window.tr('catalog.no_results_hint', '')}</p>
-        ${canReset ? `<button type="button" class="btn-load-more" onclick="resetFilters()"><span aria-hidden="true">↺</span> ${window.tr('catalog.reset', 'Restablecer')}</button>` : ''}
-      </div>`;
+    container.innerHTML = window.stateHtml({
+      icon: window.GPUIcons ? window.GPUIcons.search : '',
+      title: window.tr('catalog.no_results', window.tr('ui.no_results', 'No se encontraron resultados')),
+      hint: window.tr('catalog.no_results_hint', ''),
+      action: canReset ? `<button type="button" class="btn-load-more" data-reset-filters><span aria-hidden="true">↺</span> ${window.escapeHtml(window.tr('catalog.reset', 'Restablecer'))}</button>` : ''
+    });
   } else {
     container.innerHTML = visibleItems.map(buildCardFn).join('');
   }
@@ -586,7 +610,7 @@ function renderWithPagination(container, sortedItems, limitKey, buildCardFn) {
   
   if (sortedItems.length > currentLimit) {
     const remaining = window.tr('catalog.remaining', '{n} restantes', { n: sortedItems.length - currentLimit });
-    btnContainer.innerHTML = `<button type="button" class="btn-load-more" onclick="loadMore('${limitKey}')">${window.tr('catalog.load_more', 'Ver más GPUs')} <small class="load-more-count">${remaining}</small> <span class="arrow" aria-hidden="true">↓</span></button>`;
+    btnContainer.innerHTML = `<button type="button" class="btn-load-more" data-load-more="${window.escapeHtml(limitKey)}">${window.tr('catalog.load_more', 'Ver más GPUs')} <small class="load-more-count">${remaining}</small> <span class="arrow" aria-hidden="true">↓</span></button>`;
   } else {
     btnContainer.innerHTML = '';
   }
@@ -598,9 +622,17 @@ function renderWithPagination(container, sortedItems, limitKey, buildCardFn) {
 }
 
 window.loadMore = function(limitKey) {
+  if (!(limitKey in window.gridLimits)) return;
   window.gridLimits[limitKey] += 12;
   window.renderAll();
 };
+
+// Botones generados (sin onclick en línea, que la política de seguridad de contenido bloquearía)
+document.addEventListener('click', e => {
+  const more = e.target.closest('[data-load-more]');
+  if (more) window.loadMore(more.dataset.loadMore);
+  if (e.target.closest('[data-reset-filters]') && typeof window.resetFilters === 'function') window.resetFilters();
+});
 
 // ===== LÓGICA DE RENDERIZADO =====
 
@@ -854,7 +886,7 @@ window.renderTimeline = function() {
     <div class="timeline-item reveal">
       <div class="timeline-dot"></div>
       <div class="timeline-year">${item.year}</div>
-      <h4>${item.title}</h4>
+      <h2>${window.escapeHtml(item.title)}</h2>
       <p>${window.escapeHtml(window.localText(item.desc))}</p>
     </div>
   `).join('');
@@ -1038,41 +1070,87 @@ window.closeGpuModal = function() {
 
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', () => {
-  // Mobile Menu
+  // Menú móvil: mientras está abierto el foco no sale del panel (Tab da la vuelta), Esc lo cierra
+  // y el foco vuelve al botón que lo abrió
   const mobileBtn = document.getElementById('mobile-menu-btn');
   const closeBtn = document.getElementById('close-menu-btn');
   const navLinks = document.querySelector('.nav-links');
-  
-  const closeMenu = () => {
-    if (mobileBtn) {
-      mobileBtn.classList.remove('active');
-      mobileBtn.setAttribute('aria-expanded', 'false');
-    }
-    if (navLinks) navLinks.classList.remove('active');
+  const isMenuOpen = () => !!navLinks && navLinks.classList.contains('active');
+
+  const closeMenu = (returnFocus = false) => {
+    if (!isMenuOpen()) return;
+    mobileBtn.classList.remove('active');
+    mobileBtn.setAttribute('aria-expanded', 'false');
+    navLinks.classList.remove('active');
     document.body.classList.remove('menu-open');
+    if (returnFocus) mobileBtn.focus();
   };
+
+  const openMenu = () => {
+    mobileBtn.classList.add('active');
+    mobileBtn.setAttribute('aria-expanded', 'true');
+    navLinks.classList.add('active');
+    document.body.classList.add('menu-open');
+    // El panel pasa a ser visible en este fotograma (visibility): el foco entra en el siguiente
+    requestAnimationFrame(() => (closeBtn || navLinks.querySelector('a[href]'))?.focus());
+  };
+
+  // Controles del panel que se pueden alcanzar con Tab (las opciones de idioma usan las flechas)
+  const menuFocusables = () => [...navLinks.querySelectorAll('a[href], button:not([tabindex="-1"])')]
+    .filter(el => el.getClientRects().length > 0);
 
   if (mobileBtn && navLinks) {
     mobileBtn.setAttribute('aria-expanded', 'false');
-    mobileBtn.addEventListener('click', () => {
-      const isOpen = mobileBtn.classList.toggle('active');
-      mobileBtn.setAttribute('aria-expanded', String(isOpen));
-      navLinks.classList.toggle('active');
-      document.body.classList.toggle('menu-open');
-    });
-    
+    mobileBtn.addEventListener('click', () => (isMenuOpen() ? closeMenu(true) : openMenu()));
+
     if (closeBtn) {
-      closeBtn.addEventListener('click', closeMenu);
+      closeBtn.addEventListener('click', () => closeMenu(true));
     }
 
     navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', closeMenu);
+      link.addEventListener('click', () => closeMenu());
     });
-    
+
     document.addEventListener('click', (e) => {
-      if (navLinks.classList.contains('active') && !e.target.closest('.nav-links') && !e.target.closest('#mobile-menu-btn')) {
+      if (isMenuOpen() && !e.target.closest('.nav-links') && !e.target.closest('#mobile-menu-btn')) {
         closeMenu();
       }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!isMenuOpen()) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeMenu(true);
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const items = menuFocusables();
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (!navLinks.contains(document.activeElement)) {
+        e.preventDefault();
+        (e.shiftKey ? last : first).focus();
+      } else if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+
+    // Safari/WebKit no pasa por los enlaces con Tab (solo por controles): si el foco sale del panel
+    // por otro camino, vuelve a él
+    let tabBackwards = false;
+    document.addEventListener('keydown', (e) => { if (e.key === 'Tab') tabBackwards = e.shiftKey; }, true);
+    document.addEventListener('focusin', (e) => {
+      if (!isMenuOpen() || navLinks.contains(e.target) || e.target === mobileBtn) return;
+      // Se ha abierto otra capa encima (buscador, detalle de GPU): el menú se cierra y el foco se queda allí
+      if (e.target.closest('[aria-modal="true"]')) { closeMenu(); return; }
+      const items = menuFocusables();
+      if (items.length) (tabBackwards ? items[items.length - 1] : items[0]).focus();
     });
   }
 
@@ -1302,14 +1380,18 @@ async function initNews() {
   const esc = window.escapeHtml;
 
   try {
-    const items = await loadNewsItems();
+    // safeUrl otra vez al pintar: la lista puede venir de la caché de la sesión
+    const items = (await loadNewsItems()).filter(item => item && safeUrl(item.link));
     if (!items.length) throw new Error('No news items found');
 
+    container.setAttribute('aria-busy', 'false');
     container.innerHTML = items.map(item => {
       const date = parseNewsDate(item.date);
-      const summary = item.summary.length >= 160 ? item.summary.replace(/\s+\S*$/, '') + '…' : item.summary;
-      const image = item.image
-        ? `<img src="${esc(item.image)}" class="news-img" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`
+      const summary = String(item.summary || '');
+      const shortSummary = summary.length >= 160 ? summary.replace(/\s+\S*$/, '') + '…' : summary;
+      const imageUrl = safeUrl(item.image);
+      const image = imageUrl
+        ? `<img src="${esc(imageUrl)}" class="news-img" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`
         : `<div class="news-img news-img-fallback" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5" rx=".5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></div>`;
       return `
         <article class="news-card">
@@ -1319,7 +1401,7 @@ async function initNews() {
               <time datetime="${isNaN(date) ? '' : date.toISOString()}">${esc(formatNewsDate(date))}</time> · <strong>${esc(item.source)}</strong>
             </div>
             <h3><a href="${esc(item.link)}" target="_blank" rel="noopener noreferrer">${esc(item.title)}</a></h3>
-            <p>${esc(summary)}</p>
+            <p>${esc(shortSummary)}</p>
             <a href="${esc(item.link)}" target="_blank" rel="noopener noreferrer" class="news-link" tabindex="-1" aria-hidden="true">${window.tr('catalog.news_read_more', 'Leer más')} <span>→</span></a>
           </div>
         </article>
@@ -1338,15 +1420,26 @@ async function initNews() {
     });
   } catch (error) {
     console.warn('Error loading news:', error);
-    container.innerHTML = `
-      <div class="news-empty">
-        <p>${window.tr('catalog.news_error', 'No se pudieron cargar las noticias en este momento.')}</p>
-        <button type="button" class="btn-load-more" id="news-retry"><span aria-hidden="true">↻</span> ${window.tr('catalog.news_retry', 'Reintentar')}</button>
-      </div>
-    `;
-    document.getElementById('news-retry')?.addEventListener('click', () => {
-      container.innerHTML = '<div class="loading-news"><div class="spinner"></div></div>';
+    // Sin conexión se explica que las noticias necesitan internet; si no, que el servicio no responde
+    const offline = navigator.onLine === false;
+    container.setAttribute('aria-busy', 'false');
+    container.innerHTML = window.stateHtml({
+      tone: 'error',
+      icon: window.GPUIcons ? window.GPUIcons[offline ? 'offline' : 'alert'] : '',
+      title: window.tr(offline ? 'catalog.news_offline' : 'catalog.news_error', 'No se pudieron cargar las noticias en este momento.'),
+      hint: window.tr(offline ? 'catalog.news_offline_hint' : 'catalog.news_error_hint', ''),
+      action: `<button type="button" class="btn-load-more" data-news-retry><span aria-hidden="true">↻</span> ${esc(window.tr('catalog.news_retry', 'Reintentar'))}</button>`
+    });
+    container.querySelector('[data-news-retry]').addEventListener('click', () => {
+      container.innerHTML = newsSkeletonHtml();
+      container.setAttribute('aria-busy', 'true');
       initNews();
     });
   }
+}
+
+// Marcador de carga de las noticias (el mismo que trae el HTML de partials/news.html)
+function newsSkeletonHtml() {
+  const card = '<div class="news-card news-skeleton" aria-hidden="true"><div class="news-img"></div><div class="news-content"><span></span><span></span><span></span></div></div>';
+  return `<p class="visually-hidden">${window.escapeHtml(window.tr('news.loading'))}</p>${card.repeat(3)}`;
 }

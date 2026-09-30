@@ -93,7 +93,7 @@ test('en ruso no queda texto visible en español', async () => {
   assert.deepEqual(await untranslated(visibleTexts), []);
 });
 
-test('en ruso no quedan etiquetas accesibles en español', { todo: 'Fase 4: aria-label de tema, idioma y menú' }, async () => {
+test('en ruso no quedan etiquetas accesibles en español', async () => {
   assert.deepEqual(await untranslated(accessibleTexts), []);
 });
 

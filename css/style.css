@@ -205,7 +205,7 @@
   --gold-rgb: 168, 122, 0;
   --trace-rgb: 0, 110, 84;
   --tier-high: #6b4bd6;
-  --green: #0a8f4f;
+  --green: #087a43;
   --pink: #c21857;
   --gold: #a87a00;
   --tick: rgba(var(--accent-rgb), 0.45);
@@ -1097,6 +1097,8 @@ section {
   box-shadow: 0 2px 12px rgba(var(--accent-rgb), 0.1);
 }
 
+.section-header h1,
+
 .section-header h2 {
   font-size: clamp(2.2rem, 4.5vw, 3.2rem);
   font-weight: 900;
@@ -1926,7 +1928,7 @@ section {
   border: 1px solid rgba(var(--accent-rgb), 0.25);
 }
 
-.timeline-item h4 {
+.timeline-item h2 {
   font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 0.35rem;
@@ -1994,7 +1996,7 @@ section {
   gap: 0.85rem;
 }
 
-.footer-links h4 {
+.footer-links h2 {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -2478,7 +2480,7 @@ html[lang="ru"] .nav-links a {
   align-items: center;
   gap: 0.6rem;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: var(--font-mono);
   font-weight: 600;
   font-size: 0.85rem;
@@ -2520,7 +2522,7 @@ html[lang="ru"] .nav-links a {
   padding: 0.5rem;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s;
   backdrop-filter: blur(20px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
@@ -2531,21 +2533,38 @@ html[lang="ru"] .nav-links a {
   transform: translateY(0);
 }
 
+.lang-dropdown {
+  list-style: none;
+}
+
+/* Las opciones son botones (menuitemradio): se quita el aspecto por defecto del botón */
 .lang-option {
   display: flex;
   align-items: center;
   gap: 0.8rem;
+  width: 100%;
   padding: 0.7rem 1rem;
+  border: 0;
   border-radius: 10px;
+  background: none;
   cursor: pointer;
+  font-family: inherit;
   font-size: 0.9rem;
-  transition: all 0.2s;
+  line-height: inherit;
+  text-align: left;
+  transition: background 0.2s, color 0.2s;
   color: var(--text-muted);
 }
 
-.lang-option:hover {
+.lang-option:hover,
+.lang-option:focus-visible {
   background: rgba(var(--accent-rgb), 0.1);
   color: var(--text);
+}
+
+.lang-option[aria-checked="true"] {
+  color: var(--text);
+  font-weight: 600;
 }
 
 .lang-option img {
@@ -2565,7 +2584,7 @@ html[lang="ru"] .nav-links a {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 1rem;
   backdrop-filter: blur(10px);
   flex-shrink: 0;
@@ -2839,7 +2858,9 @@ body,
     -webkit-backdrop-filter: blur(25px) saturate(180%);
     padding: 1rem 0;
     box-shadow: -15px 0 40px rgba(0, 0, 0, 0.6);
-    transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Cerrado queda oculto (visibility) al terminar de salir: sus enlaces no reciben el foco con Tab */
+    visibility: hidden;
+    transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.5s;
     z-index: 1060;
     justify-content: flex-start;
     align-items: stretch;
@@ -2856,6 +2877,8 @@ body,
 
   .nav-links.active {
     right: 0;
+    visibility: visible;
+    transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s;
   }
 
   /* Mobile tools inside menu */
@@ -2886,7 +2909,7 @@ body,
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     flex-shrink: 0;
   }
 
@@ -2939,7 +2962,7 @@ body,
     margin-bottom: 0.5rem;
     opacity: 0;
     transform: translateX(30px);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     text-align: left;
   }
 
@@ -2983,7 +3006,7 @@ body,
     width: 100%;
     color: var(--text);
     position: relative;
-    transition: all 0.3s;
+    transition: background 0.3s, color 0.3s, padding 0.3s;
     text-align: left;
   }
 
@@ -3534,11 +3557,12 @@ body,
   background: rgba(var(--accent-rgb), 0.05);
 }
 
+/* Los puestos del 4.º en adelante van atenuados, pero con contraste 3:1 (texto grande) en ambos temas */
 .value-rank {
   font-size: 1.5rem;
   font-weight: 900;
   color: var(--text-muted);
-  opacity: 0.3;
+  opacity: 0.75;
   min-width: 40px;
 }
 
@@ -3583,7 +3607,7 @@ body,
 .value-score small {
   font-size: 0.7rem;
   text-transform: uppercase;
-  opacity: 0.6;
+  color: var(--text-muted);
 }
 
 /* ===== ARCHITECTURE MAP ===== */
@@ -3829,6 +3853,8 @@ body,
   .hero h1 {
     font-size: 2.2rem;
   }
+
+  .section-header h1,
 
   .section-header h2 {
     font-size: 1.8rem;
@@ -4284,6 +4310,74 @@ body,
 }
 
 /* ===== ESTADO VACÍO Y "VER MÁS" ===== */
+/* ---------- Estados vacíos y de error (componente común: window.stateHtml) ---------- */
+.state-msg {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 3rem 1.5rem;
+  border: 1px dashed var(--border-strong);
+  border-radius: 12px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.state-msg-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border: 1px solid rgba(var(--accent-rgb), 0.3);
+  border-radius: 12px;
+  background: rgba(var(--accent-rgb), 0.06);
+  color: var(--accent);
+}
+
+.state-msg-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.state-msg-title {
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.state-msg-hint {
+  max-width: 36rem;
+  font-size: 0.95rem;
+}
+
+.state-msg .btn-load-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+  text-decoration: none;
+}
+
+.state-msg .btn-load-more svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Errores (noticias sin servicio o sin conexión): tono cobre en vez del color de acento */
+.state-msg.is-error .state-msg-icon {
+  border-color: rgba(var(--copper-rgb), 0.4);
+  background: rgba(var(--copper-rgb), 0.08);
+  color: var(--copper);
+}
+
+/* Dentro de paneles estrechos (Tu espacio): sin marco */
+.state-msg.is-compact {
+  padding: 2.5rem 0.5rem;
+  border: 0;
+  background: none;
+}
+
 .empty-state {
   grid-column: 1 / -1;
   text-align: center;
@@ -5129,12 +5223,15 @@ body.modal-open {
     scroll-behavior: auto;
   }
 
+  /* Sin transiciones (none, no una duración mínima): con una duración mínima, la propiedad por
+     defecto "transition: all" también animaba la visibilidad heredada y los menús recién abiertos
+     no podían recibir el foco en ese instante */
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition: none !important;
   }
 
   .reveal {
@@ -5781,6 +5878,7 @@ h4,
 }
 
 .hero-title,
+.section-header h1,
 .section-header h2,
 .page-hero h1 {
   font-weight: 800;
@@ -5796,7 +5894,7 @@ h4,
 .page-stat dt,
 .stat-item small,
 .perf-label,
-.footer-links h4,
+.footer-links h2,
 .modal-similar h3,
 .modal-perf-head,
 .value-stats,
@@ -5889,7 +5987,35 @@ h4,
 [data-theme="light"] .hero-badge {
   background: rgba(var(--accent-rgb), 0.07);
   border-color: rgba(var(--accent-rgb), 0.3);
-  color: var(--accent);
+  color: var(--accent-deep);
+}
+
+/* ---------- Contraste AA en tema claro ---------- */
+/* Texto pequeño en color de acento sobre fondos teñidos: se usa el tono oscuro del acento
+   (cada color de LED desbloqueable define el suyo) */
+[data-theme="light"] .arch-year,
+[data-theme="light"] .xp-chip,
+[data-theme="light"] .spec-table td.is-best {
+  color: var(--accent-deep);
+}
+
+/* El resplandor decorativo del cuestionario oscurecía el fondo de su etiqueta */
+[data-theme="light"] .quiz-glow {
+  opacity: 0.08;
+}
+
+/* Marca en el mapa de arquitecturas: la hereda del nodo, con el tono claro pensado para fondo oscuro */
+[data-theme="light"] .arch-node.brand-nvidia .arch-brand {
+  color: #3f6900;
+}
+
+[data-theme="light"] .arch-node.brand-amd .arch-brand {
+  color: #b3141f;
+}
+
+/* Plata del 2.º puesto en el ranking de valor */
+[data-theme="light"] .value-item:nth-child(2) .value-rank {
+  color: #6e7d78;
 }
 
 /* ---------- Navegación ---------- */
@@ -6102,8 +6228,9 @@ h4,
   background: rgba(0, 0, 0, 0.16);
 }
 
+/* Oscurece (no aclara) para que el número blanco mantenga el contraste AA */
 [data-theme="light"] .catalog-tab[aria-selected="true"] .tab-count {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 #gpu-search,
@@ -6917,9 +7044,9 @@ h4,
 
 /* Tema claro: marcas con contraste suficiente sobre fondo claro */
 [data-theme="light"] .gpu-brand.brand-nvidia {
-  background: rgba(74, 122, 0, 0.1);
-  border-color: rgba(74, 122, 0, 0.3);
-  color: #4a7a00;
+  background: rgba(63, 105, 0, 0.1);
+  border-color: rgba(63, 105, 0, 0.3);
+  color: #3f6900;
 }
 
 [data-theme="light"] .gpu-brand.brand-amd {
@@ -6959,8 +7086,8 @@ h4,
 }
 
 [data-theme="light"] .server-card.nvidia-card .server-badge {
-  color: #4a7a00;
-  background: rgba(74, 122, 0, 0.1);
+  color: #3f6900;
+  background: rgba(63, 105, 0, 0.1);
 }
 
 [data-theme="light"] .server-card.amd-card .server-badge {
@@ -7136,7 +7263,7 @@ h4,
 
 [data-theme="light"] .brand-line-nvidia,
 [data-theme="light"] .brand-top-nvidia {
-  --brand: #4a7a00;
+  --brand: #3f6900;
 }
 
 [data-theme="light"] .brand-line-amd,
@@ -9315,10 +9442,10 @@ body.has-tray #footer {
 .lower-better {
   display: block;
   margin-top: 0.15rem;
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   letter-spacing: 0;
   text-transform: none;
-  opacity: 0.85;
+  color: var(--text-muted);
 }
 
 .ratio-cell {

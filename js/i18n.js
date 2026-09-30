@@ -1,5 +1,18 @@
 const translations = {
   es: {
+    a11y: {
+      skip: "Saltar al contenido",
+      nav: "Navegación principal",
+      home: "GPU Universe, inicio",
+      theme_to_light: "Cambiar a tema claro",
+      theme_to_dark: "Cambiar a tema oscuro",
+      language: "Idioma",
+      menu_open: "Abrir menú",
+      menu_close: "Cerrar menú",
+      catalog: "Catálogo de GPUs",
+      hero_img: "Ilustración generada con IA de la placa de una tarjeta gráfica: el chip, la memoria y un disipador con heatpipes de cobre",
+      breadcrumb: "Ruta de navegación"
+    },
     nav: {
       gaming: "Gaming",
       workstation: "Workstation",
@@ -217,7 +230,10 @@ const translations = {
       sources: "Fuentes de los datos",
       no_sources: "Datos heredados pendientes de verificar con una fuente.",
       reviewed: "Revisado el {date}.",
-      data_note: "Precios: PVP de lanzamiento en EE. UU., orientativo (no es el precio actual). Datos revisados el {date}."
+      data_note: "Precios: PVP de lanzamiento en EE. UU., orientativo (no es el precio actual). Datos revisados el {date}.",
+      news_error_hint: "El servicio de noticias no responde. Vuelve a intentarlo en unos minutos.",
+      news_offline: "Sin conexión",
+      news_offline_hint: "Las noticias se cargan desde internet: conéctate y vuelve a intentarlo."
     },
     gaming_page: {
       meta_title: "GPUs Gaming — Tarjetas gráficas de escritorio y portátil | GPU Universe",
@@ -678,6 +694,19 @@ const translations = {
     }
   },
   en: {
+    a11y: {
+      skip: "Skip to content",
+      nav: "Main navigation",
+      home: "GPU Universe, home",
+      theme_to_light: "Switch to light theme",
+      theme_to_dark: "Switch to dark theme",
+      language: "Language",
+      menu_open: "Open menu",
+      menu_close: "Close menu",
+      catalog: "GPU catalogue",
+      hero_img: "AI-generated illustration of a graphics card board: the chip, the memory and a heatsink with copper heat pipes",
+      breadcrumb: "Breadcrumb"
+    },
     nav: {
       gaming: "Gaming",
       workstation: "Workstation",
@@ -895,7 +924,10 @@ const translations = {
       sources: "Data sources",
       no_sources: "Legacy data pending verification with a source.",
       reviewed: "Reviewed on {date}.",
-      data_note: "Prices: US launch MSRP, as a guide (not today’s price). Data reviewed on {date}."
+      data_note: "Prices: US launch MSRP, as a guide (not today’s price). Data reviewed on {date}.",
+      news_error_hint: "The news service is not responding. Try again in a few minutes.",
+      news_offline: "You are offline",
+      news_offline_hint: "News is loaded from the internet: reconnect and try again."
     },
     gaming_page: {
       meta_title: "Gaming GPUs — Desktop and laptop graphics cards | GPU Universe",
@@ -1356,6 +1388,19 @@ const translations = {
     }
   },
   fr: {
+    a11y: {
+      skip: "Aller au contenu",
+      nav: "Navigation principale",
+      home: "GPU Universe, accueil",
+      theme_to_light: "Passer au thème clair",
+      theme_to_dark: "Passer au thème sombre",
+      language: "Langue",
+      menu_open: "Ouvrir le menu",
+      menu_close: "Fermer le menu",
+      catalog: "Catalogue de GPU",
+      hero_img: "Illustration générée par IA du circuit d’une carte graphique : la puce, la mémoire et un dissipateur à caloducs en cuivre",
+      breadcrumb: "Fil d’Ariane"
+    },
     nav: {
       gaming: "Jeu",
       workstation: "Station de Travail",
@@ -1573,7 +1618,10 @@ const translations = {
       sources: "Sources des données",
       no_sources: "Données héritées en attente de vérification par une source.",
       reviewed: "Vérifié le {date}.",
-      data_note: "Prix : prix de lancement aux États-Unis, indicatif (pas le prix actuel). Données vérifiées le {date}."
+      data_note: "Prix : prix de lancement aux États-Unis, indicatif (pas le prix actuel). Données vérifiées le {date}.",
+      news_error_hint: "Le service d’actualités ne répond pas. Réessayez dans quelques minutes.",
+      news_offline: "Hors ligne",
+      news_offline_hint: "Les actualités se chargent depuis internet : reconnectez-vous et réessayez."
     },
     gaming_page: {
       meta_title: "GPU Gaming — Cartes graphiques de bureau et portables | GPU Universe",
@@ -2034,6 +2082,19 @@ const translations = {
     }
   },
   de: {
+    a11y: {
+      skip: "Zum Inhalt springen",
+      nav: "Hauptnavigation",
+      home: "GPU Universe, Startseite",
+      theme_to_light: "Zum hellen Design wechseln",
+      theme_to_dark: "Zum dunklen Design wechseln",
+      language: "Sprache",
+      menu_open: "Menü öffnen",
+      menu_close: "Menü schließen",
+      catalog: "GPU-Katalog",
+      hero_img: "KI-generierte Illustration einer Grafikkartenplatine: Chip, Speicher und ein Kühler mit Heatpipes aus Kupfer",
+      breadcrumb: "Brotkrümelnavigation"
+    },
     nav: {
       gaming: "Gaming",
       workstation: "Workstation",
@@ -2251,7 +2312,10 @@ const translations = {
       sources: "Datenquellen",
       no_sources: "Übernommene Daten, noch nicht mit einer Quelle geprüft.",
       reviewed: "Geprüft am {date}.",
-      data_note: "Preise: US-Einführungspreis als Richtwert (nicht der aktuelle Preis). Daten geprüft am {date}."
+      data_note: "Preise: US-Einführungspreis als Richtwert (nicht der aktuelle Preis). Daten geprüft am {date}.",
+      news_error_hint: "Der Nachrichtendienst antwortet nicht. Versuche es in ein paar Minuten erneut.",
+      news_offline: "Keine Verbindung",
+      news_offline_hint: "Die Nachrichten werden aus dem Internet geladen: Stelle eine Verbindung her und versuche es erneut."
     },
     gaming_page: {
       meta_title: "Gaming-GPUs — Desktop- und Laptop-Grafikkarten | GPU Universe",
@@ -2712,6 +2776,19 @@ const translations = {
     }
   },
   it: {
+    a11y: {
+      skip: "Vai al contenuto",
+      nav: "Navigazione principale",
+      home: "GPU Universe, home",
+      theme_to_light: "Passa al tema chiaro",
+      theme_to_dark: "Passa al tema scuro",
+      language: "Lingua",
+      menu_open: "Apri il menu",
+      menu_close: "Chiudi il menu",
+      catalog: "Catalogo di GPU",
+      hero_img: "Illustrazione generata con IA della scheda di una GPU: il chip, la memoria e un dissipatore con heatpipe in rame",
+      breadcrumb: "Percorso di navigazione"
+    },
     nav: {
       gaming: "Gaming",
       workstation: "Workstation",
@@ -2929,7 +3006,10 @@ const translations = {
       sources: "Fonti dei dati",
       no_sources: "Dati ereditati in attesa di verifica con una fonte.",
       reviewed: "Verificato il {date}.",
-      data_note: "Prezzi: prezzo di lancio negli Stati Uniti, indicativo (non è il prezzo attuale). Dati verificati il {date}."
+      data_note: "Prezzi: prezzo di lancio negli Stati Uniti, indicativo (non è il prezzo attuale). Dati verificati il {date}.",
+      news_error_hint: "Il servizio di notizie non risponde. Riprova tra qualche minuto.",
+      news_offline: "Sei offline",
+      news_offline_hint: "Le notizie si caricano da internet: connettiti e riprova."
     },
     gaming_page: {
       meta_title: "GPU Gaming — Schede grafiche desktop e per portatili | GPU Universe",
@@ -3390,6 +3470,19 @@ const translations = {
     }
   },
   ru: {
+    a11y: {
+      skip: "Перейти к содержимому",
+      nav: "Основная навигация",
+      home: "GPU Universe, главная",
+      theme_to_light: "Включить светлую тему",
+      theme_to_dark: "Включить тёмную тему",
+      language: "Язык",
+      menu_open: "Открыть меню",
+      menu_close: "Закрыть меню",
+      catalog: "Каталог видеокарт",
+      hero_img: "Иллюстрация, созданная ИИ: плата видеокарты — чип, память и радиатор с медными тепловыми трубками",
+      breadcrumb: "Навигационная цепочка"
+    },
     nav: {
       gaming: "Игры",
       workstation: "Рабочие станции",
@@ -3607,7 +3700,10 @@ const translations = {
       sources: "Источники данных",
       no_sources: "Унаследованные данные, ещё не проверенные по источнику.",
       reviewed: "Проверено {date}.",
-      data_note: "Цены: рекомендованная цена в США на старте, ориентировочно (не текущая цена). Данные проверены {date}."
+      data_note: "Цены: рекомендованная цена в США на старте, ориентировочно (не текущая цена). Данные проверены {date}.",
+      news_error_hint: "Служба новостей не отвечает. Попробуйте ещё раз через несколько минут.",
+      news_offline: "Нет подключения",
+      news_offline_hint: "Новости загружаются из интернета: подключитесь и попробуйте ещё раз."
     },
     gaming_page: {
       meta_title: "Игровые GPU — настольные и мобильные видеокарты | GPU Universe",
@@ -4069,44 +4165,51 @@ const translations = {
   }
 };
 
-let currentLang = localStorage.getItem('gpu_lang') || 'es';
+// Idioma guardado: solo se acepta si existe; un valor corrupto o antiguo no debe romper la página
+function readSavedLang() {
+  try {
+    const saved = localStorage.getItem('gpu_lang');
+    if (saved && Object.prototype.hasOwnProperty.call(translations, saved)) return saved;
+  } catch (e) { /* almacenamiento no disponible */ }
+  return 'es';
+}
+
+let currentLang = readSavedLang();
 
 function setLanguage(lang) {
-  if (translations[lang]) {
-    currentLang = lang;
-    window.currentLang = lang;
-    localStorage.setItem('gpu_lang', lang);
-    applyTranslations();
-    updateLangUI(lang);
-    document.documentElement.lang = lang;
-    if (typeof window.renderAll === 'function') {
-      window.renderAll();
-    }
-    window.dispatchEvent(new CustomEvent('i18n:change', { detail: { lang } }));
+  if (!Object.prototype.hasOwnProperty.call(translations, lang)) return;
+  currentLang = lang;
+  window.currentLang = lang;
+  try { localStorage.setItem('gpu_lang', lang); } catch (e) { /* sin persistencia */ }
+  applyTranslations();
+  updateLangUI(lang);
+  document.documentElement.lang = lang;
+  if (typeof window.renderAll === 'function') {
+    window.renderAll();
   }
+  window.dispatchEvent(new CustomEvent('i18n:change', { detail: { lang } }));
 }
 
 function updateLangUI(lang) {
-  const flags = document.querySelectorAll('.current-flag');
-  const langTexts = document.querySelectorAll('.current-lang-text');
-  
   const flagCode = lang === 'en' ? 'us' : lang;
   // Banderas locales (assets/flags); la ruta se toma de la bandera actual para servir en / y en /pages
-  flags.forEach(flag => {
+  document.querySelectorAll('.current-flag').forEach(flag => {
     flag.src = flag.getAttribute('src').replace(/[a-z]{2}\.svg$/, `${flagCode}.svg`);
   });
-  
-  langTexts.forEach(text => {
+  document.querySelectorAll('.current-lang-text').forEach(text => {
     text.textContent = lang.toUpperCase();
+  });
+  document.querySelectorAll('.lang-option').forEach(opt => {
+    opt.setAttribute('aria-checked', String(opt.dataset.value === lang));
   });
 }
 
 
 function t(keyPath) {
   const keys = keyPath.split('.');
-  let value = translations[currentLang];
+  let value = translations[currentLang] || translations.es;
   for (let key of keys) {
-    if (value[key] === undefined) return keyPath;
+    if (value == null || value[key] === undefined) return keyPath;
     value = value[key];
   }
   return value;
@@ -4118,7 +4221,7 @@ function applyTranslations() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     const translation = t(key);
-    
+
     // Si es un input, modificar el placeholder, sino el textContent/innerHTML
     if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
       el.placeholder = translation;
@@ -4127,49 +4230,100 @@ function applyTranslations() {
       el.innerHTML = translation;
     }
   });
-  // Etiquetas accesibles: data-i18n-aria="clave" traduce el aria-label
+  // Etiquetas accesibles: data-i18n-aria="clave" traduce el aria-label y data-i18n-alt, el alt
   document.querySelectorAll('[data-i18n-aria]').forEach(el => {
     el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
   });
+  document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+    el.setAttribute('alt', t(el.getAttribute('data-i18n-alt')));
+  });
 }
 window.applyTranslations = applyTranslations;
+
+// Selector de idioma: botón de menú (aria-haspopup="menu") con opciones menuitemradio.
+// Teclado: flechas, Inicio/Fin y la inicial del idioma para moverse; Intro/Espacio elige;
+// Esc cierra y devuelve el foco al botón; Tab cierra y sigue con el orden normal.
+function initLangMenus() {
+  const switchers = [...document.querySelectorAll('.lang-switcher')];
+
+  function close(switcher, returnFocus) {
+    if (!switcher.classList.contains('active')) return;
+    switcher.classList.remove('active');
+    const btn = switcher.querySelector('.lang-btn');
+    btn.setAttribute('aria-expanded', 'false');
+    if (returnFocus) btn.focus();
+  }
+
+  function open(switcher, which) {
+    switchers.forEach(s => { if (s !== switcher) close(s, false); });
+    switcher.classList.add('active');
+    switcher.querySelector('.lang-btn').setAttribute('aria-expanded', 'true');
+    const options = [...switcher.querySelectorAll('.lang-option')];
+    const current = options.findIndex(o => o.dataset.value === currentLang);
+    const index = which === 'last' ? options.length - 1 : which === 'first' ? 0 : Math.max(current, 0);
+    options[index].focus();
+  }
+
+  switchers.forEach(switcher => {
+    const btn = switcher.querySelector('.lang-btn');
+    const menu = switcher.querySelector('.lang-dropdown');
+    if (!btn || !menu) return;
+    const options = () => [...menu.querySelectorAll('.lang-option')];
+
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (switcher.classList.contains('active')) close(switcher, false);
+      else open(switcher);
+    });
+    btn.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        open(switcher, e.key === 'ArrowDown' ? 'first' : 'last');
+      }
+    });
+
+    menu.addEventListener('keydown', e => {
+      const list = options();
+      const i = list.indexOf(document.activeElement);
+      const move = n => { e.preventDefault(); list[(n + list.length) % list.length].focus(); };
+      if (e.key === 'ArrowDown') move(i + 1);
+      else if (e.key === 'ArrowUp') move(i - 1);
+      else if (e.key === 'Home') move(0);
+      else if (e.key === 'End') move(list.length - 1);
+      else if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        close(switcher, true);
+      } else if (e.key === 'Tab') close(switcher, false);
+      else if (e.key.length === 1 && /\S/.test(e.key)) {
+        // Salta a la siguiente opción que empieza por esa letra
+        const letter = e.key.toLocaleLowerCase();
+        const next = [...list.slice(i + 1), ...list.slice(0, i + 1)].find(o => o.textContent.trim().toLocaleLowerCase().startsWith(letter));
+        if (next) { e.preventDefault(); next.focus(); }
+      }
+    });
+
+    // Sin stopPropagation: features.js cuenta los cambios de idioma para los logros
+    menu.addEventListener('click', e => {
+      const opt = e.target.closest('.lang-option');
+      if (!opt) return;
+      setLanguage(opt.dataset.value);
+      close(switcher, true);
+    });
+  });
+
+  // Cerrar al hacer clic fuera
+  document.addEventListener('click', e => {
+    switchers.forEach(s => { if (!s.contains(e.target)) close(s, false); });
+  });
+}
 
 // Inicializar
 function initI18n() {
   applyTranslations();
   updateLangUI(currentLang);
   document.documentElement.lang = currentLang;
-  
-  const switchers = document.querySelectorAll('.lang-switcher');
-
-  switchers.forEach(switcher => {
-    const btn = switcher.querySelector('.lang-btn');
-    const options = switcher.querySelectorAll('.lang-option');
-
-    if (btn) {
-      btn.onclick = (e) => {
-        e.stopPropagation();
-        // Close other switchers if any
-        document.querySelectorAll('.lang-switcher').forEach(s => {
-          if (s !== switcher) s.classList.remove('active');
-        });
-        switcher.classList.toggle('active');
-      };
-    }
-
-    options.forEach(opt => {
-      opt.onclick = () => {
-        const lang = opt.getAttribute('data-value');
-        setLanguage(lang);
-        switcher.classList.remove('active');
-      };
-    });
-  });
-
-  // Cerrar al hacer clic fuera
-  document.addEventListener('click', () => {
-    document.querySelectorAll('.lang-switcher').forEach(s => s.classList.remove('active'));
-  });
+  initLangMenus();
 }
 
 

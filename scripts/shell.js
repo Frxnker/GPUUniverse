@@ -55,7 +55,10 @@ function syncHtml(page, html) {
     const [, indent, name] = m;
     const end = lines.findIndex((l, n) => n > i && l.trim() === `<!-- /shell:${name} -->`);
     if (end < 0) throw new Error(`${page}: falta <!-- /shell:${name} -->`);
-    out.push(lines[i], ...render(name, page).split('\n'), `${indent}<!-- /shell:${name} -->`);
+    // La plantilla se sangra como su marca (p. ej. dentro de <main>)
+    const block = render(name, page).split('\n');
+    const base = Math.min(...block.filter(l => l.trim()).map(l => l.match(/^ */)[0].length));
+    out.push(lines[i], ...block.map(l => (l.trim() ? indent + l.slice(base) : l)), `${indent}<!-- /shell:${name} -->`);
     blocks.push(name);
     i = end;
   }
