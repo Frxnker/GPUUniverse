@@ -1,49 +1,151 @@
-# 🌌 GPU Universe — Portal de Hardware Gráfico
+# GPU Universe
 
-[![Project Version](https://img.shields.io/badge/version-1.5.0-blueviolet)](https://github.com/Frxnker/gpu-universe)
-[![Status](https://img.shields.io/badge/status-active-success)]()
-[![License](https://img.shields.io/badge/license-MIT-green)]()
+[![Pruebas](https://github.com/Frxnker/GPUUniverse/actions/workflows/pruebas.yml/badge.svg)](https://github.com/Frxnker/GPUUniverse/actions/workflows/pruebas.yml)
+![Versión](https://img.shields.io/badge/versión-2.0.0-19e6b4)
+[![Licencia: MIT](https://img.shields.io/badge/licencia-MIT-blue)](LICENSE)
 
-**GPU Universe** es una plataforma interactiva de última generación diseñada para entusiastas y profesionales del hardware. Ofrece una base de datos exhaustiva y visualmente impactante que abarca desde las tarjetas gráficas domésticas más icónicas hasta los aceleradores de IA y centros de datos más potentes del planeta.
+Portal sobre tarjetas gráficas: catálogo, comparador, historia, un visor 3D de las piezas de una GPU
+y calculadoras. Está en 6 idiomas, funciona sin conexión y no necesita compilar nada.
 
-![Preview](https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&q=80&w=1000)
+**Web publicada:** <https://frxnker.github.io/GPUUniverse/>
 
-## ✨ Características Principales
+![GPU Universe](assets/icons/og-image.png)
 
-- 🌍 **Internacionalización (i18n)**: Soporte nativo para 6 idiomas (Español, Inglés, Francés, Alemán, Italiano y Ruso).
-- 🔍 **Buscador Inteligente**: Sistema de búsqueda global con autocompletado en todas las categorías.
-- ⚖️ **Comparador Dinámico**: Visualización de rendimiento entre generaciones (Ref: **RTX 5090**).
-- 📱 **Diseño "Silicio / PCB"**: Estética inspirada en el propio hardware (pistas de circuito animadas, tarjetas tipo componente con contactos PCIe, medidores LED), con tema claro y oscuro y adaptada a cualquier pantalla.
-- 💹 **Localización de Precios**: Conversión automática a EUR, USD o RUB.
-- 🛡️ **Estructura Optimizada**: Organización profesional por carpetas para facilitar el despliegue en GitHub Pages.
+## Qué tiene
 
-## 🚀 Tecnologías Utilizadas
+- **Catálogo**:
+  - 147 GPUs de escritorio (2009-2025) y 24 de portátil en *Gaming*;
+  - 10 profesionales en *Workstation*;
+  - 9 aceleradores de IA en *Servidor*.
+  - Filtros, ordenación y buscador; el estado se guarda en la URL para compartirlo.
+  - Cada GPU tiene su ficha con las fuentes de sus datos.
+- **Comparador** de hasta 4 GPUs: veredicto, gráfica por métrica, tabla con el mejor valor
+  marcado y enlace para compartir (`?gpus=`).
+- **Historia**: cronología, mapa de arquitecturas de NVIDIA y AMD y Salón de la Fama.
+- **Aprender**: modelo 3D de una tarjeta gráfica con sus piezas explicadas. Si el equipo no tiene
+  WebGL, las piezas se pueden leer igual.
+- **Herramientas**: qué GPU mejora la tuya, qué fuente de alimentación necesitas y cuánta VRAM
+  hace falta para jugar o para IA local.
+- **Niveles**: experiencia, logros, retos diarios y colores de LED desbloqueables. El progreso se
+  guarda en el navegador.
+- **Buscador rápido** (Ctrl+K), favoritas, recientes y bandeja de comparación.
+- **Recomendador** en la portada (tres preguntas).
+- **Noticias** de TechPowerUp, Tom's Hardware, Wccftech y PC Gamer. Necesitan conexión; si el
+  servicio falla, la web lo dice y ofrece reintentar.
+- **Idiomas**: español, inglés, francés, alemán, italiano y ruso, con plurales rusos correctos.
+- **Aspecto**: tema claro y oscuro con estética de placa de circuito («Silicio / PCB»).
+- **Sin conexión**: se puede instalar como app y, tras la primera visita, funciona sin red.
 
-- **Frontend Core**: HTML5 Semántico, CSS3 Moderno, JavaScript ES6+ Vanilla.
-- **Visuales**: Canvas API, Google Fonts (*Exo 2*, *IBM Plex Sans* y *JetBrains Mono*).
+### Sobre los datos
 
-## 📁 Estructura del Proyecto
+- **Precios:** son el PVP de lanzamiento en EE. UU., en dólares y sin impuestos. Son orientativos:
+  no es el precio actual ni hay conversión de moneda.
+- **Índice gaming:** rendimiento a 1440p Ultra respecto a la RTX 5090 (= 100), según la jerarquía
+  de Tom's Hardware.
+- **Datos pendientes:** lo que no se ha podido verificar con una fuente aparece como «pendiente»,
+  nunca inventado.
+- **Revisión:** fecha y fuentes en `DATA_META` y `DATA_SOURCES` de `js/data.js`.
+
+## Tecnología
+
+- HTML, CSS y JavaScript sin frameworks ni compilación: lo que hay en el repositorio es lo que se
+  publica.
+- Nada se carga de otros dominios salvo las noticias:
+  - fuentes locales (Exo 2, IBM Plex Sans y JetBrains Mono);
+  - Three.js 0.186 local para el visor 3D;
+  - banderas e iconos propios.
+- `sw.js` (service worker) y `manifest.webmanifest` para el uso sin conexión.
+- Política de seguridad de contenido (CSP) en todas las páginas. Ver
+  [`docs/SEGURIDAD.md`](docs/SEGURIDAD.md).
+- Accesibilidad:
+  - teclado completo;
+  - enlace para saltar al contenido;
+  - contraste AA en los dos temas;
+  - respeta «reducir movimiento».
+
+## Estructura
 
 ```text
-├── index.html          # Punto de entrada (Dashboard) - Raíz para despliegue
-├── assets/             # Recursos multimedia e imágenes
-├── css/                # Hojas de estilo y diseño
-├── js/                 # Lógica, datos e internacionalización
-├── pages/              # Páginas secundarias (Gaming, Workstation, Server, Compare)
-├── package.json        # Dependencias y configuración de Node.js
-└── README.md           # Documentación técnica
+├── index.html, 404.html        Portada y página de error
+├── pages/                      Gaming, Workstation, Servidor, Comparar, Historia, Aprender,
+│                               Herramientas y Niveles
+├── partials/                   Bloques comunes (cabecera, barra, pie, modal, noticias, metadatos)
+├── css/style.css               Estilos (índice de secciones al principio)
+├── js/                         i18n, datos, lógica común y un script por página
+├── assets/                     Imágenes, fuentes, banderas e iconos
+├── vendor/three/               Three.js (copia local)
+├── sw.js, manifest.webmanifest Uso sin conexión e instalación
+├── sitemap.xml, robots.txt     Buscadores
+├── scripts/                    serve.js (servidor local) y shell.js (bloques comunes)
+├── tests/                      Pruebas automáticas
+└── docs/                       Registro de progreso y auditoría de seguridad
 ```
 
-## 🛠️ Instalación y Uso
+## Cómo usarlo en local
 
-1. **Clonar**:
-   ```bash
-   git clone https://github.com/Frxnker/gpu-universe.git
-   ```
-2. **Ejecutar**: Abre `index.html` en tu navegador.
-3. **Despliegue**: Optimizado para GitHub Pages directamente desde la rama principal.
+Hace falta [Node.js](https://nodejs.org/) 22.13 o posterior, solo para el servidor local y las
+pruebas; la web no lo necesita. GitHub Actions usa Node 24.
 
----
+```bash
+git clone https://github.com/Frxnker/GPUUniverse.git
+cd GPUUniverse
+npm install        # solo instala jsdom, que usan las pruebas
+npm start          # http://localhost:8080/  (también responde en /GPUUniverse/, como GitHub Pages)
+```
 
-Desarrollado con precisión técnica para la comunidad de hardware.  
-**© 2025-2026 GPU Universe**
+- Ábrela a través del servidor, no con doble clic en `index.html`: el service worker y las
+  noticias necesitan `http://`.
+- El servidor local distingue mayúsculas y minúsculas igual que GitHub Pages.
+
+## Pruebas
+
+```bash
+npm test                   # unos 20 s
+npm run shell -- --check   # que las páginas coinciden con partials/ y sitemap.xml está al día
+```
+
+Las pruebas (jsdom con el test runner de Node) cubren:
+- las páginas: sin errores y traducidas en los 6 idiomas;
+- las traducciones (mismas claves, plurales);
+- la coherencia de los datos;
+- los filtros y precios;
+- las reglas de niveles y logros;
+- los flujos principales (comparar, favoritos, Ctrl+K, herramientas y retos);
+- la accesibilidad (encabezados, teclado, etiquetas);
+- los metadatos y el uso sin conexión;
+- la seguridad (entradas hostiles, CSP);
+- que no haya CSS muerto;
+- las mayúsculas en las rutas.
+
+GitHub Actions las ejecuta en cada push y pull request.
+
+## Cómo cambiar cosas
+
+- **Barra, pie, modal, cabecera o noticias:**
+  - se editan en `partials/` y luego se ejecuta `npm run shell`, que los copia en todas las
+    páginas;
+  - una prueba falla si alguna página se queda desincronizada.
+- **Textos:** en `js/i18n.js`, siempre en los 6 idiomas con las mismas claves.
+  - El título y la descripción de cada página están en `meta.*`.
+  - `npm run shell` los usa también para el HTML y los metadatos para compartir.
+- **Datos de GPUs:** en `js/data.js`, con su fuente (`src`). Si no se puede verificar un dato, se
+  deja en `null` (se muestra como pendiente).
+- **Estilos:** `css/style.css` está en capas y el orden importa (ver su índice).
+- **Service worker:** si cambia la lista de archivos que guarda, sube `VERSION` en `sw.js`.
+- **Progreso guardado:** si cambia la forma del estado, sube `VERSION` en `js/progress.js` y añade
+  la migración.
+
+## Publicación
+
+- GitHub Pages publica la rama `main` tal cual.
+- `_config.yml` evita publicar lo que no es de la web (`partials/`, `tests/`, `scripts/`, `docs/`).
+- La URL pública está en `"homepage"` de `package.json`: de ahí salen el `canonical`, la sitemap y
+  la ruta de la 404.
+
+## Licencia y créditos
+
+- Código con [licencia MIT](LICENSE).
+- Las ilustraciones de GPUs están **generadas con IA** y la web lo indica junto a cada una.
+- El origen de cada imagen, fuente y biblioteca, y el aviso de marcas registradas, están en
+  [CREDITOS.md](CREDITOS.md).
+- GPU Universe es un proyecto independiente, sin relación con NVIDIA, AMD, Intel ni Apple.

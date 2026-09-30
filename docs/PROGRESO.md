@@ -518,8 +518,169 @@ Detalle completo en [`docs/SEGURIDAD.md`](SEGURIDAD.md).
   - En las pruebas que inyectan axe se usa `bypassCSP`: la propia CSP bloqueaba el script de la
     herramienta, señal de que funciona.
 
+- **Revisión completa**: 360 vistas en 3 motores, 0 incidencias reales.
+- Commit `0e2c1f7`.
+
+---
+
+## Fase extra — Publicación y legal ✅ (falta comprobarlo en la web publicada tras el push)
+
+**Qué cambia**
+- **GitHub Actions** (`.github/workflows/pruebas.yml`), en cada push y pull request:
+  - ejecuta `npm ci`, `npm run shell -- --check` y `npm test` en Linux con Node 24;
+  - Linux distingue mayúsculas como GitHub Pages.
+- **Mayúsculas en las rutas**:
+  - `tests/paths.test.js` exige que cada ruta local (HTML, `srcset`, CSS, manifest, precaché del
+    service worker y rutas escritas en el JS) coincida letra por letra con un archivo;
+  - los archivos que carga la web van en minúsculas;
+  - `scripts/serve.js` también distingue mayúsculas, así que en local un `Style.css` da 404, como
+    en GitHub Pages.
+  - Comprobado forzando `css/Style.css`: la prueba lo detecta.
+- **`_config.yml`**: GitHub Pages deja de publicar `partials/`, `tests/`, `scripts/`, `docs/`,
+  `package*.json`, `README.md` y `CREDITOS.md`, que hoy se sirven (comprobado:
+  `/GPUUniverse/partials/nav.html` responde 200).
+  - `LICENSE` sí se publica: la licencia MIT acompaña al código que se sirve.
+- **`LICENSE`** (MIT, © 2025-2026 Frxnker). Las fuentes (OFL) y Three.js (MIT) conservan sus
+  licencias.
+- **`CREDITOS.md`**:
+  - origen y licencia de cada imagen, fuente y biblioteca, datos y noticias;
+  - aviso de marcas registradas;
+  - autorías copiadas literalmente de los archivos de licencia.
+- **Imágenes generadas con IA**:
+  - nota visible «Ilustración generada con IA» (traducida) sobre la imagen de la portada, la de
+    Gaming y las 4 del Salón de la Fama;
+  - en el Salón de la Fama, el `alt` pasa de solo el nombre del modelo, que daba a entender que
+    era una foto, a «Ilustración generada con IA inspirada en la GeForce 256».
+- **Pie**: aviso de marcas (NVIDIA, AMD, Intel y Apple son marcas de sus propietarios; proyecto
+  independiente), traducido, y enlace «Créditos y licencias» a `CREDITOS.md` en GitHub.
+- **Fuentes sin Google Fonts**: ya estaban alojadas en el propio sitio desde el 30/09 (commit
+  `60192a2`), con su licencia OFL. Una prueba de la Fase 3 comprueba que ninguna página pide nada a
+  otros dominios.
+
+**Web publicada** (versión `bfe4d39`, antes de este commit)
+- Responden las 9 páginas.
+- La 404 funciona en rutas anidadas con su `<base>`.
+- GitHub Pages distingue mayúsculas: `pages/Gaming.html` da 404, como anticipaba la prueba.
+- `sw.js`, `manifest.webmanifest`, `sitemap.xml` y `robots.txt` se sirven con su tipo.
+- Hay HSTS.
+- **Tras el próximo push** hay que comprobar:
+  - que `/partials/nav.html` da 404 (por `_config.yml`);
+  - que la CSP no bloquea nada en producción;
+  - que GitHub Actions pasa en verde.
+
+**Cómo se ha comprobado**
+- `npm test`: 129 pruebas en ~21 s. Hay 4 nuevas de rutas.
+- axe: 0 infracciones con las notas nuevas (es y de, claro y oscuro, escritorio y móvil).
+- Revisión completa en 3 motores (ver cierre).
+
+---
+
+## Fase 7 — Documentación ✅
+
+- README reescrito:
+  - URL real del repositorio (`GPUUniverse`, no `gpu-universe`) y de la web publicada;
+  - versión 2.0.0 e insignia de las pruebas de GitHub Actions;
+  - funciones reales con sus cifras (147 GPUs de escritorio, 24 de portátil, 10 workstation y 9
+    de servidor);
+  - qué significan los precios y el índice gaming;
+  - cómo arrancarlo en local y cómo pasar las pruebas;
+  - cómo cambiar la barra (`partials/` + `npm run shell`), textos, datos, estilos, service worker y
+    progreso;
+  - publicación, licencia y créditos.
+- Se retiran la imagen de Unsplash (externa y ajena al proyecto), la mención a Google Fonts y la
+  conversión a EUR/RUB, que ya no existen.
+- `package.json` declara `"engines": { "node": ">=22.13" }`: el patrón `tests/**/*.test.js` de
+  `node --test` necesita Node ≥ 21 y jsdom 29 pide 20.19, 22.13 o ≥ 24.
+
+---
+
+## Propuestas (no implementadas: esperan tu aprobación)
+
+| # | Propuesta | Esfuerzo | Impacto |
+|---|---|---|---|
+| 1 | **Noticias sin servicio externo.** Una GitHub Action programada (p. ej. cada 3 h) descarga los 4 feeds, los filtra y guarda un `news.json` en el propio sitio; la web lee ese archivo. | Medio (1-2 días) | **Alto** |
+| 2 | **Una URL por idioma** (`?lang=en` + `hreflang` + `canonical` por idioma, generados por `npm run shell`). | Medio (1-2 días) | Medio-alto |
+| 3 | **Exportar e importar el progreso** (archivo JSON), para no perder niveles y logros al cambiar de navegador o borrar datos. | Bajo (medio día) | Medio |
+| 4 | **Ranking de eficiencia** (rendimiento por vatio) en Gaming y en Comparar, con los datos que ya hay. | Bajo (1 día) | Medio |
+| 5 | **Completar el índice gaming** de las 48 GPUs de escritorio de 2009-2015 que hoy salen «pendiente», con una segunda fuente verificable y el método documentado. | Medio (2-3 días de datos) | Medio |
+
+**Por qué cada una**
+1. **Noticias sin servicio externo.**
+   - Quita la dependencia de rss2json, que limita las peticiones (errores 429 y Buenas prácticas en
+     96).
+   - El JSON es del mismo origen: lo guarda el service worker y las noticias se verían también sin
+     conexión, con la última copia.
+   - El servicio deja de saber qué visitas hay.
+   - Contras: un commit automático cada pocas horas, o publicar con la acción de Pages en lugar de
+     desde la rama.
+2. **Una URL por idioma.** Hoy los buscadores solo ven el español: las traducciones se aplican con
+   JavaScript sobre la misma URL, y un enlace compartido no conserva el idioma.
+3. **Exportar e importar el progreso.** El estado ya tiene versión, migración y saneado, así que
+   importar un archivo es seguro.
+4. **Ranking de eficiencia.**
+   - 98 de las 147 GPUs de escritorio tienen índice y TDP.
+   - Complementa al «Rendimiento por precio» y responde a una pregunta frecuente (consumo y ruido).
+5. **Completar el índice gaming.**
+   - Candidatas: la clasificación relativa de TechPowerUp (hoy bloquea con captcha) o PassMark
+     G3D.
+   - Hace falta tu visto bueno sobre la fuente, por la regla de no inventar datos.
+
+---
+
+## Informe final
+
+**Lighthouse móvil** (mediana de 3 pasadas, servidor local con gzip):
+
+| Página | Rendimiento: antes de la Fase 3 → referencia de hoy → **final** | Accesibilidad: referencia → **final** | Buenas prácticas | SEO |
+|---|---|---|---|---|
+| Portada | 68 → 83 → **94** | 95 → **100** | 96* | 100 |
+| Comparar | 88 → 95 → **98** | 95 → **100** | 100 | 100 |
+| Gaming | 86 → 95 → **98** | 96 → **100** | 96* | 100 |
+| Historia | 85 → 95 → **98** | 95 → **100** | 100 | 100 |
+| Aprender | 89 → 89 → **98** | 96 → **100** | 100 | 100 |
+| Niveles | — → 81 → **98** | 95 → **100** | 100 | 100 |
+| Servidor | — → 95 → **98** | 96 → **100** | 96* | 100 |
+| Herramientas | — → 95 → **98** | 95 → **100** | 100 | 100 |
+| Workstation | — → 95 → **98** | 96 → **100** | 96* | 100 |
+
+- Final: LCP 2,3-2,7 s, TBT ≤ 40 ms, CLS ≤ 0,033.
+- \* El único fallo de Buenas prácticas son los errores 429 de rss2json en consola (su límite de
+  peticiones), ver propuesta 1.
+- La auditoría de CSP de Lighthouse pasa. Sugiere llevar la política a una cabecera HTTP, cosa que
+  GitHub Pages no permite.
+- Objetivos cumplidos: rendimiento ≥ 90; accesibilidad, buenas prácticas (salvo el servicio
+  externo) y SEO ≥ 95.
+
+**Comparación visual final**
+- Capturas finales en `screenshots/final/`, con los mismos parámetros que `screenshots/referencia/`.
+- Láminas antes/después por página en `screenshots/comparacion/`.
+- Las páginas conservan su aspecto. Cambian solo:
+  - la nota «Ilustración generada con IA»;
+  - los colores de contraste del tema claro;
+  - los estados vacíos unificados;
+  - la línea legal del pie.
+
+**Observación fuera del plan**
+- El contador de la portada «Revisión de datos» anima el año desde 0: en las capturas se ve
+  «1199» o «1248» a mitad de animación.
+- Ya pasaba antes de este trabajo. Es un arreglo de pocas líneas (no animar esa cifra) que queda
+  a tu criterio.
+
+**Queda bloqueado o sin verificar**
+- Comprobaciones de la web publicada tras el próximo push:
+  - que `/partials/` deja de publicarse;
+  - la CSP en producción;
+  - el primer run de GitHub Actions.
+- Buenas prácticas en 96 en las páginas con noticias mientras rss2json limite las peticiones
+  (propuesta 1).
+- 48 GPUs de escritorio y 2 de portátil sin índice gaming (propuesta 5).
+- Títulos en trazo fino solo en el WebKit de Playwright para Windows (sin soporte de fuentes
+  variables). Safari real no está afectado.
+
 ---
 
 ## Decisiones pendientes
 
-_Ninguna por ahora._
+1. Qué propuestas aprobar (ver arriba).
+2. Hacer push de los commits de seguridad, publicación y documentación para comprobar la web
+   publicada y el primer run de GitHub Actions.
