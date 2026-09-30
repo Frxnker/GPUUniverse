@@ -49,7 +49,6 @@ const translations = {
       history: "Historia",
       learn: "Aprender",
       search_placeholder: "Buscar GPU",
-      explore: "Explorar",
       search: "Buscar",
       tools: "Herramientas",
       levels: "Niveles"
@@ -62,7 +61,6 @@ const translations = {
       rt: "Ray Tracing",
       video: "Vídeo / Render",
       ia: "IA / Deep Learning",
-      gaming: "Gaming / 4K",
       sort: "Ordenar por",
       sort_perf: "Rendimiento",
       sort_price: "Precio",
@@ -122,16 +120,12 @@ const translations = {
       work_tag: "Profesional",
       server_title: "Servidor / HPC",
       server_desc: "H100, A100, MI300X, Gaudi 3",
-      server_tag: "Enterprise",
-      mobile_title: "Portátil",
-      mobile_desc: "RTX 4090 Laptop, Arc, RX 7900M",
-      mobile_tag: "Portátil"
+      server_tag: "Enterprise"
     },
     sections: {
       gaming_label: "Gaming",
       gaming_title: "GPUs",
       gaming_title_hl: "Domésticas",
-      gaming_p: "Las mejores tarjetas gráficas para gaming, desde gama de entrada hasta lo más top del mercado",
       work_label: "Profesional",
       work_title: "GPUs",
       work_title_hl: "Workstation",
@@ -140,22 +134,13 @@ const translations = {
       server_title: "GPUs de",
       server_title_hl: "Servidor",
       server_p: "Los aceleradores más poderosos del planeta para IA, HPC y centros de datos",
-      mobile_label: "Portátil",
-      mobile_title: "GPUs",
-      mobile_title_hl: "para Laptops",
-      mobile_p: "Tarjetas gráficas de alto rendimiento optimizadas para portátiles",
       compare_label: "Comparativa",
       compare_title: "Rendimiento",
       compare_title_hl: "Comparado",
-      compare_p: "Potencia de cómputo y memoria de los modelos más icónicos",
       timeline_label: "Historia",
       timeline_title: "Evolución de las",
       timeline_title_hl: "GPUs",
       timeline_p: "Desde los primeros aceleradores gráficos 2D en los años 80 hasta las supercomputadoras de IA actuales, la evolución de la Unidad de Procesamiento Gráfico (GPU) es una de las historias más fascinantes de la tecnología. Lo que empezó como un chip dedicado para renderizar píxeles en videojuegos, se ha convertido hoy en el cerebro indiscutible de la inteligencia artificial y el motor del cómputo paralelo masivo a nivel mundial."
-    },
-    compare: {
-      label_primary: "GPU Principal",
-      label_target: "Comparar con..."
     },
     footer: {
       tagline: "La guía definitiva de GPUs 2026",
@@ -170,8 +155,6 @@ const translations = {
       tier_mid: "Gama Media",
       tier_entry: "Entrada",
       year: "Año",
-      arch: "Arq.",
-      perf: "Rendimiento",
       bw: "Ancho Banda",
       price: "Precio",
       no_results: "No se encontraron resultados",
@@ -179,8 +162,6 @@ const translations = {
       use_case: "Casos de Uso",
       tdp: "TDP / Consumo",
       relative_perf: "Rendimiento Relativo",
-      usd_approx: "aprox.",
-      currency: "€",
       msrp: "PVP de lanzamiento",
       msrp_date: "lanzamiento · {date}",
       ai_bf16: "IA · BF16 denso",
@@ -193,10 +174,7 @@ const translations = {
     table: {
       gpu: "GPU",
       cat: "Categoría",
-      tflops: "Rendimiento (TFLOPS)",
-      vram: "Memoria VRAM",
-      bw: "Ancho de Banda",
-      price: "Precio Est."
+      vram: "Memoria VRAM"
     },
     hof: {
       label: "Salón de la Fama",
@@ -226,7 +204,6 @@ const translations = {
       all: "Todos",
       gaming: "Gaming",
       workstation: "Workstation",
-      server: "IA / Servidor",
       score_desc: "Puntuación: TFLOPS por cada 1000 $ de PVP de lanzamiento — Relación potencia/precio."
     },
     catalog: {
@@ -250,7 +227,6 @@ const translations = {
       compare: "Comparar",
       close: "Cerrar",
       back_to_top: "Volver arriba",
-      skip: "Saltar al catálogo",
       news_read_more: "Leer más",
       news_error: "No se pudieron cargar las noticias en este momento.",
       news_retry: "Reintentar",
@@ -264,7 +240,6 @@ const translations = {
       news_offline_hint: "Las noticias se cargan desde internet: conéctate y vuelve a intentarlo."
     },
     gaming_page: {
-      meta_title: "GPUs Gaming — Tarjetas gráficas de escritorio y portátil | GPU Universe",
       home: "Inicio",
       lead: "Más de 150 tarjetas gráficas de escritorio y portátil, de la GTX 460 a la RTX 5090. Filtra, ordena y compáralas con un índice de rendimiento en juegos.",
       stat_desktop: "De escritorio",
@@ -771,7 +746,6 @@ const translations = {
       history: "History",
       learn: "Learn",
       search_placeholder: "Search GPU...",
-      explore: "Explore",
       search: "Search",
       tools: "Tools",
       levels: "Levels"
@@ -784,7 +758,6 @@ const translations = {
       rt: "Ray Tracing",
       video: "Video / Render",
       ia: "AI / Deep Learning",
-      gaming: "Gaming / 4K",
       sort: "Sort by",
       sort_perf: "Performance",
       sort_price: "Price",
@@ -844,16 +817,12 @@ const translations = {
       work_tag: "Professional",
       server_title: "Server / HPC",
       server_desc: "H100, A100, MI300X, Gaudi 3",
-      server_tag: "Enterprise",
-      mobile_title: "Laptop",
-      mobile_desc: "RTX 4090 Laptop, Arc, RX 7900M",
-      mobile_tag: "Portable"
+      server_tag: "Enterprise"
     },
     sections: {
       gaming_label: "Gaming",
       gaming_title: "Domestic",
       gaming_title_hl: "GPUs",
-      gaming_p: "The best graphics cards for gaming, from entry-level to the very top of the market",
       work_label: "Professional",
       work_title: "Workstation",
       work_title_hl: "GPUs",
@@ -862,22 +831,13 @@ const translations = {
       server_title: "Server",
       server_title_hl: "GPUs",
       server_p: "The most powerful accelerators on the planet for AI, HPC, and data centers",
-      mobile_label: "Laptop",
-      mobile_title: "Laptop",
-      mobile_title_hl: "GPUs",
-      mobile_p: "High-performance graphics cards optimized for laptops",
       compare_label: "Comparison",
       compare_title: "Performance",
       compare_title_hl: "Compared",
-      compare_p: "Compute power and memory of the most iconic models",
       timeline_label: "History",
       timeline_title: "Evolution of",
       timeline_title_hl: "GPUs",
       timeline_p: "From the first 2D graphics accelerators in the 80s to today's AI supercomputers, the evolution of the Graphics Processing Unit (GPU) is one of the most fascinating stories in technology. What started as a dedicated chip for rendering pixels in video games has now become the undisputed brain of artificial intelligence and the engine of massive parallel computing worldwide."
-    },
-    compare: {
-      label_primary: "Primary GPU",
-      label_target: "Compare with..."
     },
     footer: {
       tagline: "The Ultimate GPU Guide 2026",
@@ -892,8 +852,6 @@ const translations = {
       tier_mid: "Mid-Range",
       tier_entry: "Entry-Level",
       year: "Year",
-      arch: "Arch",
-      perf: "Performance",
       bw: "Bandwidth",
       price: "Price",
       no_results: "No results found",
@@ -901,8 +859,6 @@ const translations = {
       use_case: "Use Cases",
       tdp: "TDP / Power",
       relative_perf: "Relative Performance",
-      usd_approx: "approx.",
-      currency: "$",
       msrp: "Launch MSRP",
       msrp_date: "launch · {date}",
       ai_bf16: "AI · dense BF16",
@@ -915,10 +871,7 @@ const translations = {
     table: {
       gpu: "GPU",
       cat: "Category",
-      tflops: "Performance (TFLOPS)",
-      vram: "VRAM Memory",
-      bw: "Bandwidth",
-      price: "Est. Price"
+      vram: "VRAM Memory"
     },
     hof: {
       label: "Hall of Fame",
@@ -948,7 +901,6 @@ const translations = {
       all: "All",
       gaming: "Gaming",
       workstation: "Workstation",
-      server: "AI / Server",
       score_desc: "Score: TFLOPS per $1,000 of launch MSRP — power-to-price ratio."
     },
     catalog: {
@@ -972,7 +924,6 @@ const translations = {
       compare: "Compare",
       close: "Close",
       back_to_top: "Back to top",
-      skip: "Skip to catalog",
       news_read_more: "Read more",
       news_error: "News couldn't be loaded right now.",
       news_retry: "Retry",
@@ -986,7 +937,6 @@ const translations = {
       news_offline_hint: "News is loaded from the internet: reconnect and try again."
     },
     gaming_page: {
-      meta_title: "Gaming GPUs — Desktop and laptop graphics cards | GPU Universe",
       home: "Home",
       lead: "Over 150 desktop and laptop graphics cards, from the GTX 460 to the RTX 5090. Filter, sort and compare them with a gaming performance index.",
       stat_desktop: "Desktop",
@@ -1493,7 +1443,6 @@ const translations = {
       history: "Histoire",
       learn: "Apprendre",
       search_placeholder: "Rechercher GPU",
-      explore: "Explorer",
       search: "Rechercher",
       tools: "Outils",
       levels: "Niveaux"
@@ -1506,7 +1455,6 @@ const translations = {
       rt: "Ray Tracing",
       video: "Vidéo / Rendu",
       ia: "IA / Deep Learning",
-      gaming: "Gaming / 4K",
       sort: "Trier par",
       sort_perf: "Performance",
       sort_price: "Prix",
@@ -1566,16 +1514,12 @@ const translations = {
       work_tag: "Professionnel",
       server_title: "Serveur / HPC",
       server_desc: "H100, A100, MI300X, Gaudi 3",
-      server_tag: "Entreprise",
-      mobile_title: "Portable",
-      mobile_desc: "RTX 4090 Laptop, Arc, RX 7900M",
-      mobile_tag: "Portable"
+      server_tag: "Entreprise"
     },
     sections: {
       gaming_label: "Jeu",
       gaming_title: "GPUs",
       gaming_title_hl: "Domestiques",
-      gaming_p: "Les meilleures cartes graphiques pour le jeu, de l'entrée de gamme au très haut de gamme",
       work_label: "Professionnel",
       work_title: "GPUs",
       work_title_hl: "Station de Travail",
@@ -1584,22 +1528,13 @@ const translations = {
       server_title: "GPUs de",
       server_title_hl: "Serveur",
       server_p: "Les accélérateurs les plus puissants au monde pour l'IA, le HPC et les centres de données",
-      mobile_label: "Portable",
-      mobile_title: "GPUs",
-      mobile_title_hl: "pour Portables",
-      mobile_p: "Cartes graphiques hautes performances optimisées pour les ordinateurs portables",
       compare_label: "Comparaison",
       compare_title: "Performance",
       compare_title_hl: "Comparée",
-      compare_p: "Puissance de calcul et mémoire des modèles les plus emblématiques",
       timeline_label: "Histoire",
       timeline_title: "Évolution des",
       timeline_title_hl: "GPUs",
       timeline_p: "Des premiers accélérateurs graphiques 2D dans les années 80 aux supercalculateurs d'IA actuels, l'évolution de l'Unité de Traitement Graphique (GPU) est l'une des histoires les plus fascinantes de la technologie. Ce qui a commencé comme une puce dédiée au rendu de pixels dans les jeux vidéo est devenu aujourd'hui le cerveau incontesté de l'intelligence artificielle et le moteur du calcul parallèle massif dans le monde entier."
-    },
-    compare: {
-      label_primary: "GPU Principale",
-      label_target: "Comparer avec..."
     },
     footer: {
       tagline: "Le Guide Ultime des GPUs 2026",
@@ -1614,8 +1549,6 @@ const translations = {
       tier_mid: "Milieu de Gamme",
       tier_entry: "Entrée de Gamme",
       year: "Année",
-      arch: "Arch.",
-      perf: "Performance",
       bw: "Bande Passante",
       price: "Prix",
       no_results: "Aucun résultat trouvé",
@@ -1623,8 +1556,6 @@ const translations = {
       use_case: "Cas d'Utilisation",
       tdp: "TDP / Consommation",
       relative_perf: "Performance Relative",
-      usd_approx: "environ",
-      currency: "€",
       msrp: "Prix de lancement",
       msrp_date: "lancement · {date}",
       ai_bf16: "IA · BF16 dense",
@@ -1637,10 +1568,7 @@ const translations = {
     table: {
       gpu: "GPU",
       cat: "Catégorie",
-      tflops: "Performance (TFLOPS)",
-      vram: "Mémoire VRAM",
-      bw: "Bande Passante",
-      price: "Prix Est."
+      vram: "Mémoire VRAM"
     },
     hof: {
       label: "Temple de la Renommée",
@@ -1670,7 +1598,6 @@ const translations = {
       all: "Tous",
       gaming: "Gaming",
       workstation: "Station de Travail",
-      server: "IA / Serveur",
       score_desc: "Score : TFLOPS pour 1 000 $ de prix de lancement — rapport puissance/prix."
     },
     catalog: {
@@ -1694,7 +1621,6 @@ const translations = {
       compare: "Comparer",
       close: "Fermer",
       back_to_top: "Retour en haut",
-      skip: "Aller au catalogue",
       news_read_more: "Lire la suite",
       news_error: "Impossible de charger les actualités pour le moment.",
       news_retry: "Réessayer",
@@ -1708,7 +1634,6 @@ const translations = {
       news_offline_hint: "Les actualités se chargent depuis internet : reconnectez-vous et réessayez."
     },
     gaming_page: {
-      meta_title: "GPU Gaming — Cartes graphiques de bureau et portables | GPU Universe",
       home: "Accueil",
       lead: "Plus de 150 cartes graphiques de bureau et pour portables, de la GTX 460 à la RTX 5090. Filtrez, triez et comparez-les grâce à un indice de performances en jeu.",
       stat_desktop: "De bureau",
@@ -2215,7 +2140,6 @@ const translations = {
       history: "Geschichte",
       learn: "Lernen",
       search_placeholder: "GPU suchen",
-      explore: "Entdecken",
       search: "Suchen",
       tools: "Werkzeuge",
       levels: "Level"
@@ -2228,7 +2152,6 @@ const translations = {
       rt: "Raytracing",
       video: "Video / Rendering",
       ia: "KI / Deep Learning",
-      gaming: "Gaming / 4K",
       sort: "Sortieren nach",
       sort_perf: "Leistung",
       sort_price: "Preis",
@@ -2288,16 +2211,12 @@ const translations = {
       work_tag: "Professionell",
       server_title: "Server / HPC",
       server_desc: "H100, A100, MI300X, Gaudi 3",
-      server_tag: "Enterprise",
-      mobile_title: "Laptop",
-      mobile_desc: "RTX 4090 Laptop, Arc, RX 7900M",
-      mobile_tag: "Tragbar"
+      server_tag: "Enterprise"
     },
     sections: {
       gaming_label: "Gaming",
       gaming_title: "Heimanwender",
       gaming_title_hl: "GPUs",
-      gaming_p: "Die besten Grafikkarten für Gaming, vom Einsteigermodell bis zur absoluten Spitzenklasse",
       work_label: "Professionell",
       work_title: "Workstation",
       work_title_hl: "GPUs",
@@ -2306,22 +2225,13 @@ const translations = {
       server_title: "Server",
       server_title_hl: "GPUs",
       server_p: "Die leistungsstärksten Beschleuniger der Welt für KI, HPC und Rechenzentren",
-      mobile_label: "Laptop",
-      mobile_title: "Laptop",
-      mobile_title_hl: "GPUs",
-      mobile_p: "Leistungsstarke Grafikkarten optimiert für Laptops",
       compare_label: "Vergleich",
       compare_title: "Leistung im",
       compare_title_hl: "Vergleich",
-      compare_p: "Rechenleistung und Speicher der ikonischsten Modelle",
       timeline_label: "Geschichte",
       timeline_title: "Entwicklung der",
       timeline_title_hl: "GPUs",
       timeline_p: "Von den ersten 2D-Grafikbeschleunigern in den 80ern bis zu den heutigen KI-Supercomputern ist die Entwicklung der Graphics Processing Unit (GPU) eine der faszinierendsten Geschichten der Technologie. Was als dedizierter Chip zum Rendern von Pixeln in Videospielen begann, ist heute das unbestrittene Gehirn der künstlichen Intelligenz und der Motor des massiven Parallel-Computings weltweit geworden."
-    },
-    compare: {
-      label_primary: "Haupt-GPU",
-      label_target: "Vergleichen mit..."
     },
     footer: {
       tagline: "Der ultimative GPU-Leitfaden 2026",
@@ -2336,8 +2246,6 @@ const translations = {
       tier_mid: "Mittelklasse",
       tier_entry: "Einsteiger",
       year: "Jahr",
-      arch: "Arch.",
-      perf: "Leistung",
       bw: "Bandbreite",
       price: "Preis",
       no_results: "Keine Ergebnisse gefunden",
@@ -2345,8 +2253,6 @@ const translations = {
       use_case: "Anwendungsfall",
       tdp: "TDP / Verbrauch",
       relative_perf: "Relative Leistung",
-      usd_approx: "ca.",
-      currency: "€",
       msrp: "Einführungspreis",
       msrp_date: "Marktstart · {date}",
       ai_bf16: "KI · BF16 dicht",
@@ -2359,10 +2265,7 @@ const translations = {
     table: {
       gpu: "GPU",
       cat: "Kategorie",
-      tflops: "Leistung (TFLOPS)",
-      vram: "VRAM-Speicher",
-      bw: "Bandbreite",
-      price: "Geschätzter Preis"
+      vram: "VRAM-Speicher"
     },
     hof: {
       label: "Ruhmeshalle",
@@ -2392,7 +2295,6 @@ const translations = {
       all: "Alle",
       gaming: "Gaming",
       workstation: "Workstation",
-      server: "KI / Server",
       score_desc: "Wertung: TFLOPS pro 1.000 $ Einführungspreis — Leistungs-Preis-Verhältnis."
     },
     catalog: {
@@ -2416,7 +2318,6 @@ const translations = {
       compare: "Vergleichen",
       close: "Schließen",
       back_to_top: "Nach oben",
-      skip: "Zum Katalog springen",
       news_read_more: "Weiterlesen",
       news_error: "Die News konnten gerade nicht geladen werden.",
       news_retry: "Erneut versuchen",
@@ -2430,7 +2331,6 @@ const translations = {
       news_offline_hint: "Die Nachrichten werden aus dem Internet geladen: Stelle eine Verbindung her und versuche es erneut."
     },
     gaming_page: {
-      meta_title: "Gaming-GPUs — Desktop- und Laptop-Grafikkarten | GPU Universe",
       home: "Startseite",
       lead: "Über 150 Desktop- und Laptop-Grafikkarten, von der GTX 460 bis zur RTX 5090. Filtern, sortieren und vergleichen mit einem Gaming-Leistungsindex.",
       stat_desktop: "Desktop",
@@ -2937,7 +2837,6 @@ const translations = {
       history: "Storia",
       learn: "Impara",
       search_placeholder: "Cerca GPU",
-      explore: "Esplora",
       search: "Cerca",
       tools: "Strumenti",
       levels: "Livelli"
@@ -2950,7 +2849,6 @@ const translations = {
       rt: "Ray Tracing",
       video: "Video / Rendering",
       ia: "IA / Deep Learning",
-      gaming: "Gaming / 4K",
       sort: "Ordina per",
       sort_perf: "Prestazioni",
       sort_price: "Prezzo",
@@ -3010,16 +2908,12 @@ const translations = {
       work_tag: "Professionale",
       server_title: "Server / HPC",
       server_desc: "H100, A100, MI300X, Gaudi 3",
-      server_tag: "Enterprise",
-      mobile_title: "Laptop",
-      mobile_desc: "RTX 4090 Laptop, Arc, RX 7900M",
-      mobile_tag: "Portatile"
+      server_tag: "Enterprise"
     },
     sections: {
       gaming_label: "Gaming",
       gaming_title: "GPU",
       gaming_title_hl: "Domestiche",
-      gaming_p: "Le migliori schede grafiche per il gaming, dall'entry-level al top del mercato",
       work_label: "Professionale",
       work_title: "GPU",
       work_title_hl: "Workstation",
@@ -3028,22 +2922,13 @@ const translations = {
       server_title: "GPU per",
       server_title_hl: "Server",
       server_p: "Gli acceleratori più potenti del pianeta per IA, HPC e data center",
-      mobile_label: "Laptop",
-      mobile_title: "GPU",
-      mobile_title_hl: "per Laptop",
-      mobile_p: "Schede grafiche ad alte prestazioni ottimizzate per laptop",
       compare_label: "Confronto",
       compare_title: "Prestazioni a",
       compare_title_hl: "Confronto",
-      compare_p: "Potenza di calcolo e memoria dei modelli più iconici",
       timeline_label: "Storia",
       timeline_title: "Evoluzione delle",
       timeline_title_hl: "GPU",
       timeline_p: "Dai primi acceleratori grafici 2D negli anni '80 agli attuali supercomputer IA, l'evoluzione della Graphics Processing Unit (GPU) è una delle storie più affascinanti della tecnologia. Ciò che era iniziato come un chip dedicato al rendering dei pixel nei videogiochi, oggi è diventato il cervello indiscusso dell'intelligenza artificiale e il motore del calcolo parallelo massivo in tutto il mondo."
-    },
-    compare: {
-      label_primary: "GPU Principale",
-      label_target: "Confronta con..."
     },
     footer: {
       tagline: "La Guida Definitiva alle GPU 2026",
@@ -3058,8 +2943,6 @@ const translations = {
       tier_mid: "Fascia Media",
       tier_entry: "Entry-Level",
       year: "Anno",
-      arch: "Arch.",
-      perf: "Prestazioni",
       bw: "Larghezza di Banda",
       price: "Prezzo",
       no_results: "Nessun risultato trovato",
@@ -3067,8 +2950,6 @@ const translations = {
       use_case: "Casi d'Uso",
       tdp: "TDP / Consumo",
       relative_perf: "Prestazioni Relative",
-      usd_approx: "circa",
-      currency: "€",
       msrp: "Prezzo di lancio",
       msrp_date: "lancio · {date}",
       ai_bf16: "IA · BF16 denso",
@@ -3081,10 +2962,7 @@ const translations = {
     table: {
       gpu: "GPU",
       cat: "Categoria",
-      tflops: "Prestazioni (TFLOPS)",
-      vram: "Memoria VRAM",
-      bw: "Larghezza di Banda",
-      price: "Prezzo Stimato"
+      vram: "Memoria VRAM"
     },
     hof: {
       label: "Hall of Fame",
@@ -3114,7 +2992,6 @@ const translations = {
       all: "Tutti",
       gaming: "Gaming",
       workstation: "Workstation",
-      server: "IA / Server",
       score_desc: "Punteggio: TFLOPS ogni 1.000 $ di prezzo di lancio — rapporto potenza/prezzo."
     },
     catalog: {
@@ -3138,7 +3015,6 @@ const translations = {
       compare: "Confronta",
       close: "Chiudi",
       back_to_top: "Torna su",
-      skip: "Vai al catalogo",
       news_read_more: "Leggi di più",
       news_error: "Impossibile caricare le notizie in questo momento.",
       news_retry: "Riprova",
@@ -3152,7 +3028,6 @@ const translations = {
       news_offline_hint: "Le notizie si caricano da internet: connettiti e riprova."
     },
     gaming_page: {
-      meta_title: "GPU Gaming — Schede grafiche desktop e per portatili | GPU Universe",
       home: "Home",
       lead: "Oltre 150 schede grafiche desktop e per portatili, dalla GTX 460 alla RTX 5090. Filtra, ordina e confrontale con un indice di prestazioni nei giochi.",
       stat_desktop: "Desktop",
@@ -3659,7 +3534,6 @@ const translations = {
       history: "История",
       learn: "Обучение",
       search_placeholder: "Поиск GPU",
-      explore: "Обзор",
       search: "Поиск",
       tools: "Инструменты",
       levels: "Уровни"
@@ -3672,7 +3546,6 @@ const translations = {
       rt: "Трассировка лучей",
       video: "Видео / Рендеринг",
       ia: "ИИ / Обучение",
-      gaming: "Гейминг / 4K",
       sort: "Сортировать по",
       sort_perf: "Производительность",
       sort_price: "Цена",
@@ -3732,16 +3605,12 @@ const translations = {
       work_tag: "Профессиональные",
       server_title: "Серверы / HPC",
       server_desc: "H100, A100, MI300X, Gaudi 3",
-      server_tag: "Корпоративные",
-      mobile_title: "Ноутбуки",
-      mobile_desc: "RTX 4090 Laptop, Arc, RX 7900M",
-      mobile_tag: "Портативные"
+      server_tag: "Корпоративные"
     },
     sections: {
       gaming_label: "Игры",
       gaming_title: "Домашние",
       gaming_title_hl: "GPU",
-      gaming_p: "Лучшие видеокарты для игр, от начального уровня до абсолютного топа рынка",
       work_label: "Профессиональные",
       work_title: "Рабочие станции",
       work_title_hl: "GPU",
@@ -3750,22 +3619,13 @@ const translations = {
       server_title: "Серверные",
       server_title_hl: "GPU",
       server_p: "Самые мощные ускорители на планете для ИИ, HPC и дата-центров",
-      mobile_label: "Ноутбуки",
-      mobile_title: "GPU для",
-      mobile_title_hl: "Ноутбуков",
-      mobile_p: "Высокопроизводительные видеокарты, оптимизированные для ноутбуков",
       compare_label: "Сравнение",
       compare_title: "Сравнение",
       compare_title_hl: "Производительности",
-      compare_p: "Вычислительная мощность и память самых знаковых моделей",
       timeline_label: "История",
       timeline_title: "Эволюция",
       timeline_title_hl: "GPU",
       timeline_p: "От первых 2D графических ускорителей 80-х до сегодняшних ИИ-суперкомпьютеров, эволюция графических процессоров (GPU) — одна из самых увлекательных историй в технологиях. То, что началось как специализированный чип для рендеринга пикселей в видеоиграх, сегодня стало бесспорным мозгом искусственного интеллекта и двигателем массивно-параллельных вычислений во всем мире."
-    },
-    compare: {
-      label_primary: "Основная GPU",
-      label_target: "Сравнить с..."
     },
     footer: {
       tagline: "Полное руководство по GPU 2026",
@@ -3780,8 +3640,6 @@ const translations = {
       tier_mid: "Средний класс",
       tier_entry: "Начальный уровень",
       year: "Год",
-      arch: "Архит.",
-      perf: "Производительность",
       bw: "Пропускная способность",
       price: "Цена",
       no_results: "Ничего не найдено",
@@ -3789,8 +3647,6 @@ const translations = {
       use_case: "Применение",
       tdp: "TDP / Энергопотребление",
       relative_perf: "Относительная производительность",
-      usd_approx: "прим.",
-      currency: "₽",
       msrp: "Цена на старте",
       msrp_date: "выход · {date}",
       ai_bf16: "ИИ · BF16 (dense)",
@@ -3803,10 +3659,7 @@ const translations = {
     table: {
       gpu: "GPU",
       cat: "Категория",
-      tflops: "Производительность (TFLOPS)",
-      vram: "Память VRAM",
-      bw: "Пропускная способность",
-      price: "Ориент. цена"
+      vram: "Память VRAM"
     },
     hof: {
       label: "Зал славы",
@@ -3836,7 +3689,6 @@ const translations = {
       all: "Все",
       gaming: "Игры",
       workstation: "Рабочие станции",
-      server: "ИИ / Сервер",
       score_desc: "Балл: TFLOPS на каждые 1000 $ стартовой цены — соотношение мощности и цены."
     },
     catalog: {
@@ -3860,7 +3712,6 @@ const translations = {
       compare: "Сравнить",
       close: "Закрыть",
       back_to_top: "Наверх",
-      skip: "Перейти к каталогу",
       news_read_more: "Читать далее",
       news_error: "Сейчас не удалось загрузить новости.",
       news_retry: "Повторить",
@@ -3874,7 +3725,6 @@ const translations = {
       news_offline_hint: "Новости загружаются из интернета: подключитесь и попробуйте ещё раз."
     },
     gaming_page: {
-      meta_title: "Игровые GPU — настольные и мобильные видеокарты | GPU Universe",
       home: "Главная",
       lead: "Более 150 настольных и мобильных видеокарт — от GTX 460 до RTX 5090. Фильтруйте, сортируйте и сравнивайте их по игровому индексу производительности.",
       stat_desktop: "Настольных",

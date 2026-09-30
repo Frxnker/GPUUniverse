@@ -12,7 +12,7 @@ const NAMESPACES = Object.keys(translations.es);
 // Claves que el código construye por partes: cada patrón debe declararse aquí con sus valores posibles.
 // Si aparece un patrón nuevo sin declarar, la prueba falla y pide añadirlo.
 const DYNAMIC = {
-  'defs.*': ['tflops', 'tdp', 'dlss_fsr'],
+  'defs.*': ['tflops', 'tdp', 'dlss_fsr', 'msrp', 'ai'],
   'ui.tier_*': ['entry', 'mid', 'high', 'ultra'],
   'fx.cat_*': ['desktop', 'laptop', 'workstation', 'server'],
   'fx.empty_*': ['favorites', 'recent', 'compare'],
@@ -28,9 +28,7 @@ const DYNAMIC = {
   'learn.parts.*.title': LEARN().parts,
   'learn.parts.*.desc': LEARN().parts,
   'learn.stat.*': LEARN().stats,
-  'learn.val.*': LEARN().vals,
-  'meta.*.title': PAGE_IDS(),
-  'meta.*.description': PAGE_IDS()
+  'learn.val.*': LEARN().vals
 };
 
 function ACHIEVEMENT_IDS() {
@@ -48,10 +46,6 @@ function LEARN() {
     vals: [...new Set([...block.matchAll(/\{ v: '([a-z0-9_]+)' \}/g)].map(m => m[1]))]
   };
 }
-function PAGE_IDS() {
-  return listPages().map(p => path.basename(p, '.html')).map(id => (id === 'index' ? 'home' : id));
-}
-
 // Código que realmente se publica: los scripts que cargan las páginas
 const shippedScripts = [...new Set(listPages().flatMap(scriptsOf))].filter(s => s.startsWith('js/') && s !== 'js/i18n.js');
 const shippedSources = shippedScripts.map(s => [s, fs.readFileSync(path.join(ROOT, s), 'utf8')]);

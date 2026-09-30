@@ -126,14 +126,14 @@ test('noticias: sin servicio, error con icono y reintento; sin conexión, lo dic
   assert.equal(offTitle, 'Sin conexión');
 });
 
+// quiz.js ya no deja variables globales (Fase 6): la lógica se prueba con window.GPUQuiz.recommend
 test('recomendador: una GPU sin precio oficial nunca encaja en un presupuesto', async () => {
   const { window, close } = await loadPage('index.html', { lang: 'es' });
   const bad = [];
   for (const use of ['gaming', 'work']) {
     for (const budget of ['low', 'mid', 'high']) {
       for (const perf of ['1080', '1440', '4k']) {
-        window.eval(`quizAnswers = ${JSON.stringify({ use, budget, perf })}`);
-        window.calculateRecommendations().forEach(g => {
+        window.GPUQuiz.recommend({ use, budget, perf }).forEach(g => {
           if (!(window.gpuPrice(g) > 0)) bad.push(`${use}/${budget}/${perf}: ${g.name}`);
         });
       }
@@ -141,4 +141,27 @@ test('recomendador: una GPU sin precio oficial nunca encaja en un presupuesto', 
   }
   close();
   assert.deepEqual(bad, []);
+});
+
+test('recomendador: se recorre con botones (sin onclick en línea) y el foco sigue a cada paso', async () => {
+  const { window, document, close } = await loadPage('index.html', { lang: 'es' });
+  const click = sel => document.querySelector(sel).click();
+  click('[data-quiz-start]');
+  const focus1 = document.activeElement.textContent;
+  click('[data-quiz-key="use"][data-quiz-value="gaming"]');
+  click('[data-quiz-key="budget"][data-quiz-value="mid"]');
+  click('[data-quiz-key="perf"][data-quiz-value="1440"]');
+  const results = [...document.querySelectorAll('#quiz-recommendations .rec-card')].map(b => b.dataset.openGpu);
+  const active = document.querySelector('.quiz-step.active').id;
+  const focusResults = document.activeElement.textContent;
+  click('[data-quiz-reset]');
+  const back = document.querySelector('.quiz-step.active').id;
+  const globals = ['startQuiz', 'setQuizAns', 'resetQuiz', 'quizAnswers', 'calculateRecommendations'].filter(n => n in window);
+  close();
+  assert.equal(focus1, '1. ¿Cuál será el uso principal?');
+  assert.equal(active, 'quiz-results');
+  assert.equal(focusResults, 'Nuestras recomendaciones');
+  assert.ok(results.length >= 1 && results.length <= 3, results.join(', '));
+  assert.equal(back, 'quiz-intro');
+  assert.deepEqual(globals, []);
 });

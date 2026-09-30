@@ -763,8 +763,6 @@ window.renderValueChart = function() {
     gpus = DESKTOP_GPUS;
   } else if (window.valueCategory === 'workstation') {
     gpus = WORKSTATION_GPUS;
-  } else if (window.valueCategory === 'server') {
-    gpus = SERVER_GPUS;
   }
 
   gpus = gpus.filter(g => {
@@ -825,8 +823,13 @@ window.renderValueChart = function() {
     else { grad.addColorStop(0, '#0070c0'); grad.addColorStop(1, '#00d4ff'); }
 
     ctx.fillStyle = grad;
-    if (ctx.roundRect) ctx.beginPath(), ctx.roundRect(padding.left, y, barW, barH, 4), ctx.fill();
-    else ctx.fillRect(padding.left, y, barW, barH);
+    if (ctx.roundRect) {
+      ctx.beginPath();
+      ctx.roundRect(padding.left, y, barW, barH, 4);
+      ctx.fill();
+    } else {
+      ctx.fillRect(padding.left, y, barW, barH);
+    }
 
     if (compactWidth) {
       // Nombre a la izquierda y puntuación a la derecha, sobre la barra

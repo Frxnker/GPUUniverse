@@ -398,6 +398,65 @@ tres páginas.
 
 ---
 
+## Fase 6 (parte 2) — Código muerto y hoja de estilos ✅
+
+La parte 1 (bloques compartidos en `partials/`) se hizo al principio. Ahora cubre, además de los 5
+bloques iniciales, los metadatos, la `<base>` de la 404 y la sección de noticias.
+
+**JavaScript**
+- `quiz.js` ya no crea globales (`startQuiz`, `setQuizAns`, `resetQuiz`, `quizAnswers`,
+  `calculateRecommendations`).
+  - Es un módulo cerrado; los botones usan `data-quiz-*` en lugar de 11 `onclick` en línea.
+  - Al pasar de paso, el foco va al título (mejora de accesibilidad).
+  - Solo expone `window.GPUQuiz.recommend`, que usan las pruebas.
+- Eliminado:
+  - `window.renderToolsPage`: no la llamaba nadie.
+  - La rama «IA / Servidor» de la gráfica de valor: su botón se quitó en la Fase 2 y ninguna
+    GPU de servidor tiene precio oficial.
+  - Una variable sin usar en `compare.js`.
+  - Dos expresiones usadas como sentencias (coma y `&&`).
+- Revisado con ESLint, solo en el scratchpad y sin añadir dependencias:
+  - no quedan variables locales sin usar;
+  - todas las globales de nivel superior se usan en algún archivo.
+- **Traducciones**: 23 claves sin uso eliminadas de los 6 idiomas (606 por idioma). Son restos
+  de funciones retiradas: categoría portátil, comparador antiguo de 2 GPUs, conversión de
+  moneda, «Saltar al catálogo», filtro de servidor…
+
+**CSS** (`css/style.css`: 11.225 → 10.463 líneas)
+- 94 reglas y 103 selectores muertos: sus clases no se aplican en ningún HTML ni JS.
+  - Comparador antiguo, tarjetas `featured`, spinner.
+  - Los 5 estados vacíos anteriores (`.empty-state`, `.tool-empty`, `.drawer-empty`,
+    `.news-empty`), `.nav-cta`, `.lang-select`, `.mobile-only`.
+  - `.compare-table` (en el HTML solo existe como `id`) y `.hero` (el elemento es `#hero`).
+- 135 declaraciones anuladas por otra regla posterior con el mismo selector y el mismo `@media`.
+  Solo se quitan si se anulan para todos los selectores de su regla.
+- Bloques `@media` vacíos y comentarios que se quedaron sin reglas.
+- **Organización**:
+  - índice al principio con las 4 capas del archivo (componentes base, adaptación a
+    pantallas, tema «Silicio / PCB» y funciones globales);
+  - encabezados de sección en español.
+  - No se ha cambiado el orden de las reglas: cada capa ajusta a las anteriores con la misma
+    especificidad, y mover bloques cambiaría el aspecto.
+
+**Cómo se ha comprobado**
+- Capturas con aleatoriedad fija antes y después de limpiar el CSS (Chrome, 10 páginas ×
+  escritorio/móvil × claro/oscuro).
+  - Mismas dimensiones en las 40.
+  - 9 idénticas píxel a píxel; en el resto, diferencias ≤ 0,12 % debidas a la temporización
+    (avisos de XP, pulsos del fondo, modelo 3D).
+- `tests/css.test.js`: toda clase del CSS debe aplicarse en algún sitio y no puede haber
+  `@media` vacíos, para que no vuelva a acumularse CSS muerto.
+- `tests/a11y.test.js`: el cuestionario se recorre con botones, el foco sigue a cada paso y no
+  deja globales.
+  - La prueba del recomendador de la Fase 4 usaba las globales eliminadas y ahora usa
+    `GPUQuiz.recommend`, con la misma comprobación.
+- `tests/i18n.test.js`, mantenimiento:
+  - el mapa de claves construidas por partes incluye `defs.msrp` y `defs.ai`, que se usaban
+    pero faltaban;
+  - se quitan patrones `meta.*` obsoletos que no correspondían a ninguna clave.
+
+---
+
 ## Decisiones pendientes
 
 _Ninguna por ahora._

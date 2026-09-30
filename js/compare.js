@@ -74,7 +74,7 @@
   }
 
   // ---- Selector para añadir GPUs ----
-  const picker = window.createGpuPicker({
+  window.createGpuPicker({
     input: els.input,
     list: els.list,
     pool: () => getAllGpus(),

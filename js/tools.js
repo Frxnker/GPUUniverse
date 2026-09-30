@@ -374,7 +374,6 @@
   if (psu.gpu) psu.input.value = psu.gpu.name;
 
   // Se vuelve a pintar tras cambiar de idioma (moneda y textos)
-  window.renderToolsPage = renderActive;
   const originalApply = window.applyTranslations;
   window.applyTranslations = function () {
     originalApply();

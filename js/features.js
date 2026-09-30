@@ -1006,7 +1006,7 @@
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
       if (palette && !palette.hidden && palette.classList.contains('is-open')) closeLayer(palette);
-      else { closeAllLayers(false); window.closeGpuModal && window.closeGpuModal(); openPalette(); }
+      else { closeAllLayers(false); window.closeGpuModal?.(); openPalette(); }
       return;
     }
     if (typing || e.ctrlKey || e.metaKey || e.altKey || layers.length || document.body.classList.contains('modal-open')) return;
