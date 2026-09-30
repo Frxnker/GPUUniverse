@@ -6,9 +6,8 @@
   <title>Niveles, logros y retos — GPU Universe</title>
   <meta name="description" content="Tu progreso en GPU Universe: nivel, experiencia, retos diarios sobre GPUs, logros y colores desbloqueables." />
   <meta name="theme-color" content="#050807" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="preload" href="../assets/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../assets/fonts/exo-2-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23050807'/%3E%3Crect x='9' y='9' width='14' height='14' rx='2' fill='none' stroke='%2319e6b4' stroke-width='2'/%3E%3Crect x='13' y='13' width='6' height='6' fill='%2319e6b4'/%3E%3Cpath d='M12 5v4M16 5v4M20 5v4M12 23v4M16 23v4M20 23v4M5 12h4M5 16h4M5 20h4M23 12h4M23 16h4M23 20h4' stroke='%2319e6b4' stroke-width='1.6'/%3E%3C/svg%3E" />
   <!-- Tema, color de acento e idioma antes de pintar (evita destellos) -->
@@ -35,17 +34,17 @@
               </button>
               <div class="lang-switcher">
                 <button type="button" class="lang-btn" aria-label="Idioma">
-                  <img src="https://flagcdn.com/w20/es.png" class="current-flag" alt="" width="20" height="15">
+                  <img src="../assets/flags/es.svg" class="current-flag" alt="" width="20" height="15">
                   <span class="current-lang-text">ES</span>
                   <span class="chevron" aria-hidden="true">▾</span>
                 </button>
                 <div class="lang-dropdown">
-                  <div class="lang-option" data-value="es"><img src="https://flagcdn.com/w20/es.png" alt="" width="20" height="15"> Español</div>
-                  <div class="lang-option" data-value="en"><img src="https://flagcdn.com/w20/us.png" alt="" width="20" height="15"> English</div>
-                  <div class="lang-option" data-value="fr"><img src="https://flagcdn.com/w20/fr.png" alt="" width="20" height="15"> Français</div>
-                  <div class="lang-option" data-value="de"><img src="https://flagcdn.com/w20/de.png" alt="" width="20" height="15"> Deutsch</div>
-                  <div class="lang-option" data-value="it"><img src="https://flagcdn.com/w20/it.png" alt="" width="20" height="15"> Italiano</div>
-                  <div class="lang-option" data-value="ru"><img src="https://flagcdn.com/w20/ru.png" alt="" width="20" height="15"> Русский</div>
+                  <div class="lang-option" data-value="es"><img src="../assets/flags/es.svg" alt="" width="20" height="15"> Español</div>
+                  <div class="lang-option" data-value="en"><img src="../assets/flags/us.svg" alt="" width="20" height="15"> English</div>
+                  <div class="lang-option" data-value="fr"><img src="../assets/flags/fr.svg" alt="" width="20" height="15"> Français</div>
+                  <div class="lang-option" data-value="de"><img src="../assets/flags/de.svg" alt="" width="20" height="15"> Deutsch</div>
+                  <div class="lang-option" data-value="it"><img src="../assets/flags/it.svg" alt="" width="20" height="15"> Italiano</div>
+                  <div class="lang-option" data-value="ru"><img src="../assets/flags/ru.svg" alt="" width="20" height="15"> Русский</div>
                 </div>
               </div>
               <button type="button" class="close-menu-btn" id="close-menu-btn" aria-label="Cerrar menú">
@@ -83,17 +82,17 @@
         </button>
         <div class="lang-switcher desktop-only">
           <button type="button" class="lang-btn" aria-label="Idioma">
-            <img src="https://flagcdn.com/w20/es.png" class="current-flag" alt="" width="20" height="15">
+            <img src="../assets/flags/es.svg" class="current-flag" alt="" width="20" height="15">
             <span class="current-lang-text">ES</span>
             <span class="chevron" aria-hidden="true">▾</span>
           </button>
           <div class="lang-dropdown">
-            <div class="lang-option" data-value="es"><img src="https://flagcdn.com/w20/es.png" alt="" width="20" height="15"> Español</div>
-            <div class="lang-option" data-value="en"><img src="https://flagcdn.com/w20/us.png" alt="" width="20" height="15"> English</div>
-            <div class="lang-option" data-value="fr"><img src="https://flagcdn.com/w20/fr.png" alt="" width="20" height="15"> Français</div>
-            <div class="lang-option" data-value="de"><img src="https://flagcdn.com/w20/de.png" alt="" width="20" height="15"> Deutsch</div>
-            <div class="lang-option" data-value="it"><img src="https://flagcdn.com/w20/it.png" alt="" width="20" height="15"> Italiano</div>
-            <div class="lang-option" data-value="ru"><img src="https://flagcdn.com/w20/ru.png" alt="" width="20" height="15"> Русский</div>
+            <div class="lang-option" data-value="es"><img src="../assets/flags/es.svg" alt="" width="20" height="15"> Español</div>
+            <div class="lang-option" data-value="en"><img src="../assets/flags/us.svg" alt="" width="20" height="15"> English</div>
+            <div class="lang-option" data-value="fr"><img src="../assets/flags/fr.svg" alt="" width="20" height="15"> Français</div>
+            <div class="lang-option" data-value="de"><img src="../assets/flags/de.svg" alt="" width="20" height="15"> Deutsch</div>
+            <div class="lang-option" data-value="it"><img src="../assets/flags/it.svg" alt="" width="20" height="15"> Italiano</div>
+            <div class="lang-option" data-value="ru"><img src="../assets/flags/ru.svg" alt="" width="20" height="15"> Русский</div>
           </div>
         </div>
         <button type="button" class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Abrir menú" aria-expanded="false">

@@ -1,3 +1,114 @@
+/* ===== FUENTES (alojadas en assets/fonts; licencia SIL OFL 1.1, ver assets/fonts/README.md) =====
+   Exo 2 (títulos), IBM Plex Sans (texto) y JetBrains Mono (datos). Son fuentes variables: un archivo
+   sirve varios pesos. Solo los subconjuntos que necesitan los 6 idiomas: latín y cirílico. */
+@font-face {
+  font-family: 'Exo 2';
+  font-style: normal;
+  font-weight: 600 800;
+  font-display: swap;
+  src: url(../assets/fonts/exo-2-cyrillic-ext.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: 'Exo 2';
+  font-style: normal;
+  font-weight: 600 800;
+  font-display: swap;
+  src: url(../assets/fonts/exo-2-cyrillic.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: 'Exo 2';
+  font-style: normal;
+  font-weight: 600 800;
+  font-display: swap;
+  src: url(../assets/fonts/exo-2-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Exo 2';
+  font-style: normal;
+  font-weight: 600 800;
+  font-display: swap;
+  src: url(../assets/fonts/exo-2-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(../assets/fonts/ibm-plex-sans-cyrillic-ext.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(../assets/fonts/ibm-plex-sans-cyrillic.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(../assets/fonts/ibm-plex-sans-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(../assets/fonts/ibm-plex-sans-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(../assets/fonts/jetbrains-mono-cyrillic-ext.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(../assets/fonts/jetbrains-mono-cyrillic.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(../assets/fonts/jetbrains-mono-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(../assets/fonts/jetbrains-mono-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 /* ===== REINICIO Y BASE ===== */
 *,
 *::before,
@@ -352,7 +463,8 @@ section {
   position: relative;
   display: flex;
   align-items: center;
-  padding: 8rem 2rem 4rem;
+  /* Abajo deja sitio al indicador de scroll (absoluto) para que no pise las estadísticas */
+  padding: 8rem 2rem 8rem;
   overflow: hidden;
 }
 
@@ -587,6 +699,8 @@ section {
 
 .hero-gpu-img {
   width: 100%;
+  /* El <img> lleva width/height (evita saltos al cargar); el alto sale de la proporción */
+  height: auto;
   display: block;
 }
 
@@ -3905,7 +4019,7 @@ body,
     border-color: rgba(0, 0, 0, 0.08);
   }
 
-  .learn-panel h3 {
+  .learn-panel-title {
     font-size: 1.15rem;
     letter-spacing: -0.02em;
     background: linear-gradient(135deg, #fff, var(--accent2));
@@ -3914,13 +4028,13 @@ body,
     background-clip: text;
   }
 
-  [data-theme="light"] .learn-panel h3 {
+  [data-theme="light"] .learn-panel-title {
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     -webkit-background-clip: text;
     background-clip: text;
   }
 
-  .learn-panel p {
+  .learn-panel-desc {
     display: none;
   }
 
@@ -5493,7 +5607,7 @@ body.modal-open {
     padding: 1rem;
   }
 
-  .learn-panel p,
+  .learn-panel-desc,
   .instructions-overlay {
     display: none;
   }
@@ -6564,6 +6678,178 @@ h4,
   [data-theme="light"] .learn-panel {
     background-color: rgba(251, 253, 252, 0.92);
   }
+}
+
+/* Títulos y textos del panel (antes con estilos en línea) */
+.learn-panel-title {
+  font-size: 1.2rem;
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+  color: var(--text);
+}
+
+.learn-panel-desc {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.part-title {
+  line-height: 1.2;
+}
+
+/* Lista de piezas: se puede elegir cada pieza con teclado o sin WebGL */
+.part-list-title {
+  margin: 1.25rem 0 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.part-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.part-chip {
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 0.78rem;
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.part-chip:hover {
+  color: var(--text);
+  border-color: rgba(var(--accent-rgb), 0.6);
+}
+
+.part-chip.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.1);
+}
+
+/* Etiqueta y valor separados aunque el valor ocupe dos líneas */
+.part-stat {
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.part-stat-value {
+  text-align: right;
+}
+
+.part-note {
+  margin: 0.75rem 0 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Sin WebGL: aviso en lugar del modelo */
+.learn-fallback {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(420px, calc(100% - 2rem));
+  padding: 1.25rem 1.5rem;
+  border: 1px dashed rgba(var(--accent-rgb), 0.45);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  text-align: center;
+}
+
+.learn-fallback strong {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--text);
+}
+
+.learn-fallback p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+#learn-section.no-webgl .instructions-overlay {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  /* En escritorio el panel de la pieza queda siempre a la vista */
+  #learn-section.no-webgl #part-info-panel {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Los tres botones de capa caben en una fila (antes el tercero quedaba fuera) */
+  .layer-controls {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  .layer-btn {
+    justify-content: center;
+    padding: 0.55rem 0.4rem;
+    font-size: 0.78rem;
+    line-height: 1.2;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .layer-btn svg {
+    display: none;
+  }
+
+  .part-list-title {
+    display: none;
+  }
+
+  /* Piezas en una fila desplazable */
+  .part-list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-top: 0.75rem;
+    padding-bottom: 0.25rem;
+    scrollbar-width: none;
+  }
+
+  .part-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .part-chip {
+    white-space: nowrap;
+  }
+
+  .learn-fallback {
+    top: 62%;
+  }
+}
+
+/* Las imágenes con <picture> se comportan como si el <img> estuviera solo */
+.gpu-card-inner picture,
+.page-hero-visual picture,
+.hof-img-wrapper picture {
+  display: contents;
 }
 
 /* ---------- Tooltips y detalles ---------- */

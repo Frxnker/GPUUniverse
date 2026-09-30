@@ -30,7 +30,8 @@
   const ctx = canvas.getContext('2d');
   const board = document.createElement('canvas');
   const bctx = board.getContext('2d');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let reduceMotion = motionQuery.matches;
   // Direcciones en pasos de 45°: índices pares = horizontal/vertical
   const DIRS = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
   let W = 0, H = 0, dpr = 1, traces = [], pulses = [], colors = {};
@@ -160,7 +161,21 @@
         ctx.fill();
       }
     });
-    if (!reduceMotion) requestAnimationFrame(draw);
+    frame = 0;
+    if (shouldAnimate()) frame = requestAnimationFrame(draw);
+  }
+
+  // Solo se anima con la pestaña visible, el lienzo en pantalla y sin "reducir movimiento";
+  // en cualquier otro caso queda dibujado un fotograma fijo y no se gasta CPU.
+  let frame = 0;
+  let onScreen = true;
+  const shouldAnimate = () => !reduceMotion && onScreen && !document.hidden;
+  function resume() {
+    if (!frame && shouldAnimate()) frame = requestAnimationFrame(draw);
+  }
+  function pause() {
+    if (frame) cancelAnimationFrame(frame);
+    frame = 0;
   }
 
   function setup() {
@@ -180,6 +195,18 @@
   readColors();
   setup();
   draw();
+
+  document.addEventListener('visibilitychange', () => (document.hidden ? pause() : resume()));
+  new IntersectionObserver(entries => {
+    onScreen = entries.some(e => e.isIntersecting);
+    if (onScreen) resume(); else pause();
+  }).observe(canvas);
+  motionQuery.addEventListener('change', e => {
+    reduceMotion = e.matches;
+    pause();
+    setup();
+    draw();
+  });
 
   let lastWidth = W;
   let resizeTimer;
@@ -844,7 +871,11 @@ window.renderHallOfFame = function() {
   container.innerHTML = HALL_OF_FAME.map(item => `
     <article class="hof-card">
       <div class="hof-img-wrapper">
-        <img src="${base}${item.img}.png" alt="${esc(item.name)}" class="hof-img" loading="lazy" decoding="async">
+        <picture>
+          <source type="image/avif" srcset="${base}${item.img}-480.avif 480w, ${base}${item.img}-960.avif 960w" sizes="(max-width: 768px) 92vw, 400px">
+          <source type="image/webp" srcset="${base}${item.img}-480.webp 480w, ${base}${item.img}-960.webp 960w" sizes="(max-width: 768px) 92vw, 400px">
+          <img src="${base}${item.img}-960.jpg" alt="${esc(item.name)}" class="hof-img" width="960" height="960" loading="lazy" decoding="async">
+        </picture>
         <div class="hof-year">${item.year}</div>
       </div>
       <div class="hof-content">

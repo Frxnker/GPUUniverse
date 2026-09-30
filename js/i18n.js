@@ -608,6 +608,73 @@ const translations = {
       training: "Entrenamiento de IA",
       inference: "Inferencia",
       hpc: "HPC / ciencia"
+    },
+    learn: {
+      panel_title: "Explorador 3D",
+      panel_desc: "Elige una capa para ver el interior de la tarjeta gráfica y toca o haz clic en las piezas para saber qué hacen.",
+      layers_label: "Capas del modelo",
+      layer_full: "GPU completa",
+      layer_no_shroud: "Sin carcasa",
+      layer_pcb: "Solo PCB",
+      part_hint: "Haz clic en una pieza del modelo 3D para ver su descripción.",
+      instructions: "Arrastra para girar · Rueda o pellizca para acercar",
+      parts_label: "Piezas",
+      no_webgl_title: "El modelo 3D no está disponible",
+      no_webgl: "Tu navegador o dispositivo no tiene WebGL activado. Puedes leer igualmente la descripción de cada pieza:",
+      example_note: "Los ejemplos numéricos son de la GeForce RTX 5090.",
+      stat: {
+        material: "Material",
+        function: "Función",
+        standard: "Estándar actual",
+        bandwidth: "Ancho de banda",
+        chip: "Chip de ejemplo",
+        transistors: "Transistores",
+        process: "Fabricación",
+        die_area: "Superficie",
+        type: "Tipo actual",
+        config: "Configuración",
+        speed: "Velocidad por pin",
+        input: "Tensión de entrada",
+        components: "Componentes",
+        connector: "Conector moderno",
+        max_power: "Potencia máxima",
+        pcie8: "PCIe de 8 pines",
+        heat_transport: "Transporte del calor",
+        idle: "En reposo"
+      },
+      val: {
+        pcb_material: "FR-4 y cobre",
+        pcb_function: "Señales y alimentación",
+        pcie_bw: "≈ 64 GB/s en cada sentido",
+        backplate_material: "Normalmente aluminio",
+        backplate_function: "Rigidez y protección",
+        transistors: "92.200 millones",
+        vram_config: "16 chips de 2 GB, bus de 512 bits",
+        vrm_components: "MOSFET, bobinas y condensadores",
+        connector: "12V-2x6 (16 pines)",
+        hs_material: "Aluminio y cobre",
+        hs_transport: "Heatpipes o cámara de vapor",
+        shroud_function: "Guiar el aire",
+        fan_idle: "Pueden pararse (modo 0 RPM)",
+        volts_12: "12 V",
+        watts_600: "600 W",
+        watts_150: "150 W",
+        area_750: "750 mm²",
+        speed_28: "28 Gb/s"
+      },
+      parts: {
+        pcb: { title: "Placa de circuito impreso (PCB)", desc: "Une todas las piezas: lleva las señales entre el chip gráfico y la memoria y reparte la energía. Está formada por varias capas de cobre separadas por material aislante." },
+        pcie: { title: "Conector PCIe x16", desc: "La conexión con la placa base. Las tarjetas actuales usan PCI Express 5.0 con 16 carriles." },
+        backplate: { title: "Placa trasera (backplate)", desc: "Protege la cara trasera del PCB y le da rigidez para que la tarjeta no se curve. Muchas ayudan además a disipar calor de forma pasiva." },
+        die: { title: "Chip gráfico (GPU)", desc: "El procesador de la tarjeta: miles de núcleos que trabajan en paralelo, caché y controladores de memoria en una sola pieza de silicio." },
+        vram: { title: "Memoria de vídeo (VRAM)", desc: "Guarda los datos que el chip necesita al momento: texturas, geometría y resultados intermedios. Los chips rodean al procesador para que las pistas sean cortas." },
+        vrm: { title: "Alimentación (VRM)", desc: "Los reguladores de tensión convierten los 12 V que llegan de la fuente en la tensión baja, en torno a 1 V, que necesita el chip, y la reparten en varias fases." },
+        power: { title: "Conector de alimentación", desc: "Recibe la energía de la fuente. Las tarjetas más potentes usan el conector 12V-2x6 de 16 pines; otras, uno o varios conectores PCIe de 8 pines." },
+        io: { title: "Soporte y salidas de vídeo", desc: "La chapa metálica que fija la tarjeta a la caja y aloja las salidas para monitores." },
+        heatsink: { title: "Disipador", desc: "Aletas de aluminio con heatpipes de cobre o una cámara de vapor: recogen el calor del chip, la memoria y el VRM y lo reparten en mucha superficie." },
+        shroud: { title: "Carcasa", desc: "La cubierta exterior que dirige el aire de los ventiladores hacia el disipador y da a la tarjeta su aspecto." },
+        fan: { title: "Ventilador", desc: "Empuja aire a través de las aletas del disipador para llevarse el calor. Muchas tarjetas los detienen por completo cuando la GPU está fría." }
+      }
     }
   },
   en: {
@@ -1219,6 +1286,73 @@ const translations = {
       training: "AI training",
       inference: "Inference",
       hpc: "HPC / science"
+    },
+    learn: {
+      panel_title: "3D Explorer",
+      panel_desc: "Pick a layer to look inside the graphics card, then tap or click the parts to learn what they do.",
+      layers_label: "Model layers",
+      layer_full: "Full GPU",
+      layer_no_shroud: "No shroud",
+      layer_pcb: "PCB only",
+      part_hint: "Click a part of the 3D model to see its description.",
+      instructions: "Drag to rotate · Scroll or pinch to zoom",
+      parts_label: "Parts",
+      no_webgl_title: "The 3D model is not available",
+      no_webgl: "Your browser or device doesn't have WebGL enabled. You can still read about each part:",
+      example_note: "Numeric examples are from the GeForce RTX 5090.",
+      stat: {
+        material: "Material",
+        function: "Function",
+        standard: "Current standard",
+        bandwidth: "Bandwidth",
+        chip: "Example chip",
+        transistors: "Transistors",
+        process: "Process",
+        die_area: "Die area",
+        type: "Current type",
+        config: "Configuration",
+        speed: "Speed per pin",
+        input: "Input voltage",
+        components: "Components",
+        connector: "Modern connector",
+        max_power: "Maximum power",
+        pcie8: "PCIe 8-pin",
+        heat_transport: "Heat transport",
+        idle: "At idle"
+      },
+      val: {
+        pcb_material: "FR-4 and copper",
+        pcb_function: "Signals and power",
+        pcie_bw: "≈ 64 GB/s each way",
+        backplate_material: "Usually aluminium",
+        backplate_function: "Rigidity and protection",
+        transistors: "92.2 billion",
+        vram_config: "16 × 2 GB chips, 512-bit bus",
+        vrm_components: "MOSFETs, chokes and capacitors",
+        connector: "12V-2x6 (16-pin)",
+        hs_material: "Aluminium and copper",
+        hs_transport: "Heat pipes or vapour chamber",
+        shroud_function: "Direct the airflow",
+        fan_idle: "Can stop (0 RPM mode)",
+        volts_12: "12 V",
+        watts_600: "600 W",
+        watts_150: "150 W",
+        area_750: "750 mm²",
+        speed_28: "28 Gbps"
+      },
+      parts: {
+        pcb: { title: "Printed circuit board (PCB)", desc: "Ties every part together: it carries signals between the graphics chip and the memory and distributes power. It is made of several copper layers separated by insulating material." },
+        pcie: { title: "PCIe x16 connector", desc: "The link to the motherboard. Current cards use PCI Express 5.0 with 16 lanes." },
+        backplate: { title: "Backplate", desc: "Protects the back of the PCB and stiffens it so the card does not bend. Many also help shed heat passively." },
+        die: { title: "Graphics chip (GPU)", desc: "The card's processor: thousands of cores working in parallel, cache and memory controllers on a single piece of silicon." },
+        vram: { title: "Video memory (VRAM)", desc: "Holds the data the chip needs right away: textures, geometry and intermediate results. The chips surround the processor to keep the traces short." },
+        vrm: { title: "Power delivery (VRM)", desc: "The voltage regulators turn the 12 V from the power supply into the low voltage, around 1 V, that the chip needs, spreading the load over several phases." },
+        power: { title: "Power connector", desc: "Takes power from the PSU. The most powerful cards use the 16-pin 12V-2x6 connector; others use one or more 8-pin PCIe connectors." },
+        io: { title: "Bracket and video outputs", desc: "The metal plate that fixes the card to the case and holds the monitor outputs." },
+        heatsink: { title: "Heatsink", desc: "Aluminium fins with copper heat pipes or a vapour chamber: they pull heat from the chip, memory and VRM and spread it over a large surface." },
+        shroud: { title: "Shroud", desc: "The outer cover that channels air from the fans into the heatsink and gives the card its look." },
+        fan: { title: "Fan", desc: "Pushes air through the heatsink fins to carry the heat away. Many cards stop them completely when the GPU is cool." }
+      }
     }
   },
   fr: {
@@ -1830,6 +1964,73 @@ const translations = {
       training: "Entraînement d’IA",
       inference: "Inférence",
       hpc: "HPC / science"
+    },
+    learn: {
+      panel_title: "Explorateur 3D",
+      panel_desc: "Choisissez une couche pour voir l'intérieur de la carte graphique, puis touchez ou cliquez sur les pièces pour savoir à quoi elles servent.",
+      layers_label: "Couches du modèle",
+      layer_full: "GPU complet",
+      layer_no_shroud: "Sans carénage",
+      layer_pcb: "PCB seul",
+      part_hint: "Cliquez sur une pièce du modèle 3D pour afficher sa description.",
+      instructions: "Faites glisser pour pivoter · Molette ou pincement pour zoomer",
+      parts_label: "Pièces",
+      no_webgl_title: "Le modèle 3D n'est pas disponible",
+      no_webgl: "WebGL n'est pas activé sur votre navigateur ou appareil. Vous pouvez tout de même lire la description de chaque pièce :",
+      example_note: "Les exemples chiffrés sont ceux de la GeForce RTX 5090.",
+      stat: {
+        material: "Matériau",
+        function: "Rôle",
+        standard: "Norme actuelle",
+        bandwidth: "Bande passante",
+        chip: "Puce d'exemple",
+        transistors: "Transistors",
+        process: "Gravure",
+        die_area: "Surface",
+        type: "Type actuel",
+        config: "Configuration",
+        speed: "Débit par broche",
+        input: "Tension d'entrée",
+        components: "Composants",
+        connector: "Connecteur moderne",
+        max_power: "Puissance maximale",
+        pcie8: "PCIe 8 broches",
+        heat_transport: "Transport de la chaleur",
+        idle: "Au repos"
+      },
+      val: {
+        pcb_material: "FR-4 et cuivre",
+        pcb_function: "Signaux et alimentation",
+        pcie_bw: "≈ 64 Go/s dans chaque sens",
+        backplate_material: "Généralement en aluminium",
+        backplate_function: "Rigidité et protection",
+        transistors: "92,2 milliards",
+        vram_config: "16 puces de 2 Go, bus 512 bits",
+        vrm_components: "MOSFET, selfs et condensateurs",
+        connector: "12V-2x6 (16 broches)",
+        hs_material: "Aluminium et cuivre",
+        hs_transport: "Caloducs ou chambre à vapeur",
+        shroud_function: "Guider l'air",
+        fan_idle: "Peuvent s'arrêter (mode 0 tr/min)",
+        volts_12: "12 V",
+        watts_600: "600 W",
+        watts_150: "150 W",
+        area_750: "750 mm²",
+        speed_28: "28 Gbit/s"
+      },
+      parts: {
+        pcb: { title: "Circuit imprimé (PCB)", desc: "Relie toutes les pièces : il transporte les signaux entre la puce graphique et la mémoire et distribue l'énergie. Il se compose de plusieurs couches de cuivre séparées par un isolant." },
+        pcie: { title: "Connecteur PCIe x16", desc: "La liaison avec la carte mère. Les cartes actuelles utilisent le PCI Express 5.0 sur 16 lignes." },
+        backplate: { title: "Plaque arrière (backplate)", desc: "Protège l'arrière du PCB et le rigidifie pour que la carte ne se torde pas. Beaucoup aident aussi à dissiper la chaleur de façon passive." },
+        die: { title: "Puce graphique (GPU)", desc: "Le processeur de la carte : des milliers de cœurs qui travaillent en parallèle, du cache et des contrôleurs mémoire sur une seule pièce de silicium." },
+        vram: { title: "Mémoire vidéo (VRAM)", desc: "Conserve les données dont la puce a besoin immédiatement : textures, géométrie et résultats intermédiaires. Les puces entourent le processeur pour que les pistes restent courtes." },
+        vrm: { title: "Alimentation (VRM)", desc: "Les régulateurs de tension transforment les 12 V de l'alimentation en la faible tension, environ 1 V, dont la puce a besoin, en répartissant la charge sur plusieurs phases." },
+        power: { title: "Connecteur d'alimentation", desc: "Reçoit l'énergie de l'alimentation. Les cartes les plus puissantes utilisent le connecteur 12V-2x6 à 16 broches ; les autres, un ou plusieurs connecteurs PCIe 8 broches." },
+        io: { title: "Équerre et sorties vidéo", desc: "La plaque métallique qui fixe la carte au boîtier et accueille les sorties pour les écrans." },
+        heatsink: { title: "Dissipateur", desc: "Des ailettes en aluminium avec des caloducs en cuivre ou une chambre à vapeur : ils captent la chaleur de la puce, de la mémoire et du VRM et la répartissent sur une grande surface." },
+        shroud: { title: "Carénage", desc: "Le capot extérieur qui dirige l'air des ventilateurs vers le dissipateur et donne son style à la carte." },
+        fan: { title: "Ventilateur", desc: "Pousse l'air à travers les ailettes du dissipateur pour évacuer la chaleur. Beaucoup de cartes les arrêtent complètement lorsque le GPU est froid." }
+      }
     }
   },
   de: {
@@ -2441,6 +2642,73 @@ const translations = {
       training: "KI-Training",
       inference: "Inferenz",
       hpc: "HPC / Wissenschaft"
+    },
+    learn: {
+      panel_title: "3D-Explorer",
+      panel_desc: "Wähle eine Ebene, um ins Innere der Grafikkarte zu schauen, und tippe oder klicke auf die Bauteile, um zu erfahren, was sie tun.",
+      layers_label: "Ebenen des Modells",
+      layer_full: "Komplette GPU",
+      layer_no_shroud: "Ohne Abdeckung",
+      layer_pcb: "Nur Platine",
+      part_hint: "Klicke auf ein Bauteil des 3D-Modells, um seine Beschreibung zu sehen.",
+      instructions: "Ziehen zum Drehen · Mausrad oder zwei Finger zum Zoomen",
+      parts_label: "Bauteile",
+      no_webgl_title: "Das 3D-Modell ist nicht verfügbar",
+      no_webgl: "In deinem Browser oder auf deinem Gerät ist WebGL nicht aktiviert. Die Beschreibung der Bauteile kannst du trotzdem lesen:",
+      example_note: "Die Zahlenbeispiele stammen von der GeForce RTX 5090.",
+      stat: {
+        material: "Material",
+        function: "Aufgabe",
+        standard: "Aktueller Standard",
+        bandwidth: "Bandbreite",
+        chip: "Beispielchip",
+        transistors: "Transistoren",
+        process: "Fertigung",
+        die_area: "Chipfläche",
+        type: "Aktueller Typ",
+        config: "Aufbau",
+        speed: "Datenrate pro Pin",
+        input: "Eingangsspannung",
+        components: "Bauteile",
+        connector: "Moderner Stecker",
+        max_power: "Maximale Leistung",
+        pcie8: "PCIe 8-Pin",
+        heat_transport: "Wärmetransport",
+        idle: "Im Leerlauf"
+      },
+      val: {
+        pcb_material: "FR-4 und Kupfer",
+        pcb_function: "Signale und Stromversorgung",
+        pcie_bw: "≈ 64 GB/s pro Richtung",
+        backplate_material: "Meist Aluminium",
+        backplate_function: "Stabilität und Schutz",
+        transistors: "92,2 Milliarden",
+        vram_config: "16 Chips à 2 GB, 512-Bit-Bus",
+        vrm_components: "MOSFETs, Spulen und Kondensatoren",
+        connector: "12V-2x6 (16-polig)",
+        hs_material: "Aluminium und Kupfer",
+        hs_transport: "Heatpipes oder Vapor Chamber",
+        shroud_function: "Luftstrom lenken",
+        fan_idle: "Können stillstehen (0-RPM-Modus)",
+        volts_12: "12 V",
+        watts_600: "600 W",
+        watts_150: "150 W",
+        area_750: "750 mm²",
+        speed_28: "28 Gbit/s"
+      },
+      parts: {
+        pcb: { title: "Leiterplatte (PCB)", desc: "Verbindet alle Bauteile: Sie leitet die Signale zwischen Grafikchip und Speicher und verteilt die Energie. Sie besteht aus mehreren Kupferlagen, die durch Isoliermaterial getrennt sind." },
+        pcie: { title: "PCIe-x16-Anschluss", desc: "Die Verbindung zum Mainboard. Aktuelle Karten nutzen PCI Express 5.0 mit 16 Lanes." },
+        backplate: { title: "Backplate", desc: "Schützt die Rückseite der Platine und versteift sie, damit sich die Karte nicht durchbiegt. Viele helfen zusätzlich passiv bei der Kühlung." },
+        die: { title: "Grafikchip (GPU)", desc: "Der Prozessor der Karte: Tausende parallel arbeitende Kerne, Cache und Speichercontroller auf einem einzigen Stück Silizium." },
+        vram: { title: "Grafikspeicher (VRAM)", desc: "Hält die Daten bereit, die der Chip sofort braucht: Texturen, Geometrie und Zwischenergebnisse. Die Chips sitzen rund um den Prozessor, damit die Leiterbahnen kurz bleiben." },
+        vrm: { title: "Spannungsversorgung (VRM)", desc: "Die Spannungswandler machen aus den 12 V des Netzteils die niedrige Spannung von etwa 1 V, die der Chip braucht, und verteilen die Last auf mehrere Phasen." },
+        power: { title: "Stromanschluss", desc: "Nimmt die Energie vom Netzteil auf. Die stärksten Karten nutzen den 16-poligen 12V-2x6-Stecker, andere einen oder mehrere 8-polige PCIe-Stecker." },
+        io: { title: "Slotblech und Videoausgänge", desc: "Das Blech, das die Karte am Gehäuse befestigt und die Anschlüsse für Monitore trägt." },
+        heatsink: { title: "Kühlkörper", desc: "Aluminiumlamellen mit Heatpipes aus Kupfer oder einer Vapor Chamber: Sie nehmen die Wärme von Chip, Speicher und VRM auf und verteilen sie auf eine große Fläche." },
+        shroud: { title: "Abdeckung", desc: "Die äußere Hülle, die die Luft der Lüfter durch den Kühlkörper lenkt und der Karte ihr Aussehen gibt." },
+        fan: { title: "Lüfter", desc: "Drückt Luft durch die Lamellen des Kühlkörpers und führt so die Wärme ab. Viele Karten schalten sie ganz ab, solange die GPU kühl ist." }
+      }
     }
   },
   it: {
@@ -3052,6 +3320,73 @@ const translations = {
       training: "Addestramento IA",
       inference: "Inferenza",
       hpc: "HPC / scienza"
+    },
+    learn: {
+      panel_title: "Esploratore 3D",
+      panel_desc: "Scegli un livello per vedere l'interno della scheda video e tocca o fai clic sui componenti per scoprire a cosa servono.",
+      layers_label: "Livelli del modello",
+      layer_full: "GPU completa",
+      layer_no_shroud: "Senza scocca",
+      layer_pcb: "Solo PCB",
+      part_hint: "Fai clic su un componente del modello 3D per vederne la descrizione.",
+      instructions: "Trascina per ruotare · Rotellina o pizzico per lo zoom",
+      parts_label: "Componenti",
+      no_webgl_title: "Il modello 3D non è disponibile",
+      no_webgl: "Il tuo browser o dispositivo non ha WebGL attivo. Puoi comunque leggere la descrizione di ogni componente:",
+      example_note: "Gli esempi numerici sono della GeForce RTX 5090.",
+      stat: {
+        material: "Materiale",
+        function: "Funzione",
+        standard: "Standard attuale",
+        bandwidth: "Larghezza di banda",
+        chip: "Chip di esempio",
+        transistors: "Transistor",
+        process: "Processo produttivo",
+        die_area: "Superficie",
+        type: "Tipo attuale",
+        config: "Configurazione",
+        speed: "Velocità per pin",
+        input: "Tensione in ingresso",
+        components: "Componenti",
+        connector: "Connettore moderno",
+        max_power: "Potenza massima",
+        pcie8: "PCIe a 8 pin",
+        heat_transport: "Trasporto del calore",
+        idle: "A riposo"
+      },
+      val: {
+        pcb_material: "FR-4 e rame",
+        pcb_function: "Segnali e alimentazione",
+        pcie_bw: "≈ 64 GB/s per direzione",
+        backplate_material: "Di solito alluminio",
+        backplate_function: "Rigidità e protezione",
+        transistors: "92,2 miliardi",
+        vram_config: "16 chip da 2 GB, bus a 512 bit",
+        vrm_components: "MOSFET, induttori e condensatori",
+        connector: "12V-2x6 (16 pin)",
+        hs_material: "Alluminio e rame",
+        hs_transport: "Heatpipe o camera di vapore",
+        shroud_function: "Guidare l'aria",
+        fan_idle: "Possono fermarsi (modalità 0 RPM)",
+        volts_12: "12 V",
+        watts_600: "600 W",
+        watts_150: "150 W",
+        area_750: "750 mm²",
+        speed_28: "28 Gbps"
+      },
+      parts: {
+        pcb: { title: "Circuito stampato (PCB)", desc: "Collega tutti i componenti: porta i segnali tra il chip grafico e la memoria e distribuisce l'energia. È formato da diversi strati di rame separati da materiale isolante." },
+        pcie: { title: "Connettore PCIe x16", desc: "Il collegamento con la scheda madre. Le schede attuali usano PCI Express 5.0 a 16 linee." },
+        backplate: { title: "Piastra posteriore (backplate)", desc: "Protegge il retro del PCB e lo irrigidisce perché la scheda non si pieghi. Molte aiutano anche a dissipare il calore in modo passivo." },
+        die: { title: "Chip grafico (GPU)", desc: "Il processore della scheda: migliaia di core che lavorano in parallelo, cache e controller di memoria su un unico pezzo di silicio." },
+        vram: { title: "Memoria video (VRAM)", desc: "Conserva i dati che servono subito al chip: texture, geometria e risultati intermedi. I chip circondano il processore per tenere corte le piste." },
+        vrm: { title: "Alimentazione (VRM)", desc: "I regolatori di tensione trasformano i 12 V dell'alimentatore nella bassa tensione, circa 1 V, di cui ha bisogno il chip, distribuendo il carico su più fasi." },
+        power: { title: "Connettore di alimentazione", desc: "Riceve l'energia dall'alimentatore. Le schede più potenti usano il connettore 12V-2x6 a 16 pin; le altre uno o più connettori PCIe a 8 pin." },
+        io: { title: "Staffa e uscite video", desc: "La piastra metallica che fissa la scheda al case e ospita le uscite per i monitor." },
+        heatsink: { title: "Dissipatore", desc: "Alette di alluminio con heatpipe in rame o una camera di vapore: raccolgono il calore del chip, della memoria e del VRM e lo distribuiscono su una grande superficie." },
+        shroud: { title: "Scocca", desc: "La copertura esterna che convoglia l'aria delle ventole nel dissipatore e dà alla scheda il suo aspetto." },
+        fan: { title: "Ventola", desc: "Spinge l'aria attraverso le alette del dissipatore per portare via il calore. Molte schede le fermano del tutto quando la GPU è fredda." }
+      }
     }
   },
   ru: {
@@ -3663,6 +3998,73 @@ const translations = {
       training: "Обучение ИИ",
       inference: "Инференс",
       hpc: "HPC / наука"
+    },
+    learn: {
+      panel_title: "3D-обзор",
+      panel_desc: "Выберите слой, чтобы заглянуть внутрь видеокарты, и нажмите на детали, чтобы узнать, для чего они нужны.",
+      layers_label: "Слои модели",
+      layer_full: "Вся видеокарта",
+      layer_no_shroud: "Без кожуха",
+      layer_pcb: "Только плата",
+      part_hint: "Нажмите на деталь 3D-модели, чтобы увидеть её описание.",
+      instructions: "Перетаскивайте для вращения · Колесо или щипок для масштаба",
+      parts_label: "Детали",
+      no_webgl_title: "3D-модель недоступна",
+      no_webgl: "В вашем браузере или на устройстве не включён WebGL. Описание каждой детали можно прочитать ниже:",
+      example_note: "Числовые примеры приведены для GeForce RTX 5090.",
+      stat: {
+        material: "Материал",
+        function: "Назначение",
+        standard: "Текущий стандарт",
+        bandwidth: "Пропускная способность",
+        chip: "Пример чипа",
+        transistors: "Транзисторы",
+        process: "Техпроцесс",
+        die_area: "Площадь кристалла",
+        type: "Текущий тип",
+        config: "Конфигурация",
+        speed: "Скорость на контакт",
+        input: "Входное напряжение",
+        components: "Компоненты",
+        connector: "Современный разъём",
+        max_power: "Максимальная мощность",
+        pcie8: "PCIe 8-pin",
+        heat_transport: "Отвод тепла",
+        idle: "В простое"
+      },
+      val: {
+        pcb_material: "FR-4 и медь",
+        pcb_function: "Сигналы и питание",
+        pcie_bw: "≈ 64 ГБ/с в каждую сторону",
+        backplate_material: "Обычно алюминий",
+        backplate_function: "Жёсткость и защита",
+        transistors: "92,2 млрд",
+        vram_config: "16 чипов по 2 ГБ, шина 512 бит",
+        vrm_components: "MOSFET, дроссели и конденсаторы",
+        connector: "12V-2x6 (16 контактов)",
+        hs_material: "Алюминий и медь",
+        hs_transport: "Тепловые трубки или испарительная камера",
+        shroud_function: "Направлять воздух",
+        fan_idle: "Могут останавливаться (режим 0 об/мин)",
+        volts_12: "12 В",
+        watts_600: "600 Вт",
+        watts_150: "150 Вт",
+        area_750: "750 мм²",
+        speed_28: "28 Гбит/с"
+      },
+      parts: {
+        pcb: { title: "Печатная плата (PCB)", desc: "Соединяет все детали: передаёт сигналы между графическим чипом и памятью и распределяет питание. Состоит из нескольких слоёв меди, разделённых изолятором." },
+        pcie: { title: "Разъём PCIe x16", desc: "Подключение к материнской плате. Современные видеокарты используют PCI Express 5.0 с 16 линиями." },
+        backplate: { title: "Задняя пластина (бэкплейт)", desc: "Защищает обратную сторону платы и придаёт ей жёсткость, чтобы видеокарта не прогибалась. Многие также пассивно помогают отводить тепло." },
+        die: { title: "Графический чип (GPU)", desc: "Процессор видеокарты: тысячи ядер, работающих параллельно, кэш и контроллеры памяти на одном кристалле кремния." },
+        vram: { title: "Видеопамять (VRAM)", desc: "Хранит данные, которые нужны чипу прямо сейчас: текстуры, геометрию и промежуточные результаты. Чипы расположены вокруг процессора, чтобы дорожки были короткими." },
+        vrm: { title: "Система питания (VRM)", desc: "Стабилизаторы напряжения превращают 12 В от блока питания в низкое напряжение около 1 В, нужное чипу, и распределяют нагрузку на несколько фаз." },
+        power: { title: "Разъём питания", desc: "Получает энергию от блока питания. Самые мощные видеокарты используют 16-контактный разъём 12V-2x6, остальные — один или несколько 8-контактных разъёмов PCIe." },
+        io: { title: "Планка и видеовыходы", desc: "Металлическая планка, которая крепит видеокарту к корпусу и несёт выходы для мониторов." },
+        heatsink: { title: "Радиатор", desc: "Алюминиевые рёбра с медными тепловыми трубками или испарительной камерой: они забирают тепло от чипа, памяти и VRM и распределяют его по большой площади." },
+        shroud: { title: "Кожух", desc: "Внешняя крышка, которая направляет воздух от вентиляторов в радиатор и определяет внешний вид видеокарты." },
+        fan: { title: "Вентилятор", desc: "Прогоняет воздух через рёбра радиатора и уносит тепло. Многие видеокарты полностью останавливают их, пока GPU холодный." }
+      }
     }
   }
 };
@@ -3680,6 +4082,7 @@ function setLanguage(lang) {
     if (typeof window.renderAll === 'function') {
       window.renderAll();
     }
+    window.dispatchEvent(new CustomEvent('i18n:change', { detail: { lang } }));
   }
 }
 
@@ -3688,9 +4091,9 @@ function updateLangUI(lang) {
   const langTexts = document.querySelectorAll('.current-lang-text');
   
   const flagCode = lang === 'en' ? 'us' : lang;
-  
+  // Banderas locales (assets/flags); la ruta se toma de la bandera actual para servir en / y en /pages
   flags.forEach(flag => {
-    flag.src = `https://flagcdn.com/w20/${flagCode}.png`;
+    flag.src = flag.getAttribute('src').replace(/[a-z]{2}\.svg$/, `${flagCode}.svg`);
   });
   
   langTexts.forEach(text => {
@@ -3723,6 +4126,10 @@ function applyTranslations() {
       // Usamos innerHTML en caso de que haya saltos de línea <br> incluidos
       el.innerHTML = translation;
     }
+  });
+  // Etiquetas accesibles: data-i18n-aria="clave" traduce el aria-label
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+    el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
   });
 }
 window.applyTranslations = applyTranslations;

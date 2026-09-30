@@ -24,6 +24,11 @@ const DYNAMIC = {
   'levels.*': ['done', 'current', 'locked'],
   'levels.ach.*.name': ACHIEVEMENT_IDS(),
   'levels.ach.*.desc': ACHIEVEMENT_IDS(),
+  'workload.*': ['training', 'inference', 'hpc'],
+  'learn.parts.*.title': LEARN().parts,
+  'learn.parts.*.desc': LEARN().parts,
+  'learn.stat.*': LEARN().stats,
+  'learn.val.*': LEARN().vals,
   'meta.*.title': PAGE_IDS(),
   'meta.*.description': PAGE_IDS()
 };
@@ -32,6 +37,16 @@ function ACHIEVEMENT_IDS() {
   const src = fs.readFileSync(path.join(ROOT, 'js', 'progress.js'), 'utf8');
   const block = src.slice(src.indexOf('const ACHIEVEMENTS'), src.indexOf('];', src.indexOf('const ACHIEVEMENTS')));
   return [...block.matchAll(/id:\s*'([a-z0-9_]+)'/g)].map(m => m[1]);
+}
+// Piezas, etiquetas y valores del visor 3D, leídos de la tabla PARTS de js/learn-3d.js
+function LEARN() {
+  const src = fs.readFileSync(path.join(ROOT, 'js', 'learn-3d.js'), 'utf8');
+  const block = src.slice(src.indexOf('const PARTS = {'), src.indexOf('};', src.indexOf('const PARTS = {')));
+  return {
+    parts: [...block.matchAll(/^\s+([a-z0-9_]+): \[/gm)].map(m => m[1]),
+    stats: [...new Set([...block.matchAll(/\['([a-z0-9_]+)',/g)].map(m => m[1]))],
+    vals: [...new Set([...block.matchAll(/\{ v: '([a-z0-9_]+)' \}/g)].map(m => m[1]))]
+  };
 }
 function PAGE_IDS() {
   return listPages().map(p => path.basename(p, '.html')).map(id => (id === 'index' ? 'home' : id));

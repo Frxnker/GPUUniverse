@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aprender: Anatomía de una GPU — GPU Universe</title>
   <meta name="description" content="Explora las partes de una GPU en este modelo interactivo 3D." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="preload" href="../assets/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../assets/fonts/exo-2-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23050807'/%3E%3Crect x='9' y='9' width='14' height='14' rx='2' fill='none' stroke='%2319e6b4' stroke-width='2'/%3E%3Crect x='13' y='13' width='6' height='6' fill='%2319e6b4'/%3E%3Cpath d='M12 5v4M16 5v4M20 5v4M12 23v4M16 23v4M20 23v4M5 12h4M5 16h4M5 20h4M23 12h4M23 16h4M23 20h4' stroke='%2319e6b4' stroke-width='1.6'/%3E%3C/svg%3E" />
   <meta name="theme-color" content="#050807" />
@@ -33,17 +32,17 @@
               </button>
               <div class="lang-switcher">
                 <button type="button" class="lang-btn" aria-label="Idioma">
-                  <img src="https://flagcdn.com/w20/es.png" class="current-flag" alt="" width="20" height="15">
+                  <img src="../assets/flags/es.svg" class="current-flag" alt="" width="20" height="15">
                   <span class="current-lang-text">ES</span>
                   <span class="chevron" aria-hidden="true">▾</span>
                 </button>
                 <div class="lang-dropdown">
-                  <div class="lang-option" data-value="es"><img src="https://flagcdn.com/w20/es.png" alt="" width="20" height="15"> Español</div>
-                  <div class="lang-option" data-value="en"><img src="https://flagcdn.com/w20/us.png" alt="" width="20" height="15"> English</div>
-                  <div class="lang-option" data-value="fr"><img src="https://flagcdn.com/w20/fr.png" alt="" width="20" height="15"> Français</div>
-                  <div class="lang-option" data-value="de"><img src="https://flagcdn.com/w20/de.png" alt="" width="20" height="15"> Deutsch</div>
-                  <div class="lang-option" data-value="it"><img src="https://flagcdn.com/w20/it.png" alt="" width="20" height="15"> Italiano</div>
-                  <div class="lang-option" data-value="ru"><img src="https://flagcdn.com/w20/ru.png" alt="" width="20" height="15"> Русский</div>
+                  <div class="lang-option" data-value="es"><img src="../assets/flags/es.svg" alt="" width="20" height="15"> Español</div>
+                  <div class="lang-option" data-value="en"><img src="../assets/flags/us.svg" alt="" width="20" height="15"> English</div>
+                  <div class="lang-option" data-value="fr"><img src="../assets/flags/fr.svg" alt="" width="20" height="15"> Français</div>
+                  <div class="lang-option" data-value="de"><img src="../assets/flags/de.svg" alt="" width="20" height="15"> Deutsch</div>
+                  <div class="lang-option" data-value="it"><img src="../assets/flags/it.svg" alt="" width="20" height="15"> Italiano</div>
+                  <div class="lang-option" data-value="ru"><img src="../assets/flags/ru.svg" alt="" width="20" height="15"> Русский</div>
                 </div>
               </div>
               <button type="button" class="close-menu-btn" id="close-menu-btn" aria-label="Cerrar menú">
@@ -81,17 +80,17 @@
         </button>
         <div class="lang-switcher desktop-only">
           <button type="button" class="lang-btn" aria-label="Idioma">
-            <img src="https://flagcdn.com/w20/es.png" class="current-flag" alt="" width="20" height="15">
+            <img src="../assets/flags/es.svg" class="current-flag" alt="" width="20" height="15">
             <span class="current-lang-text">ES</span>
             <span class="chevron" aria-hidden="true">▾</span>
           </button>
           <div class="lang-dropdown">
-            <div class="lang-option" data-value="es"><img src="https://flagcdn.com/w20/es.png" alt="" width="20" height="15"> Español</div>
-            <div class="lang-option" data-value="en"><img src="https://flagcdn.com/w20/us.png" alt="" width="20" height="15"> English</div>
-            <div class="lang-option" data-value="fr"><img src="https://flagcdn.com/w20/fr.png" alt="" width="20" height="15"> Français</div>
-            <div class="lang-option" data-value="de"><img src="https://flagcdn.com/w20/de.png" alt="" width="20" height="15"> Deutsch</div>
-            <div class="lang-option" data-value="it"><img src="https://flagcdn.com/w20/it.png" alt="" width="20" height="15"> Italiano</div>
-            <div class="lang-option" data-value="ru"><img src="https://flagcdn.com/w20/ru.png" alt="" width="20" height="15"> Русский</div>
+            <div class="lang-option" data-value="es"><img src="../assets/flags/es.svg" alt="" width="20" height="15"> Español</div>
+            <div class="lang-option" data-value="en"><img src="../assets/flags/us.svg" alt="" width="20" height="15"> English</div>
+            <div class="lang-option" data-value="fr"><img src="../assets/flags/fr.svg" alt="" width="20" height="15"> Français</div>
+            <div class="lang-option" data-value="de"><img src="../assets/flags/de.svg" alt="" width="20" height="15"> Deutsch</div>
+            <div class="lang-option" data-value="it"><img src="../assets/flags/it.svg" alt="" width="20" height="15"> Italiano</div>
+            <div class="lang-option" data-value="ru"><img src="../assets/flags/ru.svg" alt="" width="20" height="15"> Русский</div>
           </div>
         </div>
         <button type="button" class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Abrir menú" aria-expanded="false">
@@ -109,35 +108,35 @@
     <div class="learn-ui-overlay">
       <!-- Controles Izquierdos -->
       <div class="learn-panel" id="controls-panel">
-        <h3 style="margin-bottom: 0.5rem; color: var(--text);">Explorador 3D</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted);">Selecciona una capa para ver el interior de la tarjeta gráfica y haz clic en las partes para más información.</p>
-        
-        <div class="layer-controls">
-          <button class="layer-btn active" data-layer="full">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="m3 7 9 5 9-5M12 12v10"/></svg> GPU Completa
+        <h1 class="learn-panel-title" data-i18n="learn.panel_title">Explorador 3D</h1>
+        <p class="learn-panel-desc" data-i18n="learn.panel_desc">Elige una capa para ver el interior de la tarjeta gráfica y toca o haz clic en las piezas para saber qué hacen.</p>
+
+        <div class="layer-controls" role="group" aria-label="Capas del modelo" data-i18n-aria="learn.layers_label">
+          <button type="button" class="layer-btn active" data-layer="full" aria-pressed="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="m3 7 9 5 9-5M12 12v10"/></svg> <span data-i18n="learn.layer_full">GPU completa</span>
           </button>
-          <button class="layer-btn" data-layer="pcb-cooler">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg> Sin Disipador
+          <button type="button" class="layer-btn" data-layer="pcb-cooler" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h16M4 12h16M4 16h16"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg> <span data-i18n="learn.layer_no_shroud">Sin carcasa</span>
           </button>
-          <button class="layer-btn" data-layer="pcb-only">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5" rx=".5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg> Solo PCB
+          <button type="button" class="layer-btn" data-layer="pcb-only" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5" rx=".5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg> <span data-i18n="learn.layer_pcb">Solo PCB</span>
           </button>
         </div>
+
+        <h2 class="part-list-title" data-i18n="learn.parts_label">Piezas</h2>
+        <ul class="part-list" id="part-list"></ul>
       </div>
 
       <!-- Panel de info Derecho -->
-      <div class="learn-panel" id="part-info-panel">
-        <div class="part-title" id="part-title">GPU Die</div>
-        <div class="part-desc" id="part-desc">Haz clic en un componente del modelo 3D para ver su descripción.</div>
-        
-        <div class="part-stats" id="part-stats">
-          <!-- Dinámicamente poblado -->
-        </div>
+      <div class="learn-panel" id="part-info-panel" aria-live="polite">
+        <h2 class="part-title" id="part-title" data-i18n="learn.panel_title">Explorador 3D</h2>
+        <p class="part-desc" id="part-desc" data-i18n="learn.part_hint">Haz clic en una pieza del modelo 3D para ver su descripción.</p>
+        <div class="part-stats" id="part-stats"></div>
       </div>
     </div>
 
     <div class="instructions-overlay">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="6"/><path d="M12 7v4"/></svg> Arrastra para rotar · Haz scroll para zoom
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="6"/><path d="M12 7v4"/></svg> <span data-i18n="learn.instructions">Arrastra para girar · Rueda o pellizca para acercar</span>
     </div>
   </section>
 
@@ -149,8 +148,6 @@
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script src="../js/i18n.js"></script>
   <script src="../js/data.js"></script>
   <script src="../js/app.js"></script>

@@ -9,16 +9,13 @@ test.before(async () => {
 });
 test.after(() => win.close());
 
-const gpu = (name, extra = {}) => ({ brand: 'nvidia', name, arch: 'Test', year: 2023, vram: '8 GB GDDR6', tflops: '10', price: '~$300', perf: 10, ...extra });
+const gpu = (name, extra = {}) => ({ brand: 'nvidia', name, arch: 'Test', year: 2023, vram: '8 GB GDDR6', tflops: '10', msrp: 300, perf: 10, ...extra });
 
-test('priceToUsd convierte los formatos de precio a dólares', () => {
-  assert.equal(win.priceToUsd('~$899'), 899);
-  assert.equal(win.priceToUsd('~$75,000'), 75000);
-  assert.equal(win.priceToUsd('~$3999+'), 3999);
-  assert.ok(Math.abs(win.priceToUsd('2499€') - 2499 / 0.92) < 0.01);
-  assert.ok(Number.isNaN(win.priceToUsd('Legacy')));
-  assert.ok(Number.isNaN(win.priceToUsd('')));
-  assert.ok(Number.isNaN(win.priceToUsd(undefined)));
+test('gpuPrice devuelve el PVP de lanzamiento en dólares o 0 si no hay precio oficial', () => {
+  assert.equal(win.gpuPrice({ msrp: 899 }), 899);
+  assert.equal(win.gpuPrice({ msrp: null, priceNote: 'laptop' }), 0);
+  assert.equal(win.gpuPrice({}), 0);
+  assert.equal(win.gpuPrice(undefined), 0);
 });
 
 test('parseVram extrae los GB', () => {
@@ -29,13 +26,24 @@ test('parseVram extrae los GB', () => {
   assert.equal(win.parseVram(undefined), 0);
 });
 
-test('formatPrice muestra la moneda del idioma', () => {
+test('formatPrice muestra dólares con el formato del idioma, sin convertir', () => {
   win.currentLang = 'en';
-  assert.equal(win.formatPrice('~$899'), '~$899');
+  assert.equal(win.formatPrice(1999), '$1,999');
+  // es-ES no agrupa los números de 4 cifras
   win.currentLang = 'es';
-  assert.match(win.formatPrice('~$899'), /^~827\s?€$/);
-  assert.equal(win.formatPrice('N/A'), 'N/A');
-  assert.equal(win.formatPrice('Legacy'), 'Legacy');
+  assert.match(win.formatPrice(1999), /^1\.?999\s?US\$$/);
+  win.currentLang = 'ru';
+  assert.match(win.formatPrice(1999), /^1\s999\s\$$/);
+  win.currentLang = 'es';
+  assert.equal(win.formatPrice(0), '—');
+  assert.equal(win.formatPrice(null), '—');
+});
+
+test('priceInfo explica por qué falta el precio', () => {
+  assert.equal(win.priceInfo({ msrp: 499, launch: '2016-05', year: 2016 }).missing, false);
+  assert.equal(win.priceInfo({ msrp: null, priceNote: 'laptop' }).value, win.tr('ui.price_laptop'));
+  assert.equal(win.priceInfo({ msrp: null, priceNote: 'no-official' }).value, win.tr('ui.price_none'));
+  assert.equal(win.priceInfo({ msrp: null }).value, win.tr('ui.price_pending'));
 });
 
 test('matchesRange acepta rangos "min-max"', () => {
@@ -86,10 +94,10 @@ test('filtro de uso: ray tracing según marca y arquitectura', () => {
 
 test('ordenación por rendimiento, precio y valor; los que no tienen dato van al final', () => {
   const list = [
-    gpu('Lenta', { perf: 10, price: '~$100' }),
-    gpu('Rápida', { perf: 50, price: '~$1000' }),
-    gpu('Sin datos', { perf: 0, price: 'Legacy' }),
-    gpu('Media', { perf: 30, price: '~$300' })
+    gpu('Lenta', { perf: 10, msrp: 100 }),
+    gpu('Rápida', { perf: 50, msrp: 1000 }),
+    gpu('Sin datos', { perf: 0, msrp: null }),
+    gpu('Media', { perf: 30, msrp: 300 })
   ];
   const names = (sort, dir) => Array.from(win.sortGpus(list, sort, dir), g => g.name);
   assert.deepEqual(names('perf', 'desc'), ['Rápida', 'Media', 'Lenta', 'Sin datos']);

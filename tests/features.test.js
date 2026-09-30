@@ -118,7 +118,7 @@ test('herramientas: el asesor solo propone GPUs que mejoran lo pedido y caben en
   const budget = Number(document.getElementById('up-budget').value);
   names.forEach(n => {
     assert.ok(window.gpuGamingIndex(n) >= base * 1.5, `${n} supera +50 %`);
-    assert.ok(window.priceToUsd(window.findGpu(n).price) <= budget, `${n} cabe en ${budget}`);
+    assert.ok(window.gpuPrice(window.findGpu(n)) <= budget, `${n} cabe en ${budget}`);
   });
   close();
 });

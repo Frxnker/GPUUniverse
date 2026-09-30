@@ -1,10 +1,12 @@
 // Servidor estático para revisar la web en local (sin dependencias).
-// Imita a GitHub Pages: sirve index.html en las carpetas y 404.html cuando no existe la ruta.
+// Imita a GitHub Pages: sirve index.html en las carpetas, 404.html cuando no existe la ruta y
+// comprime con gzip los archivos de texto (así las medidas de Lighthouse se parecen a producción).
 //   npm start                 -> http://localhost:8080
 //   PORT=3000 npm start       -> otro puerto
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const zlib = require('zlib');
 
 const ROOT = path.resolve(__dirname, '..');
 const PORT = Number(process.env.PORT) || Number(process.argv[2]) || 8080;
@@ -27,12 +29,18 @@ const TYPES = {
   '.woff2': 'font/woff2'
 };
 
-function send(res, status, file) {
+const COMPRESSIBLE = /^(text\/|application\/(json|manifest\+json|xml)|image\/svg)/;
+
+function send(req, res, status, file) {
+  const type = TYPES[path.extname(file).toLowerCase()] || 'application/octet-stream';
+  const gzip = COMPRESSIBLE.test(type) && /\bgzip\b/.test(req.headers['accept-encoding'] || '');
   res.writeHead(status, {
-    'Content-Type': TYPES[path.extname(file).toLowerCase()] || 'application/octet-stream',
-    'Cache-Control': 'no-cache'
+    'Content-Type': type,
+    'Cache-Control': 'no-cache',
+    ...(gzip ? { 'Content-Encoding': 'gzip', Vary: 'Accept-Encoding' } : {})
   });
-  fs.createReadStream(file).pipe(res);
+  const stream = fs.createReadStream(file);
+  (gzip ? stream.pipe(zlib.createGzip()) : stream).pipe(res);
 }
 
 const server = http.createServer((req, res) => {
@@ -51,9 +59,9 @@ const server = http.createServer((req, res) => {
     return;
   }
   if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
-  if (fs.existsSync(file)) return send(res, 200, file);
+  if (fs.existsSync(file)) return send(req, res, 200, file);
   const notFound = path.join(ROOT, '404.html');
-  if (fs.existsSync(notFound)) return send(res, 404, notFound);
+  if (fs.existsSync(notFound)) return send(req, res, 404, notFound);
   res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }).end('404');
 });
 

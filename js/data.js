@@ -184,7 +184,7 @@ const DESKTOP_GPUS = [
   // 2024
   { brand: 'amd', name: 'Radeon RX 7900 GRE', arch: 'RDNA 3 / Navi 31', year: 2024, launch: '2024-02', tier: 'high', vram: '16 GB GDDR6', tflops: '45.98', bandwidth: '576 GB/s', tdp: '260W', msrp: 549, perf: 56.6, src: ['thwLegacy', 'thw22'] },
   { brand: 'amd', name: 'Radeon RX 7600 XT', arch: 'RDNA 3 / Navi 33', year: 2024, launch: '2024-01', tier: 'mid', vram: '16 GB GDDR6', tflops: '22.57', bandwidth: '288 GB/s', tdp: '190W', msrp: 329, perf: 30, src: ['thwLegacy', 'thw'] },
-  { brand: 'intel', name: 'Arc B580', arch: 'Battlemage / BMG-G21', year: 2024, launch: null, tier: 'mid', vram: '12 GB GDDR6', tflops: '13.7', bandwidth: '456 GB/s', tdp: '190W', msrp: 249, perf: 30.3, src: ['thw'] },
+  { brand: 'intel', name: 'Arc B580', arch: 'Battlemage / BMG-G21', year: 2024, launch: '2024-12', tier: 'mid', vram: '12 GB GDDR6', tflops: '13.7', bandwidth: '456 GB/s', tdp: '190W', msrp: 249, perf: 30.3, src: ['thw', 'https://www.intel.com/content/www/us/en/newsroom/news/intel-launches-arc-b-series-graphics-cards.html'] },
   { brand: 'nvidia', name: 'RTX 4080 SUPER', arch: 'Ada Lovelace / AD103', year: 2024, launch: '2024-01', tier: 'high', vram: '16 GB GDDR6X', tflops: '52.22', bandwidth: '736 GB/s', tdp: '320W', msrp: 999, perf: 70.9, src: ['thwLegacy', 'thw'] },
   { brand: 'nvidia', name: 'RTX 4070 Ti SUPER', arch: 'Ada Lovelace / AD103', year: 2024, launch: '2024-01', tier: 'high', vram: '16 GB GDDR6X', tflops: '44.1', bandwidth: '672 GB/s', tdp: '285W', msrp: 799, perf: 62.1, src: ['thwLegacy', 'thw'] },
   { brand: 'nvidia', name: 'RTX 4070 SUPER', arch: 'Ada Lovelace / AD104', year: 2024, launch: '2024-01', tier: 'high', vram: '12 GB GDDR6X', tflops: '35.48', bandwidth: '504 GB/s', tdp: '220W', msrp: 599, perf: 54.5, src: ['thwLegacy', 'thw'] },
@@ -193,9 +193,9 @@ const DESKTOP_GPUS = [
   { brand: 'amd', name: 'Radeon RX 9070 XT', arch: 'RDNA 4 / Navi 48', year: 2025, launch: '2025-03', tier: 'high', vram: '16 GB GDDR6', tflops: '48.7', bandwidth: '640 GB/s', tdp: '304W', msrp: 599, perf: 69.7, src: ['thwLegacy', 'thw'] },
   { brand: 'amd', name: 'Radeon RX 9070', arch: 'RDNA 4 / Navi 48', year: 2025, launch: '2025-03', tier: 'high', vram: '16 GB GDDR6', tflops: '36.1', bandwidth: '640 GB/s', tdp: '220W', msrp: 549, perf: 62.1, src: ['thwLegacy', 'thw'] },
   { brand: 'amd', name: 'Radeon RX 9070 GRE', arch: 'RDNA 4 / Navi 48', year: 2025, launch: null, tier: 'high', vram: '12 GB GDDR6', tflops: '34.3', bandwidth: '432 GB/s', tdp: '220W', msrp: 549, perf: 51.8, src: ['thw', 'https://www.amd.com/en/products/graphics/desktops/radeon/9000-series/amd-radeon-rx-9070-gre.html'] },
-  { brand: 'amd', name: 'Radeon RX 9060 XT', arch: 'RDNA 4', year: 2025, launch: null, tier: 'mid', vram: '16 GB GDDR6', tflops: '25.6', bandwidth: '320 GB/s', tdp: '160W', msrp: 349, perf: 40.2, src: ['thw'] },
-  { brand: 'amd', name: 'Radeon RX 9060 XT (8GB)', arch: 'RDNA 4 / Navi 44', year: 2025, launch: null, tier: 'mid', vram: '8 GB GDDR6', tflops: '25.6', bandwidth: '320 GB/s', tdp: null, msrp: 299, perf: 37.3, src: ['thw', 'https://www.amd.com/en/products/graphics/desktops/radeon/9000-series/amd-radeon-rx-9060xt.html'] },
-  { brand: 'intel', name: 'Arc B570', arch: 'Battlemage', year: 2025, launch: null, tier: 'entry', vram: '10 GB GDDR6', tflops: '11.5', bandwidth: '380 GB/s', tdp: '150W', msrp: 219, perf: 26.5, src: ['thw'] },
+  { brand: 'amd', name: 'Radeon RX 9060 XT', arch: 'RDNA 4', year: 2025, launch: '2025-06', tier: 'mid', vram: '16 GB GDDR6', tflops: '25.6', bandwidth: '320 GB/s', tdp: '160W', msrp: 349, perf: 40.2, src: ['thw', 'https://www.tomshardware.com/pc-components/gpus/amd-radeon-rx-9060-xt-launches-on-june-5-starting-at-usd299'] },
+  { brand: 'amd', name: 'Radeon RX 9060 XT (8GB)', arch: 'RDNA 4 / Navi 44', year: 2025, launch: '2025-06', tier: 'mid', vram: '8 GB GDDR6', tflops: '25.6', bandwidth: '320 GB/s', tdp: null, msrp: 299, perf: 37.3, src: ['thw', 'https://www.amd.com/en/products/graphics/desktops/radeon/9000-series/amd-radeon-rx-9060xt.html', 'https://www.tomshardware.com/pc-components/gpus/amd-radeon-rx-9060-xt-launches-on-june-5-starting-at-usd299'] },
+  { brand: 'intel', name: 'Arc B570', arch: 'Battlemage', year: 2025, launch: '2025-01', tier: 'entry', vram: '10 GB GDDR6', tflops: '11.5', bandwidth: '380 GB/s', tdp: '150W', msrp: 219, perf: 26.5, src: ['thw', 'https://www.intel.com/content/www/us/en/newsroom/news/intel-launches-arc-b-series-graphics-cards.html'] },
   { brand: 'nvidia', name: 'RTX 5090', arch: 'Blackwell / GB202', year: 2025, launch: '2025-01', tier: 'ultra', vram: '32 GB GDDR7', tflops: '104.8', bandwidth: '1792 GB/s', tdp: '575W', msrp: 1999, perf: 100, src: ['thwLegacy', 'thw'] },
   { brand: 'nvidia', name: 'RTX 5080', arch: 'Blackwell / GB203', year: 2025, launch: '2025-01', tier: 'high', vram: '16 GB GDDR7', tflops: '56.3', bandwidth: '960 GB/s', tdp: '360W', msrp: 999, perf: 76.7, src: ['thwLegacy', 'thw'] },
   { brand: 'nvidia', name: 'RTX 5070 Ti', arch: 'Blackwell / GB203', year: 2025, launch: '2025-02', tier: 'high', vram: '16 GB GDDR7', tflops: '43.9', bandwidth: '896 GB/s', tdp: '300W', msrp: 749, perf: 69.8, src: ['thwLegacy', 'thw'] },
@@ -203,7 +203,7 @@ const DESKTOP_GPUS = [
   { brand: 'nvidia', name: 'RTX 5060 Ti (16GB)', arch: 'Blackwell / GB206', year: 2025, launch: '2025-04', tier: 'mid', vram: '16 GB GDDR7', tflops: '23.7', bandwidth: '448 GB/s', tdp: '180W', msrp: 429, perf: 43.9, src: ['thwLegacy', 'thw'] },
   { brand: 'nvidia', name: 'RTX 5060 Ti', arch: 'Blackwell / GB206', year: 2025, launch: '2025-04', tier: 'mid', vram: '8 GB GDDR7', tflops: '23.7', bandwidth: '448 GB/s', tdp: '180W', msrp: 379, perf: 41, src: ['thwLegacy', 'thw'] },
   { brand: 'nvidia', name: 'RTX 5060', arch: 'Blackwell / GB206', year: 2025, launch: '2025-05', tier: 'mid', vram: '8 GB GDDR7', tflops: '19.2', bandwidth: '448 GB/s', tdp: '145W', msrp: 299, perf: 35.8, src: ['thwLegacy', 'thw'] },
-  { brand: 'nvidia', name: 'RTX 5050', arch: 'Blackwell / GB207', year: 2025, launch: null, tier: 'entry', vram: '8 GB GDDR6', tflops: '13.2', bandwidth: '320 GB/s', tdp: '130W', msrp: 249, perf: 27.1, src: ['thw'] }
+  { brand: 'nvidia', name: 'RTX 5050', arch: 'Blackwell / GB207', year: 2025, launch: '2025-07', tier: 'entry', vram: '8 GB GDDR6', tflops: '13.2', bandwidth: '320 GB/s', tdp: '130W', msrp: 249, perf: 27.1, src: ['thw', 'https://www.tomshardware.com/pc-components/gpus/nvidia-rtx-5050-puts-blackwell-within-reach-of-more-gamers-at-usd249-entry-level-50-series-launches-in-late-july'] }
 ];
 
 // Portátiles: no se venden por separado, así que no tienen precio. El TGP (consumo) lo fija cada
@@ -324,7 +324,7 @@ const SERVER_GPUS = [
     }
   },
   {
-    brand: 'amd', name: 'Instinct MI355X', arch: 'CDNA 4', year: 2025, launch: '2025-06', vram: '288 GB HBM3E', tflops: '157.3', ai: 2500, bandwidth: '8000 GB/s', tdp: '1400W',
+    brand: 'amd', name: 'Instinct MI355X', arch: 'CDNA 4', year: 2025, launch: '2025-06', vram: '288 GB HBM3e', tflops: '157.3', ai: 2500, bandwidth: '8000 GB/s', tdp: '1400W',
     interconnect: 'Infinity Fabric: 7 × 153 GB/s', workloads: ['training', 'inference', 'hpc'], msrp: null, priceNote: 'no-official', src: ['amdMi355x'], cssClass: 'amd-card',
     desc: {
       es: 'Acelerador CDNA 4 fabricado a 3 nm, con 288 GB de HBM3E a 8 TB/s. Añade formatos de 4 y 6 bits (MXFP4/MXFP6) para inferencia.',
@@ -336,7 +336,7 @@ const SERVER_GPUS = [
     }
   },
   {
-    brand: 'amd', name: 'Instinct MI325X', arch: 'CDNA 3', year: 2024, launch: '2024-10', vram: '256 GB HBM3E', tflops: '163.4', ai: 1307.4, bandwidth: '6000 GB/s', tdp: '1000W',
+    brand: 'amd', name: 'Instinct MI325X', arch: 'CDNA 3', year: 2024, launch: '2024-10', vram: '256 GB HBM3e', tflops: '163.4', ai: 1307.4, bandwidth: '6000 GB/s', tdp: '1000W',
     interconnect: 'Infinity Fabric: 8 × 128 GB/s', workloads: ['training', 'inference', 'hpc'], msrp: null, priceNote: 'no-official', src: ['amdMi325x'], cssClass: 'amd-card',
     desc: {
       es: 'Evolución del MI300X con la misma potencia de cálculo y más memoria: 256 GB de HBM3E a 6 TB/s.',

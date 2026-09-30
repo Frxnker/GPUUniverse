@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
-const { ROOT, LANGS, listPages, loadPage, scriptsOf } = require('./helpers/env');
+const { ROOT, LANGS, listPages, loadPage, scriptsOf, loadData } = require('./helpers/env');
 
 const PAGES = listPages();
 const NAMESPACES = ['nav', 'filters', 'quiz', 'hero', 'news', 'categories', 'sections', 'compare', 'compare2', 'footer', 'ui', 'table',
@@ -21,7 +21,7 @@ function visibleTextIssues(document) {
 }
 
 // learn.html depende de Three.js desde un CDN: si no carga, la página falla (se arregla en la Fase 3)
-const KNOWN = { 'pages/learn.html': 'Fase 3: Three.js local y aviso si no hay WebGL' };
+const KNOWN = {};
 
 for (const page of PAGES) {
   test(`${page}: carga sin errores de consola`, { todo: KNOWN[page] }, async () => {
@@ -46,6 +46,11 @@ for (const page of PAGES) {
 const LATIN_WORD = /(?:^|[^\p{L}])[a-záéíóúñü]{4,}(?![\p{L}])/u;
 // Términos técnicos que se escriben igual en todos los idiomas
 const SAME_EVERYWHERE = /^(?:\d+ )?(?:pts|aprox\.)$/;
+// Los nombres comerciales de las GPUs tampoco se traducen ("M5 Ultra GPU (80-core)")
+const GPU_NAMES = (() => {
+  const d = loadData();
+  return new Set([...d.DESKTOP_GPUS, ...d.MOBILE_GPUS, ...d.WORKSTATION_GPUS, ...d.SERVER_GPUS].map(g => g.name));
+})();
 
 function visibleTexts(document) {
   const texts = new Set();
@@ -76,7 +81,7 @@ async function untranslated(extract) {
     const ru = await loadPage(page, { lang: 'ru' });
     const spanish = extract(es.document);
     for (const text of extract(ru.document)) {
-      if (spanish.has(text) && LATIN_WORD.test(text) && !SAME_EVERYWHERE.test(text)) leaks.push(`${page}: ${text.slice(0, 80)}`);
+      if (spanish.has(text) && LATIN_WORD.test(text) && !SAME_EVERYWHERE.test(text) && !GPU_NAMES.has(text)) leaks.push(`${page}: ${text.slice(0, 80)}`);
     }
     es.close();
     ru.close();
@@ -84,7 +89,7 @@ async function untranslated(extract) {
   return leaks;
 }
 
-test('en ruso no queda texto visible en español', { todo: 'Fase 2: Salón de la Fama, mapa de arquitecturas y usos de servidor · Fase 3: Aprender' }, async () => {
+test('en ruso no queda texto visible en español', async () => {
   assert.deepEqual(await untranslated(visibleTexts), []);
 });
 
