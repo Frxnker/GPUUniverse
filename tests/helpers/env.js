@@ -81,6 +81,8 @@ function installBrowserApis(window, options) {
   window.HTMLElement.prototype.scrollIntoView = function () {};
   window.scrollTo = () => {};
   window.scrollBy = () => {};
+  // jsdom no trae el objeto CSS; los navegadores sí (gaming.js usa CSS.escape con los filtros de la URL)
+  if (!window.CSS) window.CSS = { escape: value => String(value).replace(/[^a-zA-Z0-9_-]/g, c => `\\${c}`) };
   Object.defineProperty(window.navigator, 'clipboard', {
     configurable: true,
     value: { writeText: text => { window.__clipboard = text; return Promise.resolve(); } }

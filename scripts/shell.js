@@ -17,6 +17,8 @@
 //   {{url}}         URL pública de la página ("homepage" de package.json + ruta)
 //   {{site}}        URL pública del sitio, acabada en /
 //   {{basepath}}    ruta del sitio en el dominio (/GPUUniverse/)
+//   {{scripthash}}  hashes sha256 de los <script> en línea de la misma plantilla (para la CSP)
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
@@ -80,8 +82,13 @@ function render(name, page) {
     if (!value) throw new Error(`${page}: falta meta.${ctx.id}_${key} en js/i18n.js`);
     return escAttr(value);
   };
-  return fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n').replace(/\n$/, '').replace(/\{\{([a-z]+)(?::([a-z-]+))?\}\}/g, (all, key, arg) => {
+  const template = fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n').replace(/\n$/, '');
+  // Hash de cada script en línea de la plantilla, para la CSP (así el script puede cambiar sin tocarla)
+  const scriptHashes = () => [...template.matchAll(/<script>([\s\S]*?)<\/script>/g)]
+    .map(m => `'sha256-${crypto.createHash('sha256').update(m[1]).digest('base64')}'`).join(' ');
+  return template.replace(/\{\{([a-z]+)(?::([a-z-]+))?\}\}/g, (all, key, arg) => {
     if (key === 'root') return ctx.root;
+    if (key === 'scripthash') return scriptHashes();
     if (key === 'pages') return ctx.pages;
     if (key === 'current') return arg === ctx.current ? ' class="active" aria-current="page"' : '';
     if (key === 'id') return ctx.id;

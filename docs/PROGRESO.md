@@ -455,6 +455,69 @@ bloques iniciales, los metadatos, la `<base>` de la 404 y la sección de noticia
     pero faltaban;
   - se quitan patrones `meta.*` obsoletos que no correspondían a ninguna clave.
 
+**Cierre**
+- Revisión completa en navegador: 360 vistas (3 motores × 10 páginas × escritorio y móvil × claro
+  y oscuro × es, ru y de).
+  - **0 incidencias reales**.
+  - Solo aparecen el aviso de service worker bloqueado por la herramienta de pruebas y los dos
+    avisos de Firefox de siempre.
+- Commit `bfe4d39` («Update»), hecho y publicado por ti durante la pausa.
+
+---
+
+## Fase extra — Seguridad ✅
+
+Detalle completo en [`docs/SEGURIDAD.md`](SEGURIDAD.md).
+
+**Qué cambia**
+- **Fallo de XSS corregido.**
+  - Niveles pintaba sin escapar `xp` y `games.played` del estado guardado.
+  - Un estado manipulado en `localStorage` ejecutaba código.
+  - En GitHub Pages es un riesgo real: todos los proyectos de `frxnker.github.io` comparten origen
+    y, por tanto, `localStorage`.
+- **Estado de progreso con versión, migración y saneado** (`progress.js`: `VERSION`,
+  `MIGRATIONS`, `sanitize`):
+  - cada campo se convierte a su tipo y tope (enteros ≥ 0, fechas, listas de textos);
+  - un estado sin versión se migra;
+  - uno de una versión futura se sanea sin borrarse;
+  - un JSON roto vuelve al estado inicial.
+  - **No cambia ninguna regla de XP, niveles, logros ni desbloqueos**: las 15 pruebas de reglas
+    siguen pasando igual.
+- El script de pre-pintado solo acepta tema `light`/`dark`, los 6 idiomas y un color con forma
+  válida.
+- **CSP** en `<meta>`, en la cabecera común de las 10 páginas:
+  - scripts solo del propio sitio, más el de pre-pintado por su hash, que calcula `npm run shell`;
+  - `object-src 'none'` y `base-uri 'self'`;
+  - datos externos solo de rss2json;
+  - imágenes `https:` para las noticias.
+  - Límite: `frame-ancestors` no funciona en `<meta>` y GitHub Pages no deja poner cabeceras.
+- Auditados los 63 `innerHTML`: solo pintan constantes del repositorio, texto escapado, URL
+  validadas o números saneados.
+  - Las noticias vuelven a validar las URL también cuando salen de la caché de la sesión (hecho
+    en la Fase 4).
+- `rel="noopener"`: ya lo llevaban todos los enlaces externos; ahora una prueba lo exige.
+
+**Cómo se ha comprobado**
+- `tests/security.test.js`: 8 pruebas.
+  - Parámetros de URL hostiles.
+  - `localStorage` hostil en todas las claves (antes de corregir el fallo, esta prueba encontraba
+    los elementos inyectados).
+  - RSS hostil (títulos con HTML, enlaces `javascript:`, imágenes `data:`) y caché de noticias
+    manipulada.
+  - Migración y saneado del estado.
+  - CSP con el hash correcto antes de cualquier recurso.
+  - Sin manejadores en línea ni URL `javascript:`.
+  - `noopener` en todos los enlaces externos.
+- **Cambio en el entorno de pruebas**: jsdom no trae `CSS.escape` (los navegadores sí) y se
+  simula como otras API. Sin él, `gaming.js` fallaba en jsdom al leer un filtro de la URL.
+- **CSP en navegador real** (Chrome, Firefox y WebKit): 30/30 páginas sin violaciones ni errores.
+  - Funcionan el visor 3D (import dinámico de Three.js), las noticias con imágenes externas, el
+    detalle de GPU, el buscador Ctrl+K y el service worker.
+  - Teclado 69/69. Sin conexión: 20/21 (la que falla es el 429 real de rss2json en WebKit, ya
+    explicado).
+  - En las pruebas que inyectan axe se usa `bypassCSP`: la propia CSP bloqueaba el script de la
+    herramienta, señal de que funciona.
+
 ---
 
 ## Decisiones pendientes

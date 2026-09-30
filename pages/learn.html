@@ -4,6 +4,9 @@
   <!-- shell:head -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Política de seguridad de contenido: scripts solo del propio sitio (y el de pre-pintado, por su hash,
+       que calcula npm run shell); datos externos solo de rss2json; imágenes https para las noticias -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-jaTQil24SQnuPbpvm0rQLpPdimORJnvi8LfqTMvzZCQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://api.rss2json.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
   <meta name="theme-color" content="#050807" />
   <link rel="preload" href="../assets/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="../assets/fonts/exo-2-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -11,8 +14,8 @@
   <link rel="icon" href="../assets/icons/icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png" />
   <link rel="manifest" href="../manifest.webmanifest" />
-  <!-- Tema, color de acento e idioma antes de pintar (evita destellos) -->
-  <script>(function(d){try{var s=localStorage;d.setAttribute('data-theme',s.getItem('gpu-universe-theme')||'dark');var a=s.getItem('gpu-universe-accent');if(a)d.setAttribute('data-accent',a);var l=s.getItem('gpu_lang');if(l)d.lang=l;}catch(e){d.setAttribute('data-theme','dark');}})(document.documentElement);</script>
+  <!-- Tema, color de acento e idioma antes de pintar (evita destellos); solo acepta valores válidos -->
+  <script>(function(d){try{var s=localStorage,t=s.getItem('gpu-universe-theme'),a=s.getItem('gpu-universe-accent'),l=s.getItem('gpu_lang');d.setAttribute('data-theme',t==='light'?'light':'dark');if(/^[a-z]{3,12}$/.test(a||''))d.setAttribute('data-accent',a);if(/^(es|en|fr|de|it|ru)$/.test(l||''))d.lang=l;}catch(e){d.setAttribute('data-theme','dark');}})(document.documentElement);</script>
   <!-- /shell:head -->
   <!-- shell:meta -->
   <title data-i18n="meta.learn_title">Anatomía de una GPU en 3D | GPU Universe</title>

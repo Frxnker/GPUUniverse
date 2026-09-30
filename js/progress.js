@@ -69,7 +69,7 @@
 
   function freshState() {
     return {
-      v: 1, xp: 0,
+      v: VERSION, xp: 0,
       viewed: [], pages: [], compares: [], layers: [], tools: [], langs: [], themes: [],
       once: {}, achievements: [],
       favPeak: 0, maxCompare: 0, quizCount: 0, shares: 0,
@@ -78,15 +78,51 @@
     };
   }
 
+  // Versión del formato guardado. Si cambia la forma del estado, se sube VERSION y se añade en
+  // MIGRATIONS la conversión desde la versión anterior (clave = versión de origen).
+  const VERSION = 1;
+  const MIGRATIONS = {
+    // 0: estado sin campo "v" (anterior a la versión 1): se rescata lo que encaje en el formato actual
+    0: saved => ({ ...saved, v: 1 })
+  };
+
+  // Deja lo guardado con los tipos y topes del formato actual: lo que no encaja se descarta.
+  // Importante: localStorage lo comparten todas las webs de frxnker.github.io, así que no se
+  // confía en nada de lo que venga de ahí (la interfaz pinta estos números sin escapar).
+  function sanitize(saved) {
+    const obj = v => (v && typeof v === 'object' && !Array.isArray(v) ? v : {});
+    const count = v => (typeof v === 'number' && Number.isFinite(v) && v >= 0 ? Math.floor(v) : 0);
+    const day = v => (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : '');
+    const texts = (v, cap = 1000) => (Array.isArray(v) ? [...new Set(v.filter(x => typeof x === 'string' && x.length <= 300))].slice(-cap) : []);
+    const s = obj(saved);
+    const games = obj(s.games);
+    const streak = obj(s.streak);
+    const best = {};
+    Object.entries(obj(games.best)).forEach(([id, score]) => { if (/^[a-z]{1,20}$/.test(id) && typeof score === 'number') best[id] = count(score); });
+    const once = {};
+    Object.keys(obj(s.once)).slice(0, 20000).forEach(key => { if (key.length <= 300) once[key] = 1; });
+    return {
+      v: VERSION,
+      xp: count(s.xp),
+      viewed: texts(s.viewed, 2000), pages: texts(s.pages), compares: texts(s.compares, 300),
+      layers: texts(s.layers), tools: texts(s.tools), langs: texts(s.langs), themes: texts(s.themes),
+      once, achievements: texts(s.achievements),
+      favPeak: count(s.favPeak), maxCompare: count(s.maxCompare), quizCount: count(s.quizCount), shares: count(s.shares),
+      streak: { count: count(streak.count), best: count(streak.best), last: day(streak.last) },
+      games: { played: count(games.played), best, perfect: count(games.perfect) ? 1 : 0, dailyCount: count(games.dailyCount), dailyDone: day(games.dailyDone) }
+    };
+  }
+
   function load() {
     try {
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-      if (saved && saved.v === 1) {
-        // Mezcla con el estado vacío por si se añaden campos en versiones futuras
-        const base = freshState();
-        return { ...base, ...saved, streak: { ...base.streak, ...saved.streak }, games: { ...base.games, ...saved.games, best: { ...(saved.games && saved.games.best) } } };
-      }
-    } catch (e) { /* almacenamiento no disponible */ }
+      let saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+      if (!saved || typeof saved !== 'object') return freshState();
+      let version = Number.isInteger(saved.v) ? saved.v : 0;
+      while (version < VERSION && MIGRATIONS[version]) saved = MIGRATIONS[version++](saved);
+      // Una versión más nueva (p. ej. tras volver a una versión anterior de la web) no borra el
+      // progreso: se queda con lo que este formato entiende
+      return sanitize(saved);
+    } catch (e) { /* almacenamiento no disponible o JSON roto */ }
     return freshState();
   }
 
