@@ -17,14 +17,12 @@
   };
 
   // ---------- Rutas y página actual ----------
-  const IN_PAGES = /\/pages\//.test(window.location.pathname);
   const FILE = (window.location.pathname.split('/').pop() || 'index.html').replace(/\.html$/, '') || 'index';
-  const PAGE_ID = FILE === 'index' ? 'home' : FILE;
+  // La 404 se sirve en cualquier ruta: se reconoce por su clase, no por la URL
+  const IS_404 = document.body.classList.contains('page-404');
+  const PAGE_ID = IS_404 ? 'notfound' : FILE === 'index' ? 'home' : FILE;
 
-  function pageHref(page) {
-    if (page === 'home') return IN_PAGES ? '../index.html' : 'index.html';
-    return IN_PAGES ? `${page}.html` : `pages/${page}.html`;
-  }
+  const pageHref = page => window.pageHref(page);
 
   // ---------- Iconos (SVG de línea, heredan el color del texto) ----------
   const svg = body => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
@@ -1194,8 +1192,10 @@
     translateStatic();
     renderTray();
     syncActionButtons();
-    Progress.start(PAGE_ID);
+    // La 404 no es una sección: cuenta la visita del día, pero no da XP de «sección nueva»
+    Progress.start(IS_404 ? null : PAGE_ID);
     maybeWelcome();
+    document.querySelectorAll('[data-open-search]').forEach(btn => btn.addEventListener('click', () => openPalette()));
 
     if (deepLinkGpu && window.findGpu(deepLinkGpu)) {
       setTimeout(() => {

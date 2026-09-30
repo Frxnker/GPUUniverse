@@ -8924,6 +8924,25 @@ body.has-tray #footer {
   margin-bottom: 0.9rem;
 }
 
+/* ---------- Página 404 ---------- */
+.notfound-hero {
+  min-height: 62vh;
+  padding-bottom: 4rem;
+}
+
+.notfound-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.notfound-actions .btn-ghost {
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 /* ---------- Controles comunes: segmentado, rango e interruptor ---------- */
 .segmented {
   display: inline-flex;

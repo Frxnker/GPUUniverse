@@ -3,6 +3,11 @@
   "version": "2.0.0",
   "private": true,
   "description": "Portal estático de GPUs (HTML + CSS + JS sin compilación) desplegado en GitHub Pages",
+  "homepage": "https://frxnker.github.io/GPUUniverse/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Frxnker/GPUUniverse.git"
+  },
   "scripts": {
     "start": "node scripts/serve.js",
     "shell": "node scripts/shell.js",

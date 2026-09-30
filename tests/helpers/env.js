@@ -23,7 +23,8 @@ const MIME = { '.js': 'text/javascript', '.html': 'text/html', '.json': 'applica
 function localOnly(external) {
   return requestInterceptor(request => {
     if (request.url.startsWith(ORIGIN)) {
-      const rel = decodeURIComponent(new URL(request.url).pathname).replace(/^\/+/, '');
+      // Como en GitHub Pages, el sitio también responde bajo /GPUUniverse/ (la 404 usa <base href="/GPUUniverse/">)
+      const rel = decodeURIComponent(new URL(request.url).pathname).replace(/^\/+/, '').replace(/^GPUUniverse\//, '');
       if (/\.css$/.test(rel)) return new Response('', { headers: { 'Content-Type': 'text/css' } });
       const file = path.join(ROOT, rel);
       if (!file.startsWith(ROOT) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {

@@ -253,6 +253,16 @@ if (navbar) {
 }
 
 // ===== UTILIDADES =====
+// Ruta relativa a la raíz del sitio ('' en la raíz, '../' en pages/). La da el enlace al manifest que
+// escribe partials/head.html; así también vale en la página 404, que se sirve en cualquier ruta con <base>
+window.rootPath = function() {
+  const link = document.querySelector('link[rel="manifest"]');
+  return link ? link.getAttribute('href').replace(/manifest\.webmanifest$/, '') : '';
+};
+window.pageHref = function(page) {
+  return page === 'home' ? `${window.rootPath()}index.html` : `${window.rootPath()}pages/${page}.html`;
+};
+
 const LOCALES = { es: 'es-ES', en: 'en-US', fr: 'fr-FR', de: 'de-DE', it: 'it-IT', ru: 'ru-RU' };
 window.currentLocale = () => LOCALES[window.currentLang] || 'es-ES';
 
@@ -899,7 +909,7 @@ window.renderHallOfFame = function() {
   const container = document.getElementById('hof-grid');
   if (!container || typeof HALL_OF_FAME === 'undefined') return;
   const esc = window.escapeHtml;
-  const base = window.location.pathname.includes('/pages/') ? '../assets/' : 'assets/';
+  const base = `${window.rootPath()}assets/`;
   container.innerHTML = HALL_OF_FAME.map(item => `
     <article class="hof-card">
       <div class="hof-img-wrapper">
@@ -1013,7 +1023,7 @@ window.openGpuModal = function(name, trigger) {
   const brandMap = { nvidia: 'NVIDIA', amd: 'AMD', intel: 'Intel', apple: 'Apple' };
   // Contenido adicional que puede aportar cada página (índice, alternativas...)
   const extras = typeof window.gpuModalExtras === 'function' ? (window.gpuModalExtras(gpu) || {}) : {};
-  const comparePath = window.location.pathname.includes('/pages/') ? 'compare.html' : 'pages/compare.html';
+  const comparePath = window.pageHref('compare');
   const desc = window.localText(gpu.desc);
   const price = window.priceInfo(gpu);
 
@@ -1442,4 +1452,13 @@ async function initNews() {
 function newsSkeletonHtml() {
   const card = '<div class="news-card news-skeleton" aria-hidden="true"><div class="news-img"></div><div class="news-content"><span></span><span></span><span></span></div></div>';
   return `<p class="visually-hidden">${window.escapeHtml(window.tr('news.loading'))}</p>${card.repeat(3)}`;
+}
+
+// ===== USO SIN CONEXIÓN =====
+// El service worker (sw.js, en la raíz) guarda la web para poder abrirla sin conexión.
+// Las noticias siguen necesitando red: sin conexión muestran su aviso.
+if ('serviceWorker' in navigator && /^https?:$/.test(window.location.protocol)) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register(`${window.rootPath()}sw.js`).catch(err => console.warn('Service worker:', err));
+  });
 }

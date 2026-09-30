@@ -13,6 +13,34 @@ const translations = {
       hero_img: "Ilustración generada con IA de la placa de una tarjeta gráfica: el chip, la memoria y un disipador con heatpipes de cobre",
       breadcrumb: "Ruta de navegación"
     },
+    meta: {
+      home_title: "GPU Universe — Todas las GPUs, de gaming a servidor",
+      home_desc: "Explora el universo de las GPUs: tarjetas gráficas de gaming, workstation y aceleradores de IA para servidor, con comparador, historia y herramientas.",
+      gaming_title: "GPUs gaming de escritorio y portátil | GPU Universe",
+      gaming_desc: "Catálogo de más de 150 GPUs gaming de escritorio y portátil, de la GTX 460 a la RTX 5090: especificaciones, precios e índice de rendimiento en juegos.",
+      workstation_title: "GPUs workstation: NVIDIA RTX PRO, Radeon PRO y Apple | GPU Universe",
+      workstation_desc: "GPUs profesionales para 3D, CAD, vídeo e IA: memoria, rendimiento, consumo y precio de lanzamiento de NVIDIA, AMD y Apple.",
+      server_title: "GPUs de servidor y aceleradores de IA | GPU Universe",
+      server_desc: "Aceleradores para IA y HPC en centros de datos: memoria HBM, rendimiento BF16 y FP32, ancho de banda, consumo e interconexión de NVIDIA, AMD e Intel.",
+      compare_title: "Comparador de GPUs: hasta 4 cara a cara | GPU Universe",
+      compare_desc: "Compara hasta 4 GPUs con veredicto, gráfica de rendimiento y tabla de especificaciones, y comparte la comparación con un enlace.",
+      history_title: "Historia de las GPUs y mapa de arquitecturas | GPU Universe",
+      history_desc: "Cronología de las tarjetas gráficas desde los años 80 hasta la era de la IA, mapa de arquitecturas de NVIDIA y AMD y las GPUs legendarias.",
+      learn_title: "Anatomía de una GPU en 3D | GPU Universe",
+      learn_desc: "Explora en 3D las piezas de una tarjeta gráfica: chip, memoria, alimentación, disipador y ventiladores, y para qué sirve cada una.",
+      tools_title: "Herramientas: mejora de GPU, fuente y VRAM | GPU Universe",
+      tools_desc: "Calcula qué GPU mejora la tuya, qué fuente de alimentación necesitas, cuánto consume y cuánta VRAM hace falta para jugar o ejecutar IA en local.",
+      levels_title: "Niveles, logros y retos | GPU Universe",
+      levels_desc: "Tu progreso en GPU Universe: nivel, experiencia, retos diarios sobre GPUs, logros y colores desbloqueables.",
+      notfound_title: "Página no encontrada | GPU Universe",
+      notfound_desc: "Esta página no existe. Vuelve al inicio o busca una GPU."
+    },
+    notfound: {
+      title: "Esta página no existe",
+      lead: "Puede que la dirección esté mal escrita o que la página haya cambiado de sitio. Vuelve al inicio o busca una GPU.",
+      home: "Ir al inicio",
+      search: "Buscar una GPU"
+    },
     nav: {
       gaming: "Gaming",
       workstation: "Workstation",
@@ -706,6 +734,34 @@ const translations = {
       catalog: "GPU catalogue",
       hero_img: "AI-generated illustration of a graphics card board: the chip, the memory and a heatsink with copper heat pipes",
       breadcrumb: "Breadcrumb"
+    },
+    meta: {
+      home_title: "GPU Universe — Every GPU, from gaming to data center",
+      home_desc: "Explore the world of GPUs: gaming and workstation graphics cards and data-center AI accelerators, with a comparison tool, history and calculators.",
+      gaming_title: "Desktop and laptop gaming GPUs | GPU Universe",
+      gaming_desc: "A catalogue of 150+ desktop and laptop gaming GPUs, from the GTX 460 to the RTX 5090: specifications, prices and a gaming performance index.",
+      workstation_title: "Workstation GPUs: NVIDIA RTX PRO, Radeon PRO and Apple | GPU Universe",
+      workstation_desc: "Professional GPUs for 3D, CAD, video and AI: memory, performance, power and launch price from NVIDIA, AMD and Apple.",
+      server_title: "Data-center GPUs and AI accelerators | GPU Universe",
+      server_desc: "AI and HPC accelerators for data centers: HBM memory, BF16 and FP32 performance, bandwidth, power and interconnect from NVIDIA, AMD and Intel.",
+      compare_title: "GPU comparison: up to 4 head to head | GPU Universe",
+      compare_desc: "Compare up to 4 GPUs with a verdict, a performance chart and a specification table, and share the comparison with a link.",
+      history_title: "GPU history and architecture map | GPU Universe",
+      history_desc: "A timeline of graphics cards from the 1980s to the AI era, a map of NVIDIA and AMD architectures and the legendary GPUs.",
+      learn_title: "GPU anatomy in 3D | GPU Universe",
+      learn_desc: "Explore the parts of a graphics card in 3D: the chip, memory, power delivery, heatsink and fans, and what each one does.",
+      tools_title: "Tools: GPU upgrade, power supply and VRAM | GPU Universe",
+      tools_desc: "Find out which GPU upgrades yours, which power supply you need, how much it draws and how much VRAM you need for gaming or local AI.",
+      levels_title: "Levels, achievements and challenges | GPU Universe",
+      levels_desc: "Your progress in GPU Universe: level, experience, daily GPU challenges, achievements and unlockable colors.",
+      notfound_title: "Page not found | GPU Universe",
+      notfound_desc: "This page does not exist. Go back home or search for a GPU."
+    },
+    notfound: {
+      title: "This page does not exist",
+      lead: "The address may be mistyped or the page may have moved. Go back home or search for a GPU.",
+      home: "Go home",
+      search: "Search for a GPU"
     },
     nav: {
       gaming: "Gaming",
@@ -1401,6 +1457,34 @@ const translations = {
       hero_img: "Illustration générée par IA du circuit d’une carte graphique : la puce, la mémoire et un dissipateur à caloducs en cuivre",
       breadcrumb: "Fil d’Ariane"
     },
+    meta: {
+      home_title: "GPU Universe — Toutes les GPU, du jeu au serveur",
+      home_desc: "Explorez l’univers des GPU : cartes graphiques gaming et workstation et accélérateurs d’IA pour serveur, avec comparateur, histoire et outils.",
+      gaming_title: "GPU gaming pour PC fixe et portable | GPU Universe",
+      gaming_desc: "Catalogue de plus de 150 GPU gaming pour PC fixe et portable, de la GTX 460 à la RTX 5090 : caractéristiques, prix et indice de performance en jeu.",
+      workstation_title: "GPU workstation : NVIDIA RTX PRO, Radeon PRO et Apple | GPU Universe",
+      workstation_desc: "GPU professionnelles pour la 3D, la CAO, la vidéo et l’IA : mémoire, performances, consommation et prix de lancement de NVIDIA, AMD et Apple.",
+      server_title: "GPU serveur et accélérateurs d’IA | GPU Universe",
+      server_desc: "Accélérateurs d’IA et de HPC pour centres de données : mémoire HBM, performances BF16 et FP32, bande passante, consommation et interconnexion.",
+      compare_title: "Comparateur de GPU : jusqu’à 4 face à face | GPU Universe",
+      compare_desc: "Comparez jusqu’à 4 GPU avec un verdict, un graphique de performances et un tableau des caractéristiques, puis partagez la comparaison par un lien.",
+      history_title: "Histoire des GPU et carte des architectures | GPU Universe",
+      history_desc: "Chronologie des cartes graphiques des années 80 à l’ère de l’IA, carte des architectures NVIDIA et AMD et GPU légendaires.",
+      learn_title: "Anatomie d’une GPU en 3D | GPU Universe",
+      learn_desc: "Explorez en 3D les pièces d’une carte graphique : puce, mémoire, alimentation, dissipateur et ventilateurs, et le rôle de chacune.",
+      tools_title: "Outils : mise à niveau, alimentation et VRAM | GPU Universe",
+      tools_desc: "Découvrez quelle GPU améliore la vôtre, quelle alimentation choisir, combien elle consomme et combien de VRAM il faut pour jouer ou pour l’IA locale.",
+      levels_title: "Niveaux, succès et défis | GPU Universe",
+      levels_desc: "Votre progression sur GPU Universe : niveau, expérience, défis quotidiens sur les GPU, succès et couleurs à débloquer.",
+      notfound_title: "Page introuvable | GPU Universe",
+      notfound_desc: "Cette page n’existe pas. Revenez à l’accueil ou cherchez une GPU."
+    },
+    notfound: {
+      title: "Cette page n’existe pas",
+      lead: "L’adresse est peut-être mal saisie ou la page a été déplacée. Revenez à l’accueil ou cherchez une GPU.",
+      home: "Aller à l’accueil",
+      search: "Chercher une GPU"
+    },
     nav: {
       gaming: "Jeu",
       workstation: "Station de Travail",
@@ -2094,6 +2178,34 @@ const translations = {
       catalog: "GPU-Katalog",
       hero_img: "KI-generierte Illustration einer Grafikkartenplatine: Chip, Speicher und ein Kühler mit Heatpipes aus Kupfer",
       breadcrumb: "Brotkrümelnavigation"
+    },
+    meta: {
+      home_title: "GPU Universe — Alle GPUs, vom Gaming bis zum Rechenzentrum",
+      home_desc: "Entdecke die Welt der GPUs: Gaming- und Workstation-Grafikkarten und KI-Beschleuniger fürs Rechenzentrum, mit Vergleich, Geschichte und Rechnern.",
+      gaming_title: "Gaming-GPUs für Desktop und Laptop | GPU Universe",
+      gaming_desc: "Katalog mit über 150 Gaming-GPUs für Desktop und Laptop, von der GTX 460 bis zur RTX 5090: technische Daten, Preise und Gaming-Leistungsindex.",
+      workstation_title: "Workstation-GPUs: NVIDIA RTX PRO, Radeon PRO und Apple | GPU Universe",
+      workstation_desc: "Profi-GPUs für 3D, CAD, Video und KI: Speicher, Leistung, Verbrauch und Einführungspreis von NVIDIA, AMD und Apple.",
+      server_title: "Server-GPUs und KI-Beschleuniger | GPU Universe",
+      server_desc: "KI- und HPC-Beschleuniger fürs Rechenzentrum: HBM-Speicher, BF16- und FP32-Leistung, Bandbreite, Verbrauch und Interconnect von NVIDIA, AMD und Intel.",
+      compare_title: "GPU-Vergleich: bis zu 4 im direkten Duell | GPU Universe",
+      compare_desc: "Vergleiche bis zu 4 GPUs mit Fazit, Leistungsdiagramm und Datentabelle und teile den Vergleich per Link.",
+      history_title: "GPU-Geschichte und Architektur-Karte | GPU Universe",
+      history_desc: "Zeitleiste der Grafikkarten von den 80ern bis zur KI-Ära, Karte der NVIDIA- und AMD-Architekturen und die legendären GPUs.",
+      learn_title: "Aufbau einer GPU in 3D | GPU Universe",
+      learn_desc: "Entdecke die Bauteile einer Grafikkarte in 3D: Chip, Speicher, Stromversorgung, Kühler und Lüfter, und wofür jedes davon da ist.",
+      tools_title: "Tools: GPU-Upgrade, Netzteil und VRAM | GPU Universe",
+      tools_desc: "Finde heraus, welche GPU deine übertrifft, welches Netzteil du brauchst, wie viel sie verbraucht und wie viel VRAM Spiele oder lokale KI benötigen.",
+      levels_title: "Level, Erfolge und Herausforderungen | GPU Universe",
+      levels_desc: "Dein Fortschritt in GPU Universe: Level, Erfahrung, tägliche GPU-Herausforderungen, Erfolge und freischaltbare Farben.",
+      notfound_title: "Seite nicht gefunden | GPU Universe",
+      notfound_desc: "Diese Seite existiert nicht. Zurück zur Startseite oder nach einer GPU suchen."
+    },
+    notfound: {
+      title: "Diese Seite gibt es nicht",
+      lead: "Vielleicht ist die Adresse falsch geschrieben oder die Seite wurde verschoben. Zurück zur Startseite oder nach einer GPU suchen.",
+      home: "Zur Startseite",
+      search: "GPU suchen"
     },
     nav: {
       gaming: "Gaming",
@@ -2789,6 +2901,34 @@ const translations = {
       hero_img: "Illustrazione generata con IA della scheda di una GPU: il chip, la memoria e un dissipatore con heatpipe in rame",
       breadcrumb: "Percorso di navigazione"
     },
+    meta: {
+      home_title: "GPU Universe — Tutte le GPU, dal gaming al server",
+      home_desc: "Esplora l’universo delle GPU: schede grafiche gaming e workstation e acceleratori IA per server, con comparatore, storia e strumenti.",
+      gaming_title: "GPU gaming desktop e portatili | GPU Universe",
+      gaming_desc: "Catalogo di oltre 150 GPU gaming desktop e portatili, dalla GTX 460 alla RTX 5090: specifiche, prezzi e indice di prestazioni nei giochi.",
+      workstation_title: "GPU workstation: NVIDIA RTX PRO, Radeon PRO e Apple | GPU Universe",
+      workstation_desc: "GPU professionali per 3D, CAD, video e IA: memoria, prestazioni, consumo e prezzo di lancio di NVIDIA, AMD e Apple.",
+      server_title: "GPU per server e acceleratori IA | GPU Universe",
+      server_desc: "Acceleratori per IA e HPC nei data center: memoria HBM, prestazioni BF16 e FP32, larghezza di banda, consumo e interconnessione di NVIDIA, AMD e Intel.",
+      compare_title: "Comparatore di GPU: fino a 4 a confronto | GPU Universe",
+      compare_desc: "Confronta fino a 4 GPU con verdetto, grafico delle prestazioni e tabella delle specifiche, e condividi il confronto con un link.",
+      history_title: "Storia delle GPU e mappa delle architetture | GPU Universe",
+      history_desc: "Cronologia delle schede grafiche dagli anni ’80 all’era dell’IA, mappa delle architetture NVIDIA e AMD e le GPU leggendarie.",
+      learn_title: "Anatomia di una GPU in 3D | GPU Universe",
+      learn_desc: "Esplora in 3D i componenti di una scheda grafica: chip, memoria, alimentazione, dissipatore e ventole, e a cosa serve ciascuno.",
+      tools_title: "Strumenti: upgrade GPU, alimentatore e VRAM | GPU Universe",
+      tools_desc: "Scopri quale GPU migliora la tua, quale alimentatore ti serve, quanto consuma e quanta VRAM serve per giocare o eseguire l’IA in locale.",
+      levels_title: "Livelli, obiettivi e sfide | GPU Universe",
+      levels_desc: "I tuoi progressi su GPU Universe: livello, esperienza, sfide quotidiane sulle GPU, obiettivi e colori sbloccabili.",
+      notfound_title: "Pagina non trovata | GPU Universe",
+      notfound_desc: "Questa pagina non esiste. Torna alla home o cerca una GPU."
+    },
+    notfound: {
+      title: "Questa pagina non esiste",
+      lead: "Forse l’indirizzo è scritto male o la pagina è stata spostata. Torna alla home o cerca una GPU.",
+      home: "Vai alla home",
+      search: "Cerca una GPU"
+    },
     nav: {
       gaming: "Gaming",
       workstation: "Workstation",
@@ -3482,6 +3622,34 @@ const translations = {
       catalog: "Каталог видеокарт",
       hero_img: "Иллюстрация, созданная ИИ: плата видеокарты — чип, память и радиатор с медными тепловыми трубками",
       breadcrumb: "Навигационная цепочка"
+    },
+    meta: {
+      home_title: "GPU Universe — все видеокарты, от игровых до серверных",
+      home_desc: "Мир GPU: игровые и профессиональные видеокарты и серверные ускорители ИИ, а также сравнение, история и калькуляторы.",
+      gaming_title: "Игровые видеокарты для ПК и ноутбуков | GPU Universe",
+      gaming_desc: "Каталог из более чем 150 игровых видеокарт для ПК и ноутбуков, от GTX 460 до RTX 5090: характеристики, цены и игровой индекс производительности.",
+      workstation_title: "GPU для рабочих станций: RTX PRO, Radeon PRO и Apple | GPU Universe",
+      workstation_desc: "Профессиональные GPU для 3D, САПР, видео и ИИ: память, производительность, энергопотребление и стартовая цена NVIDIA, AMD и Apple.",
+      server_title: "Серверные GPU и ускорители ИИ | GPU Universe",
+      server_desc: "Ускорители ИИ и HPC для центров обработки данных: память HBM, производительность BF16 и FP32, пропускная способность, потребление и интерфейсы.",
+      compare_title: "Сравнение видеокарт: до 4 моделей | GPU Universe",
+      compare_desc: "Сравните до 4 видеокарт: итог, график производительности и таблица характеристик, а также ссылка, чтобы поделиться сравнением.",
+      history_title: "История видеокарт и карта архитектур | GPU Universe",
+      history_desc: "Хронология видеокарт с 1980-х до эпохи ИИ, карта архитектур NVIDIA и AMD и легендарные GPU.",
+      learn_title: "Устройство видеокарты в 3D | GPU Universe",
+      learn_desc: "Изучите в 3D детали видеокарты: чип, память, систему питания, радиатор и вентиляторы — и зачем нужна каждая из них.",
+      tools_title: "Инструменты: апгрейд GPU, блок питания и VRAM | GPU Universe",
+      tools_desc: "Узнайте, какая видеокарта лучше вашей, какой блок питания нужен, сколько она потребляет и сколько VRAM нужно для игр или локального ИИ.",
+      levels_title: "Уровни, достижения и испытания | GPU Universe",
+      levels_desc: "Ваш прогресс в GPU Universe: уровень, опыт, ежедневные испытания о видеокартах, достижения и открываемые цвета.",
+      notfound_title: "Страница не найдена | GPU Universe",
+      notfound_desc: "Такой страницы нет. Вернитесь на главную или найдите видеокарту."
+    },
+    notfound: {
+      title: "Такой страницы нет",
+      lead: "Возможно, адрес набран с ошибкой или страница переехала. Вернитесь на главную или найдите видеокарту.",
+      home: "На главную",
+      search: "Найти видеокарту"
     },
     nav: {
       gaming: "Игры",
@@ -4236,6 +4404,10 @@ function applyTranslations() {
   });
   document.querySelectorAll('[data-i18n-alt]').forEach(el => {
     el.setAttribute('alt', t(el.getAttribute('data-i18n-alt')));
+  });
+  // Metadatos: la descripción de la página en el idioma elegido
+  document.querySelectorAll('[data-i18n-content]').forEach(el => {
+    el.setAttribute('content', t(el.getAttribute('data-i18n-content')));
   });
 }
 window.applyTranslations = applyTranslations;

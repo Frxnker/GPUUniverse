@@ -10,6 +10,9 @@ const zlib = require('zlib');
 
 const ROOT = path.resolve(__dirname, '..');
 const PORT = Number(process.env.PORT) || Number(process.argv[2]) || 8080;
+// Como en GitHub Pages, la web también responde bajo su ruta publicada (/GPUUniverse/):
+// así la 404, que usa <base href="/GPUUniverse/">, funciona igual en local
+const BASE_PATH = new URL(JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8')).homepage).pathname;
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -51,6 +54,11 @@ const server = http.createServer((req, res) => {
     res.writeHead(400).end('Bad request');
     return;
   }
+  if (pathname === BASE_PATH.slice(0, -1)) {
+    res.writeHead(301, { Location: BASE_PATH }).end();
+    return;
+  }
+  if (pathname.startsWith(BASE_PATH)) pathname = '/' + pathname.slice(BASE_PATH.length);
   let file = path.join(ROOT, pathname);
   // Nada fuera de la carpeta del proyecto ni carpetas internas
   const rel = path.relative(ROOT, file);

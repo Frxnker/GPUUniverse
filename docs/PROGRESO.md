@@ -314,6 +314,90 @@ tres páginas.
 
 ---
 
+## Fase 5 — SEO, compartir y uso sin conexión ✅
+
+**Qué cambia**
+- **Metadatos por página** (plantilla `partials/meta.html`, rellenada por `npm run shell`):
+  - título, descripción, `canonical`, Open Graph y tarjeta de Twitter con la URL publicada;
+  - la URL pública sale de `"homepage"` en `package.json`;
+  - el título y la descripción en español se toman de `js/i18n.js` (`meta.*`), así que hay una
+    sola fuente;
+  - al cambiar de idioma se traducen el título y la descripción (`data-i18n-content`).
+- Antes, Workstation, Servidor y Comparar tenían el mismo título y la misma descripción que la
+  portada.
+- Imagen para compartir `assets/icons/og-image.png` (1200×630) e iconos de la app (SVG, 192, 512,
+  adaptable y Apple) generados a partir del chip del favicon. El favicon deja de ser un `data:`.
+- `manifest.webmanifest`: la web se puede instalar como app.
+- **`sw.js` (service worker)**:
+  - guarda las 10 páginas, el CSS, los 11 scripts, Three.js, las fuentes, las banderas y los
+    iconos (46 archivos);
+  - páginas, CSS y JS van primero a la red (siempre lo último publicado) y, sin conexión, usan la
+    copia guardada;
+  - fuentes, imágenes e iconos van primero a la copia;
+  - las noticias no pasan por él: sin conexión muestran «Sin conexión: las noticias se cargan desde
+    internet».
+- `sitemap.xml`, generado por `npm run shell`, y `robots.txt`.
+  - GitHub Pages solo lee el `robots.txt` de la raíz del dominio (`frxnker.github.io`), así que
+    este no tendrá efecto hasta que haya un dominio propio.
+  - La sitemap sí vale: se puede enviar a Search Console.
+- **`404.html`**:
+  - GitHub Pages la sirve en cualquier ruta que no existe; lleva `<base href="/GPUUniverse/">`
+    (generado desde `homepage`) para que funcionen sus estilos y enlaces a cualquier profundidad;
+  - lleva `noindex`, está traducida y tiene botones «Ir al inicio» y «Buscar una GPU»;
+  - no da XP de «sección nueva» (no se tocan las reglas de progreso: solo no se registra como
+    sección).
+- Las rutas relativas se calculan con `window.rootPath()` (lo marca el enlace al manifest) en vez
+  de mirar si la URL contiene `/pages/`, que fallaba en la 404.
+- `scripts/serve.js` responde también bajo `/GPUUniverse/` y redirige `/GPUUniverse` a
+  `/GPUUniverse/`, como GitHub Pages.
+- **Cambio en el entorno de pruebas** (`tests/helpers/env.js`): las peticiones a `/GPUUniverse/…`
+  se sirven desde la raíz del proyecto, como en GitHub Pages. Es necesario porque la 404 usa
+  `<base>`; no cambia lo que comprueba ninguna prueba existente.
+
+**Cómo se ha comprobado**
+- `tests/seo.test.js`: 6 pruebas nuevas.
+  - Metadatos únicos por página, con longitudes razonables, `canonical` = `og:url` = URL
+    publicada y `og:image` existente.
+  - Título y descripción traducidos en los 6 idiomas.
+  - La sitemap lista exactamente las páginas públicas y `robots.txt` la enlaza.
+  - El manifest tiene iconos que existen.
+  - La precaché del service worker incluye todas las páginas y scripts, y todo lo que guarda
+    existe.
+  - La 404 lleva `noindex`, su `<base>` es correcto y no da XP.
+- La 404 entra además en todas las pruebas genéricas de página (sin errores, traducida, `h1`,
+  `main`, enlace de salto…).
+- **Navegador real** (Chrome, Firefox y WebKit): 20/21 comprobaciones.
+  - 404 en `/GPUUniverse/pages/no-existe.html`: código 404, con estilos, enlaces a la raíz y
+    buscador.
+  - El service worker se instala y guarda 46-47 archivos.
+  - Sin conexión se abren Gaming, Comparar con `?gpus=`, Aprender y Herramientas `#psu` con sus
+    estilos.
+  - Las noticias muestran su aviso y una ruta inexistente muestra la 404 guardada.
+  - La que falla: en WebKit, con el service worker activo, la herramienta de pruebas ya no
+    intercepta la petición a rss2json, y el servicio real respondió 429 (su límite).
+  - Firefox y WebKit se prueban sin conexión apagando el servidor, porque el modo sin conexión
+    de Playwright corta la navegación antes de que actúe el service worker.
+
+- **Revisión completa**: 360 vistas (3 motores × 10 páginas, ya con la 404, × escritorio y móvil
+  × claro y oscuro × es, ru y de).
+  - Chrome y Firefox: 0 errores; solo los dos avisos de Firefox de siempre.
+  - WebKit se repitió con el service worker bloqueado, porque con él activo Playwright ya no
+    intercepta la petición a rss2json y salían sus 429 reales: 0 incidencias.
+- **Lighthouse móvil**:
+  - Rendimiento 94 en las 9 páginas (antes 95): el LCP sube ~0,1 s por las peticiones nuevas de
+    la cabecera (manifest e iconos). Sigue por encima del objetivo de 90.
+  - Accesibilidad 100 y SEO 100 en todas.
+  - Buenas prácticas: 100, y 96 en las páginas con noticias por los 429 de rss2json.
+
+**Limitación del entorno de pruebas detectada**
+- En el WebKit de Playwright para Windows los títulos se ven con trazo fino.
+- Las fuentes son variables (peso 100-900 con valor por defecto 400) y ese WebKit no aplica el eje
+  de peso, así que pinta la instancia de 400.
+- Safari real (macOS e iOS) admite fuentes variables desde la versión 11. Ya ocurría en las
+  capturas de referencia.
+
+---
+
 ## Decisiones pendientes
 
 _Ninguna por ahora._

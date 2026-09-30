@@ -1,0 +1,13 @@
+# GPU Universe
+#
+# Ojo: los buscadores solo leen robots.txt en la raíz del dominio. Mientras la web se publique en
+# https://frxnker.github.io/GPUUniverse/ este archivo no tiene efecto (manda el de frxnker.github.io).
+# Sirve tal cual si el sitio pasa a un dominio propio.
+User-agent: *
+Allow: /
+Disallow: /partials/
+Disallow: /tests/
+Disallow: /scripts/
+Disallow: /docs/
+
+Sitemap: https://frxnker.github.io/GPUUniverse/sitemap.xml
