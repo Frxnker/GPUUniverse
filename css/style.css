@@ -546,16 +546,18 @@ section {
   font-weight: 900;
   line-height: 1.05;
   margin-bottom: 1.5rem;
-  animation: fade-up 0.8s 0.1s ease both;
+  animation: rise-in 0.8s 0.1s ease both;
   letter-spacing: -0.03em;
 }
 
+/* El título y el subtítulo son el elemento más grande de la portada (LCP): entran solo con
+   movimiento, sin pasar por opacidad 0, para que el navegador los pinte en el primer fotograma */
 .hero-subtitle {
   font-size: 1.15rem;
   color: var(--text-muted);
   max-width: 31.25rem;
   margin-bottom: 2.75rem;
-  animation: fade-up 0.8s 0.2s ease both;
+  animation: rise-in 0.8s 0.2s ease both;
   line-height: 1.7;
 }
 
@@ -2043,6 +2045,16 @@ section {
 
   to {
     opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    transform: translateY(20px);
+  }
+
+  to {
     transform: translateY(0);
   }
 }
@@ -9854,6 +9866,16 @@ body.has-tray #footer {
   border: 1px solid rgba(var(--accent-rgb), 0.35);
   border-radius: 14px;
   background: var(--ticks), radial-gradient(600px 240px at 0% 0%, rgba(var(--accent-rgb), 0.1), transparent 70%), var(--panel);
+}
+
+/* Hueco reservado hasta que levels.js pinta el perfil y la lista de XP: así el resto de la página
+   ya empieza fuera de la pantalla y no salta al rellenarse (CLS) */
+.profile-card:empty {
+  min-height: 29rem;
+}
+
+.howto-list:empty {
+  min-height: 23rem;
 }
 
 .profile-main {

@@ -167,3 +167,32 @@ test('fuentes locales: cada @font-face apunta a un archivo, con latín y ciríli
     }
   }
 });
+
+// Un elemento que empieza con opacidad 0 no cuenta para el LCP hasta que termina de aparecer
+test('portada: el título y el subtítulo (LCP) no empiezan invisibles', () => {
+  const css = fs.readFileSync(path.join(ROOT, 'css', 'style.css'), 'utf8');
+  const keyframes = name => {
+    const m = new RegExp(`@keyframes ${name}\\s*\\{([\\s\\S]*?)\\n\\}`).exec(css);
+    assert.ok(m, `no existe @keyframes ${name}`);
+    return m[1];
+  };
+  for (const selector of ['.hero-title', '.hero-subtitle']) {
+    const rule = new RegExp(`\\n\\${selector} \\{([^}]*)\\}`).exec(css);
+    assert.ok(rule, selector);
+    const anim = /animation:\s*([a-z-]+)/.exec(rule[1]);
+    if (anim) assert.doesNotMatch(keyframes(anim[1]), /opacity:\s*0\b/, `${selector} usa ${anim[1]}`);
+  }
+});
+
+test('la bienvenida no aparece al cargar, solo tras la primera interacción', async () => {
+  // Primera visita: sin la marca de bienvenida vista que el entorno pone por defecto
+  const { window, document, close } = await loadPage('pages/learn.html', { wait: 50, storage: { 'gpu-universe-welcome': '' } });
+  await delay(1500);
+  const beforeInteraction = !!document.querySelector('.welcome-card');
+  window.dispatchEvent(new window.Event('scroll'));
+  await delay(1000);
+  const afterInteraction = !!document.querySelector('.welcome-card');
+  close();
+  assert.equal(beforeInteraction, false);
+  assert.equal(afterInteraction, true);
+});

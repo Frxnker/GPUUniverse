@@ -112,6 +112,76 @@ accesible, CSP, metadatos SEO) cae dentro de estos bloques.
 
 ---
 
+## Fase 3 — Rendimiento ✅
+
+Ya estaba hecho (commits del 30/09):
+- Imágenes AVIF/WebP con `srcset` y tamaño explícito.
+- Three.js 0.186 local en `vendor/three`.
+- Pausas del fondo animado y del visor 3D (pestaña oculta, fuera de pantalla, movimiento reducido).
+- Banderas SVG locales y fuentes locales.
+
+Faltaban la medición «después» y el objetivo nuevo de rendimiento ≥ 90 en móvil, que no cumplían
+tres páginas.
+
+**Causas encontradas y arreglos**
+
+| Página | Antes | Causa | Arreglo |
+|---|---|---|---|
+| Portada | 83 (LCP 4,7 s) | El subtítulo del hero (el elemento LCP) entraba con `fade-up` desde `opacity: 0` y 0,2 s de retraso, así que no contaba hasta ~1 s después. | El título y el subtítulo entran solo con movimiento (`rise-in`, sin opacidad); el resto del hero conserva `fade-up`. |
+| Niveles | 81 (CLS 0,28) | `#profile-card` y `#howto-list` están vacíos hasta que `levels.js` los rellena; en móvil la sección de retos empezaba dentro de la pantalla y bajaba de golpe. | `min-height` solo mientras están vacíos (`:empty`): lo que sigue ya empieza fuera de la pantalla y su desplazamiento no cuenta. |
+| Aprender | 89 | La tarjeta de bienvenida de la primera visita aparecía a los 1,2 s y su párrafo pasaba a ser el LCP. | La bienvenida aparece 0,8 s después de la primera interacción (desplazar, tocar o teclear). Cambio de comportamiento pequeño: ya no tapa la página antes de verla. |
+
+**Lighthouse móvil (mediana de 3 pasadas, servidor local con gzip)**
+
+| Página | Antes de la Fase 3 (sesión anterior) | Referencia de hoy | Después |
+|---|---|---|---|
+| Portada | 68 | 83 | **95** |
+| Comparar | 88 | 95 | **95** |
+| Gaming | 86 | 95 | **95** |
+| Historia | 85 | 95 | **95** |
+| Aprender | 89 | 89 | **95** |
+| Niveles | — | 81 | **95** |
+| Servidor | — | 95 | **95** |
+| Herramientas | — | 95 | **95** |
+| Workstation | — | 95 | **95** |
+
+- LCP ≤ 2,9 s y TBT ≤ 80 ms en todas las páginas.
+- CLS ≤ 0,033 en todas (Niveles pasa de 0,282 a 0).
+- Peso de la portada al cargar: 312 KiB.
+  - La referencia medía 1.802 KiB, pero la diferencia son sobre todo las imágenes de las noticias
+    reales, que ahora no llegaron por el límite de rss2json.
+  - Esas imágenes ya son `loading="lazy"`.
+- Accesibilidad (93–96) y Buenas prácticas (96–100) se tratan en la Fase 4.
+  - Las caídas de Buenas prácticas a 96 se deben a errores 429 de rss2json en la consola: el
+    servicio gratuito limitó las peticiones tras cientos de cargas de prueba seguidas.
+  - No son un cambio del código. Ver «Riesgos».
+
+**Cómo se ha comprobado**
+- `npm test`: 2 pruebas nuevas en `tests/performance.test.js`.
+  - El título y el subtítulo del hero no empiezan con opacidad 0.
+  - La bienvenida no aparece al cargar, solo tras la primera interacción.
+- Revisión en navegador: 324 vistas.
+  - Chrome, Firefox 155 y WebKit 26.6 × 9 páginas × escritorio y móvil × claro y oscuro ×
+    es, ru y de.
+  - **0 errores de consola de la web**, 0 páginas con scroll horizontal.
+  - Solo quedan dos avisos de Firefox, ya presentes en la referencia: el filtrado de sombras
+    WebGL en Aprender y el `preload` de imagen ignorado en móvil, que es lo esperado porque su
+    `media` no coincide.
+  - Aparte, 24 errores 429 de rss2json al final de la ráfaga, en WebKit. La web los gestiona: estado
+    de error con botón de reintento. A partir de ahora las revisiones masivas sirven un feed de
+    prueba local.
+
+### Riesgos detectados
+
+- **rss2json (servicio externo gratuito)** limita las peticiones.
+  - Cada visitante nuevo hace 4 peticiones por sesión (una por feed).
+  - Si se supera el límite, el navegador anota el fallo en la consola (no se puede evitar desde
+    JS) y la web muestra su estado de error.
+  - Propuesta para las fases siguientes: guardar la caché en `localStorage` en lugar de
+    `sessionStorage`, para reducir peticiones entre pestañas y visitas.
+
+---
+
 ## Decisiones pendientes
 
 _Ninguna por ahora._

@@ -1100,40 +1100,49 @@
   });
 
   // ---------- Bienvenida (primera visita) ----------
+  // Aparece tras la primera interacción (desplazar, tocar o teclear) y no al cargar: así no tapa la
+  // página antes de que se vea y no se convierte en el elemento más grande de la carga (LCP)
   function maybeWelcome() {
     let seen = false;
     try { seen = localStorage.getItem('gpu-universe-welcome') === '1'; } catch (e) { seen = true; }
     if (seen) return;
-    setTimeout(() => {
-      if (document.body.classList.contains('modal-open') || layers.length) return;
-      const card = document.createElement('div');
-      card.className = 'welcome-card';
-      card.setAttribute('role', 'dialog');
-      card.setAttribute('aria-labelledby', 'welcome-title');
-      card.innerHTML = `
-        <div class="welcome-head">
-          <span class="level-badge level-badge-sm"><span>1</span></span>
-          <h2 id="welcome-title">${esc(T('fx.welcome_title'))}</h2>
-        </div>
-        <p>${esc(T('fx.welcome_text'))}</p>
-        <ul class="welcome-list">
-          <li>${ICONS.search}<span>${T('fx.welcome_tip', { key: `<kbd>${MOD}</kbd> <kbd>K</kbd>` })}</span></li>
-          <li>${ICONS.heart}<span>${esc(T('fx.welcome_tip_fav'))}</span></li>
-          <li>${ICONS.trophy}<span>${esc(T('fx.welcome_tip_levels'))}</span></li>
-        </ul>
-        <div class="welcome-actions">
-          <a class="btn-ghost btn-sm" href="${pageHref('levels')}" data-welcome-close>${esc(T('fx.view_levels'))}</a>
-          <button type="button" class="btn-primary btn-sm" data-welcome-close>${esc(T('fx.welcome_start'))}</button>
-        </div>`;
-      document.body.appendChild(card);
-      requestAnimationFrame(() => card.classList.add('is-visible'));
-      card.addEventListener('click', e => {
-        if (!e.target.closest('[data-welcome-close]')) return;
-        try { localStorage.setItem('gpu-universe-welcome', '1'); } catch (err) { /* nada */ }
-        card.classList.remove('is-visible');
-        setTimeout(() => card.remove(), 250);
-      });
-    }, 1200);
+    const EVENTS = ['scroll', 'pointerdown', 'keydown'];
+    const onFirstInteraction = () => {
+      EVENTS.forEach(type => window.removeEventListener(type, onFirstInteraction, true));
+      setTimeout(showWelcome, 800);
+    };
+    EVENTS.forEach(type => window.addEventListener(type, onFirstInteraction, { capture: true, passive: true }));
+  }
+
+  function showWelcome() {
+    if (document.body.classList.contains('modal-open') || layers.length || document.querySelector('.welcome-card')) return;
+    const card = document.createElement('div');
+    card.className = 'welcome-card';
+    card.setAttribute('role', 'dialog');
+    card.setAttribute('aria-labelledby', 'welcome-title');
+    card.innerHTML = `
+      <div class="welcome-head">
+        <span class="level-badge level-badge-sm"><span>1</span></span>
+        <h2 id="welcome-title">${esc(T('fx.welcome_title'))}</h2>
+      </div>
+      <p>${esc(T('fx.welcome_text'))}</p>
+      <ul class="welcome-list">
+        <li>${ICONS.search}<span>${T('fx.welcome_tip', { key: `<kbd>${MOD}</kbd> <kbd>K</kbd>` })}</span></li>
+        <li>${ICONS.heart}<span>${esc(T('fx.welcome_tip_fav'))}</span></li>
+        <li>${ICONS.trophy}<span>${esc(T('fx.welcome_tip_levels'))}</span></li>
+      </ul>
+      <div class="welcome-actions">
+        <a class="btn-ghost btn-sm" href="${pageHref('levels')}" data-welcome-close>${esc(T('fx.view_levels'))}</a>
+        <button type="button" class="btn-primary btn-sm" data-welcome-close>${esc(T('fx.welcome_start'))}</button>
+      </div>`;
+    document.body.appendChild(card);
+    requestAnimationFrame(() => card.classList.add('is-visible'));
+    card.addEventListener('click', e => {
+      if (!e.target.closest('[data-welcome-close]')) return;
+      try { localStorage.setItem('gpu-universe-welcome', '1'); } catch (err) { /* nada */ }
+      card.classList.remove('is-visible');
+      setTimeout(() => card.remove(), 250);
+    });
   }
 
   // ---------- Botones del menú ----------
