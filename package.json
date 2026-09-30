@@ -5,6 +5,7 @@
   "description": "Portal estático de GPUs (HTML + CSS + JS sin compilación) desplegado en GitHub Pages",
   "scripts": {
     "start": "node scripts/serve.js",
+    "shell": "node scripts/shell.js",
     "test": "node --test --test-reporter=spec \"tests/**/*.test.js\""
   },
   "devDependencies": {

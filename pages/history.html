@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- shell:head -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Historia de las GPUs — GPU Universe</title>
-  <meta name="description" content="Explora la fascinante evolución de las Unidades de Procesamiento Gráfico desde sus inicios hasta la era de la IA." />
+  <meta name="theme-color" content="#050807" />
   <link rel="preload" href="../assets/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="../assets/fonts/exo-2-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23050807'/%3E%3Crect x='9' y='9' width='14' height='14' rx='2' fill='none' stroke='%2319e6b4' stroke-width='2'/%3E%3Crect x='13' y='13' width='6' height='6' fill='%2319e6b4'/%3E%3Cpath d='M12 5v4M16 5v4M20 5v4M12 23v4M16 23v4M20 23v4M5 12h4M5 16h4M5 20h4M23 12h4M23 16h4M23 20h4' stroke='%2319e6b4' stroke-width='1.6'/%3E%3C/svg%3E" />
-  <meta name="theme-color" content="#050807" />
   <!-- Tema, color de acento e idioma antes de pintar (evita destellos) -->
   <script>(function(d){try{var s=localStorage;d.setAttribute('data-theme',s.getItem('gpu-universe-theme')||'dark');var a=s.getItem('gpu-universe-accent');if(a)d.setAttribute('data-accent',a);var l=s.getItem('gpu_lang');if(l)d.lang=l;}catch(e){d.setAttribute('data-theme','dark');}})(document.documentElement);</script>
+  <!-- /shell:head -->
+  <title>Historia de las GPUs — GPU Universe</title>
+  <meta name="description" content="Explora la fascinante evolución de las Unidades de Procesamiento Gráfico desde sus inicios hasta la era de la IA." />
 </head>
 <body>
 
   <canvas id="particles-canvas"></canvas>
 
+  <!-- shell:nav -->
   <nav id="navbar">
     <div class="nav-inner">
       <a href="../index.html" class="nav-logo">
@@ -103,6 +106,7 @@
       </div>
     </div>
   </nav>
+  <!-- /shell:nav -->
 
   <section id="history" style="padding-top: 140px;">
     <div class="section-bg-accent accent-gold"></div>
@@ -148,6 +152,7 @@
     </div>
   </section>
 
+  <!-- shell:footer -->
   <footer id="footer">
     <div class="footer-glow"></div>
     <div class="container">
@@ -184,20 +189,23 @@
       </div>
     </div>
   </footer>
+  <!-- /shell:footer -->
 
-  <!-- DETALLE DE GPU -->
-  <!-- DETALLE DE GPU -->
+  <!-- shell:modal -->
   <div id="gpu-modal" class="modal-overlay" aria-hidden="true">
     <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <button type="button" id="modal-close" class="modal-close" aria-label="Cerrar">&times;</button>
       <div id="modal-body"></div>
     </div>
   </div>
+  <!-- /shell:modal -->
 
+  <!-- shell:scripts -->
   <script src="../js/i18n.js"></script>
   <script src="../js/data.js"></script>
   <script src="../js/app.js"></script>
   <script src="../js/progress.js"></script>
   <script src="../js/features.js"></script>
+  <!-- /shell:scripts -->
 </body>
 </html>
