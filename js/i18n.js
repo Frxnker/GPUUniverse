@@ -147,7 +147,9 @@ const translations = {
       categories: "Categorías",
       brands: "Marcas",
       bottom: "© 2026 GPU Universe — Información actualizada sobre hardware gráfico",
-      explore: "Explora"
+      explore: "Explora",
+      trademarks: "NVIDIA, AMD, Intel, Apple y los nombres de sus productos son marcas de sus propietarios. GPU Universe es un proyecto independiente, sin relación con ellos.",
+      credits: "Créditos y licencias"
     },
     ui: {
       tier_ultra: "Entusiasta",
@@ -169,7 +171,9 @@ const translations = {
       price_none: "Sin precio oficial",
       price_pending: "Precio pendiente",
       pending_hint: "Dato pendiente: no se ha podido verificar con una fuente fiable.",
-      preliminary: "Datos preliminares"
+      preliminary: "Datos preliminares",
+      ai_image: "Ilustración generada con IA",
+      ai_image_of: "Ilustración generada con IA inspirada en la {name}"
     },
     table: {
       gpu: "GPU",
@@ -844,7 +848,9 @@ const translations = {
       categories: "Categories",
       brands: "Brands",
       bottom: "© 2026 GPU Universe — Up-to-date graphics hardware information",
-      explore: "Explore"
+      explore: "Explore",
+      trademarks: "NVIDIA, AMD, Intel, Apple and their product names are trademarks of their respective owners. GPU Universe is an independent project not affiliated with them.",
+      credits: "Credits and licenses"
     },
     ui: {
       tier_ultra: "Enthusiast",
@@ -866,7 +872,9 @@ const translations = {
       price_none: "No official price",
       price_pending: "Price pending",
       pending_hint: "Pending: this figure could not be verified with a reliable source.",
-      preliminary: "Preliminary figures"
+      preliminary: "Preliminary figures",
+      ai_image: "AI-generated illustration",
+      ai_image_of: "AI-generated illustration inspired by the {name}"
     },
     table: {
       gpu: "GPU",
@@ -1541,7 +1549,9 @@ const translations = {
       categories: "Catégories",
       brands: "Marques",
       bottom: "© 2026 GPU Universe — Informations à jour sur le matériel graphique",
-      explore: "Explorer"
+      explore: "Explorer",
+      trademarks: "NVIDIA, AMD, Intel, Apple et les noms de leurs produits sont des marques de leurs propriétaires respectifs. GPU Universe est un projet indépendant, sans lien avec eux.",
+      credits: "Crédits et licences"
     },
     ui: {
       tier_ultra: "Enthousiaste",
@@ -1563,7 +1573,9 @@ const translations = {
       price_none: "Pas de prix officiel",
       price_pending: "Prix en attente",
       pending_hint: "En attente : cette donnée n’a pas pu être vérifiée avec une source fiable.",
-      preliminary: "Données préliminaires"
+      preliminary: "Données préliminaires",
+      ai_image: "Illustration générée par IA",
+      ai_image_of: "Illustration générée par IA inspirée de la {name}"
     },
     table: {
       gpu: "GPU",
@@ -2238,7 +2250,9 @@ const translations = {
       categories: "Kategorien",
       brands: "Marken",
       bottom: "© 2026 GPU Universe — Aktuelle Informationen zu Grafikhardware",
-      explore: "Entdecken"
+      explore: "Entdecken",
+      trademarks: "NVIDIA, AMD, Intel, Apple und ihre Produktnamen sind Marken ihrer jeweiligen Inhaber. GPU Universe ist ein unabhängiges Projekt ohne Verbindung zu ihnen.",
+      credits: "Credits und Lizenzen"
     },
     ui: {
       tier_ultra: "Enthusiast",
@@ -2260,7 +2274,9 @@ const translations = {
       price_none: "Kein offizieller Preis",
       price_pending: "Preis ausstehend",
       pending_hint: "Ausstehend: Dieser Wert ließ sich nicht mit einer verlässlichen Quelle prüfen.",
-      preliminary: "Vorläufige Angaben"
+      preliminary: "Vorläufige Angaben",
+      ai_image: "KI-generierte Illustration",
+      ai_image_of: "KI-generierte Illustration nach dem Vorbild der {name}"
     },
     table: {
       gpu: "GPU",
@@ -2935,7 +2951,9 @@ const translations = {
       categories: "Categorie",
       brands: "Marche",
       bottom: "© 2026 GPU Universe — Informazioni aggiornate sull'hardware grafico",
-      explore: "Esplora"
+      explore: "Esplora",
+      trademarks: "NVIDIA, AMD, Intel, Apple e i nomi dei loro prodotti sono marchi dei rispettivi proprietari. GPU Universe è un progetto indipendente, non affiliato a loro.",
+      credits: "Crediti e licenze"
     },
     ui: {
       tier_ultra: "Entusiasta",
@@ -2957,7 +2975,9 @@ const translations = {
       price_none: "Nessun prezzo ufficiale",
       price_pending: "Prezzo in attesa",
       pending_hint: "In attesa: questo dato non è stato verificato con una fonte affidabile.",
-      preliminary: "Dati preliminari"
+      preliminary: "Dati preliminari",
+      ai_image: "Illustrazione generata con IA",
+      ai_image_of: "Illustrazione generata con IA ispirata alla {name}"
     },
     table: {
       gpu: "GPU",
@@ -3632,7 +3652,9 @@ const translations = {
       categories: "Категории",
       brands: "Бренды",
       bottom: "© 2026 GPU Universe — Актуальная информация о графическом оборудовании",
-      explore: "Разделы"
+      explore: "Разделы",
+      trademarks: "NVIDIA, AMD, Intel, Apple и названия их продуктов — товарные знаки их владельцев. GPU Universe — независимый проект, не связанный с ними.",
+      credits: "Авторы и лицензии"
     },
     ui: {
       tier_ultra: "Энтузиаст",
@@ -3654,7 +3676,9 @@ const translations = {
       price_none: "Нет официальной цены",
       price_pending: "Цена уточняется",
       pending_hint: "Уточняется: значение не удалось проверить по надёжному источнику.",
-      preliminary: "Предварительные данные"
+      preliminary: "Предварительные данные",
+      ai_image: "Иллюстрация создана ИИ",
+      ai_image_of: "Иллюстрация, созданная ИИ, по мотивам {name}"
     },
     table: {
       gpu: "GPU",

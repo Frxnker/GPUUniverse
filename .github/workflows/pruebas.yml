@@ -1,0 +1,28 @@
+# Pruebas automáticas en cada push y pull request.
+# En Linux el sistema de archivos distingue mayúsculas, como GitHub Pages: una ruta mal escrita
+# ("Style.css") que en Windows funciona falla aquí.
+name: Pruebas
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Instalar dependencias (solo jsdom, para las pruebas)
+        run: npm ci
+      - name: Páginas sincronizadas con partials/ y sitemap.xml al día
+        run: node scripts/shell.js --check
+      - name: Pruebas
+        run: npm test

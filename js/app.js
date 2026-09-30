@@ -919,8 +919,9 @@ window.renderHallOfFame = function() {
         <picture>
           <source type="image/avif" srcset="${base}${item.img}-480.avif 480w, ${base}${item.img}-960.avif 960w" sizes="(max-width: 768px) 92vw, 400px">
           <source type="image/webp" srcset="${base}${item.img}-480.webp 480w, ${base}${item.img}-960.webp 960w" sizes="(max-width: 768px) 92vw, 400px">
-          <img src="${base}${item.img}-960.jpg" alt="${esc(item.name)}" class="hof-img" width="960" height="960" loading="lazy" decoding="async">
+          <img src="${base}${item.img}-960.jpg" alt="${esc(window.tr('ui.ai_image_of', '', { name: item.name }))}" class="hof-img" width="960" height="960" loading="lazy" decoding="async">
         </picture>
+        <span class="ai-note" aria-hidden="true">${esc(window.tr('ui.ai_image'))}</span>
         <div class="hof-year">${item.year}</div>
       </div>
       <div class="hof-content">

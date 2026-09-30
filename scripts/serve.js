@@ -34,6 +34,19 @@ const TYPES = {
 
 const COMPRESSIBLE = /^(text\/|application\/(json|manifest\+json|xml)|image\/svg)/;
 
+// GitHub Pages distingue mayúsculas y minúsculas; Windows y macOS no. Aquí se exige la misma
+// grafía que en el disco para que un "Style.css" falle también en local.
+function existsExact(file) {
+  if (!fs.existsSync(file)) return false;
+  const rel = path.relative(ROOT, file);
+  let dir = ROOT;
+  for (const part of rel.split(path.sep).filter(Boolean)) {
+    if (!fs.readdirSync(dir).includes(part)) return false;
+    dir = path.join(dir, part);
+  }
+  return true;
+}
+
 function send(req, res, status, file) {
   const type = TYPES[path.extname(file).toLowerCase()] || 'application/octet-stream';
   const gzip = COMPRESSIBLE.test(type) && /\bgzip\b/.test(req.headers['accept-encoding'] || '');
@@ -66,8 +79,8 @@ const server = http.createServer((req, res) => {
     res.writeHead(403).end('Forbidden');
     return;
   }
-  if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
-  if (fs.existsSync(file)) return send(req, res, 200, file);
+  if (existsExact(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
+  if (existsExact(file)) return send(req, res, 200, file);
   const notFound = path.join(ROOT, '404.html');
   if (fs.existsSync(notFound)) return send(req, res, 404, notFound);
   res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }).end('404');

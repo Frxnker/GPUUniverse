@@ -1,0 +1,14 @@
+# GitHub Pages publica el repositorio tal cual (no hay que compilar nada).
+# Esta lista solo evita publicar lo que es del desarrollo y no de la web: plantillas de partials/
+# (la web ya las lleva copiadas en cada página), pruebas, scripts y documentación interna.
+exclude:
+  - partials/
+  - tests/
+  - scripts/
+  - docs/
+  - screenshots/
+  - package.json
+  - package-lock.json
+  - README.md
+  - CREDITOS.md
+# LICENSE se publica: la licencia MIT acompaña al código que se sirve

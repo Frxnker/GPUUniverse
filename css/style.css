@@ -8214,6 +8214,59 @@ body.has-tray #footer {
   cursor: pointer;
 }
 
+/* ---------- Avisos legales: ilustraciones generadas con IA y marcas ---------- */
+/* Sobre la imagen, con fondo oscuro fijo para que se lea igual en ambos temas */
+.ai-note {
+  position: absolute;
+  z-index: 2;
+  left: 0.75rem;
+  bottom: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(5, 8, 7, 0.72);
+  color: #e6f1ec;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+/* Salón de la fama: arriba, que abajo a la derecha está el año */
+.hof-img-wrapper .ai-note {
+  top: 0.75rem;
+  bottom: auto;
+}
+
+/* Gaming: la imagen se difumina hacia los bordes, así que la nota va centrada */
+.page-hero-visual .ai-note {
+  left: 50%;
+  bottom: 8%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+/* El aviso va en su propia línea bajo el copyright */
+.footer-bottom {
+  flex-wrap: wrap;
+}
+
+.footer-legal {
+  flex-basis: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.footer-legal a {
+  margin-left: 0.4rem;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
 /* ---------- Controles comunes: segmentado, rango e interruptor ---------- */
 .segmented {
   display: inline-flex;

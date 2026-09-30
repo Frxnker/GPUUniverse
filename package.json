@@ -8,6 +8,9 @@
     "type": "git",
     "url": "https://github.com/Frxnker/GPUUniverse.git"
   },
+  "engines": {
+    "node": ">=22.13"
+  },
   "scripts": {
     "start": "node scripts/serve.js",
     "shell": "node scripts/shell.js",
