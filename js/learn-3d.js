@@ -74,7 +74,9 @@
     if (viewer && !fromModel) viewer.highlight(id);
   }
 
+  let currentLayer = 'full';
   function setLayer(mode) {
+    currentLayer = mode;
     els.layerBtns.forEach(b => {
       const active = b.dataset.layer === mode;
       b.classList.toggle('active', active);
@@ -135,7 +137,13 @@
   const whenIdle = cb => (window.requestIdleCallback ? requestIdleCallback(cb, { timeout: 1500 }) : setTimeout(cb, 200));
   const start = () => whenIdle(() => {
     import(THREE_URL)
-      .then(THREE => { viewer = createViewer(THREE); })
+      .then(createViewer)
+      .then(api => {
+        viewer = api;
+        // Lo que se haya elegido mientras se montaba el modelo
+        viewer.setLayer(currentLayer);
+        if (selectedId) viewer.highlight(selectedId);
+      })
       .catch(err => {
         console.warn('No se pudo iniciar el visor 3D:', err);
         showFallback();
@@ -144,8 +152,15 @@
   if (document.readyState === 'complete') start();
   else window.addEventListener('load', start, { once: true });
 
+  // Devuelve el control al navegador entre pasos largos (menos bloqueo del hilo principal)
+  const yieldToMain = () => new Promise(resolve => {
+    if (window.scheduler && typeof window.scheduler.yield === 'function') window.scheduler.yield().then(resolve);
+    else setTimeout(resolve, 0);
+  });
+
   // ----- Escena de Three.js -----
-  function createViewer(THREE) {
+  async function createViewer(THREE) {
+    let ready = false; // no se dibuja nada hasta tener los shaders compilados (ver el final)
     // Mantiene el aspecto del modelo original (r128): colores sin gestión de color y salida lineal
     THREE.ColorManagement.enabled = false;
 
@@ -167,6 +182,7 @@
     renderer.domElement.setAttribute('aria-hidden', 'true');
     container.appendChild(renderer.domElement);
 
+    await yieldToMain();
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = !reduceMotion.matches;
     controls.dampingFactor = 0.05;
@@ -206,6 +222,7 @@
     }
     new MutationObserver(updateLighting).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
+    await yieldToMain();
     // Materiales
     const mat = (color, roughness, metalness, extra = {}) => new THREE.MeshStandardMaterial({ color, roughness, metalness, ...extra });
     const materials = {
@@ -317,7 +334,7 @@
       else last = 0;
     }
     function requestRender() {
-      if (!frame) frame = requestAnimationFrame(draw);
+      if (ready && !frame) frame = requestAnimationFrame(draw);
     }
 
     controls.addEventListener('start', () => { dragging = true; requestRender(); });
@@ -366,6 +383,13 @@
       requestRender();
     });
 
+    // Los shaders se compilan antes del primer dibujo: en paralelo si la GPU lo permite
+    // (KHR_parallel_shader_compile) y, si no, de una vez en su propio turno
+    await yieldToMain();
+    if (renderer.extensions.has('KHR_parallel_shader_compile')) await renderer.compileAsync(scene, camera);
+    else renderer.compile(scene, camera);
+    await yieldToMain();
+    ready = true;
     section.classList.add('has-webgl');
     updateLighting();
     requestRender();

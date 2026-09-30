@@ -138,3 +138,32 @@ test('fondo animado: se detiene con la pestaña oculta y vuelve al mostrarla', a
   assert.ok(whileHidden <= 1, `oculta: ${whileHidden}`);
   assert.ok(resumed > 3, `reanudada: ${resumed}`);
 });
+
+test('fuentes locales: cada @font-face apunta a un archivo, con latín y cirílico y su licencia', () => {
+  const css = fs.readFileSync(path.join(ROOT, 'css', 'style.css'), 'utf8');
+  const faces = [...css.matchAll(/@font-face\s*\{([^}]*)\}/g)].map(m => m[1]);
+  assert.ok(faces.length > 0);
+  const byFamily = {};
+  const bad = [];
+  faces.forEach(face => {
+    const family = /font-family:\s*'([^']+)'/.exec(face)[1];
+    const url = /url\(([^)]+)\)/.exec(face)[1];
+    if (!fs.existsSync(path.join(ROOT, 'css', url))) bad.push(`${family}: no existe ${url}`);
+    if (!/font-display:\s*swap/.test(face)) bad.push(`${family}: sin font-display: swap`);
+    (byFamily[family] = byFamily[family] || []).push(/unicode-range:\s*([^;]+)/.exec(face)[1]);
+  });
+  assert.deepEqual(bad, []);
+  assert.deepEqual(Object.keys(byFamily).sort(), ['Exo 2', 'IBM Plex Sans', 'JetBrains Mono']);
+  for (const [family, ranges] of Object.entries(byFamily)) {
+    assert.ok(ranges.some(r => /U\+0000-00FF/.test(r)), `${family}: falta latín`);
+    assert.ok(ranges.some(r => /U\+0400-045F/.test(r)), `${family}: falta cirílico (ruso)`);
+  }
+  ['OFL-exo2.txt', 'OFL-ibmplexsans.txt', 'OFL-jetbrainsmono.txt'].forEach(f =>
+    assert.ok(fs.existsSync(path.join(ROOT, 'assets', 'fonts', f)), f));
+  // Las fuentes precargadas existen
+  for (const page of PAGES) {
+    for (const m of read(page).matchAll(/<link rel="preload" href="([^"]+)" as="font"/g)) {
+      assert.ok(fs.existsSync(path.join(path.dirname(path.join(ROOT, page)), m[1])), `${page}: ${m[1]}`);
+    }
+  }
+});
