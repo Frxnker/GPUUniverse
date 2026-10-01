@@ -44,7 +44,16 @@ function fakeContext2d(canvas) {
     measureText: text => ({ width: String(text).length * 7 }),
     createLinearGradient: () => ({ addColorStop() {} }),
     createRadialGradient: () => ({ addColorStop() {} }),
-    getImageData: () => ({ data: new Uint8ClampedArray(4) })
+    getImageData: () => ({ data: new Uint8ClampedArray(4) }),
+    // Como un navegador real: dibujar un lienzo de 0 px de ancho o alto lanza InvalidStateError.
+    // canvas.__draws cuenta los dibujos que sí se hacen, para comprobar que un efecto se pinta
+    drawImage(source) {
+      if (source && source.tagName === 'CANVAS' && (source.width === 0 || source.height === 0)) {
+        const { DOMException } = canvas.ownerDocument.defaultView;
+        throw new DOMException("Failed to execute 'drawImage' on 'CanvasRenderingContext2D': The image argument is a canvas element with a width or height of 0.", 'InvalidStateError');
+      }
+      canvas.__draws = (canvas.__draws || 0) + 1;
+    }
   };
   return new Proxy(target, {
     get(obj, prop) {
@@ -59,15 +68,29 @@ function fakeContext2d(canvas) {
 }
 
 function installBrowserApis(window, options) {
-  const { reducedMotion = false, fetchImpl } = options;
+  const { reducedMotion = false, fetchImpl, viewport } = options;
+  // Tamaño de la ventana (jsdom usa 1024 × 768). window.__setViewport(w, h) lo cambia y lanza resize,
+  // como al agrandar un iframe o abrir un panel
+  if (viewport) {
+    const size = { ...viewport };
+    ['innerWidth', 'outerWidth'].forEach(p => Object.defineProperty(window, p, { configurable: true, get: () => size.width }));
+    ['innerHeight', 'outerHeight'].forEach(p => Object.defineProperty(window, p, { configurable: true, get: () => size.height }));
+    window.__setViewport = (width, height) => {
+      Object.assign(size, { width, height });
+      window.dispatchEvent(new window.Event('resize'));
+    };
+  }
   window.matchMedia = query => ({
     matches: /prefers-reduced-motion:\s*reduce/.test(query) ? reducedMotion : false,
     media: query,
     onchange: null,
     addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, dispatchEvent() { return false; }
   });
+  // Los observadores no avisan solos; window.__observers deja a una prueba simular, p. ej., que un
+  // elemento entra en pantalla
+  window.__observers = [];
   class FakeObserver {
-    constructor(cb) { this.cb = cb; this.targets = new Set(); }
+    constructor(cb) { this.cb = cb; this.targets = new Set(); window.__observers.push(this); }
     observe(el) { this.targets.add(el); }
     unobserve(el) { this.targets.delete(el); }
     disconnect() { this.targets.clear(); }
@@ -94,7 +117,8 @@ function installBrowserApis(window, options) {
 /**
  * Carga una página y espera a que termine (load + temporizadores cortos).
  * options: lang, theme, storage (objeto clave→valor para localStorage), query ('?gpu=...'),
- *          hash, reducedMotion, fetchImpl, wait (ms tras load), beforeScripts(window)
+ *          hash, reducedMotion, fetchImpl, wait (ms tras load), beforeScripts(window),
+ *          viewport ({ width, height } de la ventana; por defecto 1024 × 768)
  */
 async function loadPage(page, options = {}) {
   const url = ORIGIN + page + (options.query || '') + (options.hash || '');

@@ -1,5 +1,7 @@
-# GitHub Pages publica el repositorio tal cual (no hay que compilar nada).
-# Esta lista solo evita publicar lo que es del desarrollo y no de la web: plantillas de partials/
+# Solo cuenta si GitHub Pages publica desde la rama («Deploy from a branch»). Desde la Fase B la web se
+# publica con GitHub Actions (.github/workflows/noticias.yml) y lo publicado lo decide scripts/site.js;
+# tests/site.test.js comprueba que ambos coinciden, por si algún día se vuelve a publicar desde la rama.
+# Esta lista evita publicar lo que es del desarrollo y no de la web: plantillas de partials/
 # (la web ya las lleva copiadas en cada página), pruebas, scripts y documentación interna.
 exclude:
   - partials/

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Feed de ejemplo para las pruebas (datos ficticios): sin fechas, o con fechas imposibles -->
+<rss version="2.0">
+  <channel>
+    <title>Feed sin fechas</title>
+    <item>
+      <title>GPU sin fecha de publicación</title>
+      <link>https://sinfechas.example/1</link>
+      <description>No trae pubDate.</description>
+    </item>
+    <item>
+      <title>GPU con una fecha que no es una fecha</title>
+      <link>https://sinfechas.example/2</link>
+      <pubDate>ayer por la tarde</pubDate>
+      <description>pubDate ilegible.</description>
+    </item>
+    <item>
+      <title>GPU con una fecha del futuro lejano</title>
+      <link>https://sinfechas.example/3</link>
+      <pubDate>Fri, 01 Jan 2100 00:00:00 +0000</pubDate>
+      <description>Una fecha en el futuro no sirve para ordenar.</description>
+    </item>
+  </channel>
+</rss>

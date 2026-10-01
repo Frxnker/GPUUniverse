@@ -1,0 +1,63 @@
+# Noticias y publicación de la web en GitHub Pages.
+# Cada 3 horas, en cada push a main y a mano (pestaña Actions → «Run workflow»):
+#   1. descarga los feeds de los medios y genera news.json (scripts/news.js, sin servicios intermedios);
+#   2. comprueba que las páginas coinciden con partials/ y pasa las pruebas;
+#   3. monta en _site/ solo lo que se publica (scripts/site.js) y lo despliega en GitHub Pages.
+# No hace commits: news.json solo existe en lo publicado. Si fallan todos los feeds, se conserva el
+# news.json publicado; si tampoco se puede leer, el run falla y la web sigue con la última versión.
+# Requisito (una vez): Settings → Pages → Build and deployment → Source: «GitHub Actions».
+name: Noticias y publicación
+
+on:
+  schedule:
+    - cron: '17 */3 * * *'
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Un despliegue cada vez; uno en curso no se cancela a medias
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  construir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Instalar dependencias (solo jsdom, para las pruebas)
+        run: npm ci
+      - name: Noticias (news.json)
+        run: node scripts/news.js
+      - name: Páginas sincronizadas con partials/ y sitemap.xml al día
+        run: node scripts/shell.js --check
+      - name: Pruebas (incluye el formato de news.json y el contenido del sitio)
+        run: npm test
+      - name: Montar el sitio (solo lo que se publica)
+        run: node scripts/site.js _site
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  publicar:
+    needs: construir
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

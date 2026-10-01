@@ -109,7 +109,11 @@ const translations = {
       label: "Actualidad",
       title: "Últimas Noticias de Hardware",
       subtitle: "Sigue al día con los últimos lanzamientos y filtraciones del mundo de las GPUs.",
-      loading: "Cargando las últimas noticias…"
+      loading: "Cargando las últimas noticias…",
+      updated: "Actualizado {time}",
+      updated_offline: "Sin conexión: última copia guardada, actualizada {time}",
+      empty: "Ahora mismo no hay noticias",
+      empty_hint: "Las noticias se actualizan cada pocas horas: vuelve a intentarlo más tarde."
     },
     categories: {
       gaming_title: "Gaming",
@@ -239,9 +243,9 @@ const translations = {
       no_sources: "Datos heredados pendientes de verificar con una fuente.",
       reviewed: "Revisado el {date}.",
       data_note: "Precios: PVP de lanzamiento en EE. UU., orientativo (no es el precio actual). Datos revisados el {date}.",
-      news_error_hint: "El servicio de noticias no responde. Vuelve a intentarlo en unos minutos.",
+      news_error_hint: "No se pudo leer el archivo de noticias. Vuelve a intentarlo en unos minutos.",
       news_offline: "Sin conexión",
-      news_offline_hint: "Las noticias se cargan desde internet: conéctate y vuelve a intentarlo."
+      news_offline_hint: "Todavía no hay una copia guardada de las noticias: conéctate y vuelve a intentarlo."
     },
     gaming_page: {
       home: "Inicio",
@@ -810,7 +814,11 @@ const translations = {
       label: "News",
       title: "Latest Hardware News",
       subtitle: "Stay up to date with the latest releases and leaks from the GPU world.",
-      loading: "Loading the latest news…"
+      loading: "Loading the latest news…",
+      updated: "Updated {time}",
+      updated_offline: "Offline: last saved copy, updated {time}",
+      empty: "No news right now",
+      empty_hint: "News is updated every few hours: try again later."
     },
     categories: {
       gaming_title: "Gaming",
@@ -940,9 +948,9 @@ const translations = {
       no_sources: "Legacy data pending verification with a source.",
       reviewed: "Reviewed on {date}.",
       data_note: "Prices: US launch MSRP, as a guide (not today’s price). Data reviewed on {date}.",
-      news_error_hint: "The news service is not responding. Try again in a few minutes.",
+      news_error_hint: "The news file couldn't be read. Try again in a few minutes.",
       news_offline: "You are offline",
-      news_offline_hint: "News is loaded from the internet: reconnect and try again."
+      news_offline_hint: "There is no saved copy of the news yet: reconnect and try again."
     },
     gaming_page: {
       home: "Home",
@@ -1511,7 +1519,11 @@ const translations = {
       label: "Actualités",
       title: "Dernières Nouvelles Matériel",
       subtitle: "Restez à jour avec les derniers lancements et fuites du monde des GPU.",
-      loading: "Chargement des dernières actualités…"
+      loading: "Chargement des dernières actualités…",
+      updated: "Mis à jour {time}",
+      updated_offline: "Hors ligne : dernière copie enregistrée, mise à jour {time}",
+      empty: "Aucune actualité pour le moment",
+      empty_hint: "Les actualités sont mises à jour toutes les quelques heures : réessayez plus tard."
     },
     categories: {
       gaming_title: "Jeu",
@@ -1641,9 +1653,9 @@ const translations = {
       no_sources: "Données héritées en attente de vérification par une source.",
       reviewed: "Vérifié le {date}.",
       data_note: "Prix : prix de lancement aux États-Unis, indicatif (pas le prix actuel). Données vérifiées le {date}.",
-      news_error_hint: "Le service d’actualités ne répond pas. Réessayez dans quelques minutes.",
+      news_error_hint: "Impossible de lire le fichier des actualités. Réessayez dans quelques minutes.",
       news_offline: "Hors ligne",
-      news_offline_hint: "Les actualités se chargent depuis internet : reconnectez-vous et réessayez."
+      news_offline_hint: "Aucune copie des actualités n’est encore enregistrée : reconnectez-vous et réessayez."
     },
     gaming_page: {
       home: "Accueil",
@@ -2212,7 +2224,11 @@ const translations = {
       label: "Nachrichten",
       title: "Neueste Hardware-News",
       subtitle: "Bleiben Sie auf dem Laufenden mit den neuesten Veröffentlichungen und Leaks aus der GPU-Welt.",
-      loading: "Neueste Nachrichten werden geladen…"
+      loading: "Neueste Nachrichten werden geladen…",
+      updated: "Aktualisiert {time}",
+      updated_offline: "Offline: zuletzt gespeicherte Kopie, aktualisiert {time}",
+      empty: "Gerade gibt es keine News",
+      empty_hint: "Die News werden alle paar Stunden aktualisiert: Versuche es später erneut."
     },
     categories: {
       gaming_title: "Gaming",
@@ -2342,9 +2358,9 @@ const translations = {
       no_sources: "Übernommene Daten, noch nicht mit einer Quelle geprüft.",
       reviewed: "Geprüft am {date}.",
       data_note: "Preise: US-Einführungspreis als Richtwert (nicht der aktuelle Preis). Daten geprüft am {date}.",
-      news_error_hint: "Der Nachrichtendienst antwortet nicht. Versuche es in ein paar Minuten erneut.",
+      news_error_hint: "Die Nachrichtendatei konnte nicht gelesen werden. Versuche es in ein paar Minuten erneut.",
       news_offline: "Keine Verbindung",
-      news_offline_hint: "Die Nachrichten werden aus dem Internet geladen: Stelle eine Verbindung her und versuche es erneut."
+      news_offline_hint: "Es gibt noch keine gespeicherte Kopie der News: Stelle eine Verbindung her und versuche es erneut."
     },
     gaming_page: {
       home: "Startseite",
@@ -2913,7 +2929,11 @@ const translations = {
       label: "Notizie",
       title: "Ultime Notizie Hardware",
       subtitle: "Rimani aggiornato con gli ultimi lanci e leak dal mondo delle GPU.",
-      loading: "Caricamento delle ultime notizie…"
+      loading: "Caricamento delle ultime notizie…",
+      updated: "Aggiornato {time}",
+      updated_offline: "Offline: ultima copia salvata, aggiornata {time}",
+      empty: "Al momento non ci sono notizie",
+      empty_hint: "Le notizie si aggiornano ogni poche ore: riprova più tardi."
     },
     categories: {
       gaming_title: "Gaming",
@@ -3043,9 +3063,9 @@ const translations = {
       no_sources: "Dati ereditati in attesa di verifica con una fonte.",
       reviewed: "Verificato il {date}.",
       data_note: "Prezzi: prezzo di lancio negli Stati Uniti, indicativo (non è il prezzo attuale). Dati verificati il {date}.",
-      news_error_hint: "Il servizio di notizie non risponde. Riprova tra qualche minuto.",
+      news_error_hint: "Impossibile leggere il file delle notizie. Riprova tra qualche minuto.",
       news_offline: "Sei offline",
-      news_offline_hint: "Le notizie si caricano da internet: connettiti e riprova."
+      news_offline_hint: "Non c’è ancora una copia salvata delle notizie: connettiti e riprova."
     },
     gaming_page: {
       home: "Home",
@@ -3614,7 +3634,11 @@ const translations = {
       label: "Новости",
       title: "Последние новости оборудования",
       subtitle: "Будьте в курсе последних запусков и утечек из мира GPU.",
-      loading: "Загружаем свежие новости…"
+      loading: "Загружаем свежие новости…",
+      updated: "Обновлено {time}",
+      updated_offline: "Нет подключения: последняя сохранённая копия, обновлена {time}",
+      empty: "Сейчас новостей нет",
+      empty_hint: "Новости обновляются каждые несколько часов: попробуйте позже."
     },
     categories: {
       gaming_title: "Игры",
@@ -3744,9 +3768,9 @@ const translations = {
       no_sources: "Унаследованные данные, ещё не проверенные по источнику.",
       reviewed: "Проверено {date}.",
       data_note: "Цены: рекомендованная цена в США на старте, ориентировочно (не текущая цена). Данные проверены {date}.",
-      news_error_hint: "Служба новостей не отвечает. Попробуйте ещё раз через несколько минут.",
+      news_error_hint: "Не удалось прочитать файл новостей. Попробуйте ещё раз через несколько минут.",
       news_offline: "Нет подключения",
-      news_offline_hint: "Новости загружаются из интернета: подключитесь и попробуйте ещё раз."
+      news_offline_hint: "Сохранённой копии новостей пока нет: подключитесь и попробуйте ещё раз."
     },
     gaming_page: {
       home: "Главная",

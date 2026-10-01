@@ -1,8 +1,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Política de seguridad de contenido: scripts solo del propio sitio (y el de pre-pintado, por su hash,
-       que calcula npm run shell); datos externos solo de rss2json; imágenes https para las noticias -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' {{scripthash}}; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://api.rss2json.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+  <!-- Política de seguridad de contenido: todo del propio sitio, sin excepciones de otros dominios (las
+       noticias son news.json, del mismo origen); el script de pre-pintado va por su hash, que calcula
+       npm run shell -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' {{scripthash}}; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
   <meta name="theme-color" content="#050807" />
   <link rel="preload" href="{{root}}assets/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="{{root}}assets/fonts/exo-2-latin.woff2" as="font" type="font/woff2" crossorigin />

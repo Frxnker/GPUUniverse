@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Feed de ejemplo para las pruebas (datos ficticios): RSS 2.0 como el de TechPowerUp o Wccftech -->
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Medio de prueba</title>
+    <link>https://medio.example</link>
+    <atom:link href="https://medio.example/rss" rel="self" type="application/rss+xml" />
+    <description>Feed ficticio</description>
+    <item>
+      <title>NVIDIA presenta una GPU de prueba &amp; su disipador</title>
+      <link>https://medio.example/noticias/1-gpu-de-prueba</link>
+      <pubDate>Wed, 30 Sep 2026 10:00:00 +0000</pubDate>
+      <category><![CDATA[GPUs]]></category>
+      <category>Hardware</category>
+      <description><![CDATA[<p>La <strong>tarjeta de prueba</strong> llega con 16 GB de memoria y un disipador nuevo.</p><figure><img src="https://cdn.medio.example/a.jpg" alt=""><figcaption>(Crédito de la imagen: nadie)</figcaption></figure><p>Este texto de relleno sirve para comprobar que el extracto se corta en una palabra y no deja el artículo entero dentro de news.json, que solo lleva un resumen corto. [&#8230;]</p>]]></description>
+      <content:encoded><![CDATA[<p>Artículo completo que nunca debe acabar en news.json.</p>]]></content:encoded>
+    </item>
+    <item>
+      <title><![CDATA[ Oferta de teclados mecánicos ]]></title>
+      <link>https://medio.example/noticias/2-teclados</link>
+      <dc:creator>Redacción</dc:creator>
+      <pubDate>Wed, 30 Sep 2026 12:30:00 +0000</pubDate>
+      <category>Periféricos</category>
+      <description>Un teclado &lt;em&gt;rebajado&lt;/em&gt; con interruptores ópticos.</description>
+    </item>
+    <item>
+      <title>AMD Radeon de prueba: primeras pruebas de rendimiento</title>
+      <link>https://medio.example/noticias/3-radeon</link>
+      <guid isPermaLink="false">medio-3</guid>
+      <pubDate>Tue, 29 Sep 2026 08:15:00 GMT</pubDate>
+      <description>Resumen corto de la Radeon de prueba.</description>
+    </item>
+    <item>
+      <title>Noticia sin enlace propio, pero con guid permanente</title>
+      <guid>https://medio.example/noticias/4-guid</guid>
+      <pubDate>Mon, 28 Sep 2026 09:00:00 +0000</pubDate>
+      <description>Intel prepara drivers nuevos para Arc.</description>
+    </item>
+  </channel>
+</rss>

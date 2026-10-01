@@ -1,258 +1,7 @@
-// ===== ALTERNAR TEMA =====
-(function initTheme() {
-  // Solo "light" o "dark": un valor guardado desconocido vuelve al tema oscuro
-  let saved = 'dark';
-  try { saved = localStorage.getItem('gpu-universe-theme') === 'light' ? 'light' : 'dark'; } catch (e) { /* almacenamiento no disponible */ }
-  document.documentElement.setAttribute('data-theme', saved);
-
-  // La etiqueta del botón dice qué hará al pulsarlo ("Cambiar a tema claro" en el tema oscuro)
-  const updateLabels = () => {
-    if (typeof window.t !== 'function') return;
-    const key = document.documentElement.getAttribute('data-theme') === 'light' ? 'a11y.theme_to_dark' : 'a11y.theme_to_light';
-    document.querySelectorAll('.theme-toggle').forEach(btn => btn.setAttribute('aria-label', window.t(key)));
-  };
-  window.addEventListener('i18n:change', updateLabels);
-
-  document.addEventListener('DOMContentLoaded', () => {
-    updateLabels();
-    const btns = document.querySelectorAll('.theme-toggle');
-    btns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const current = document.documentElement.getAttribute('data-theme');
-        const next = current === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        try { localStorage.setItem('gpu-universe-theme', next); } catch (e) { /* sin persistencia */ }
-        updateLabels();
-
-        // Vuelve a renderizar los gráficos del canvas para que usen los nuevos colores del tema
-        if (typeof window.renderChart === 'function') window.renderChart();
-        if (typeof window.renderValueChart === 'function') window.renderValueChart();
-      });
-    });
-  });
-})();
-
-
-// ===== FONDO: PISTAS DE CIRCUITO =====
-// Pistas de PCB a 0°/45°/90° con vías en los extremos y pulsos de señal que las recorren.
-// Las pistas se dibujan una vez en un lienzo aparte; cada fotograma solo pinta los pulsos.
-(function initCircuit() {
-  const canvas = document.getElementById('particles-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const board = document.createElement('canvas');
-  const bctx = board.getContext('2d');
-  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let reduceMotion = motionQuery.matches;
-  // Direcciones en pasos de 45°: índices pares = horizontal/vertical
-  const DIRS = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
-  let W = 0, H = 0, dpr = 1, traces = [], pulses = [], colors = {};
-
-  function readColors() {
-    const cs = getComputedStyle(document.documentElement);
-    colors = {
-      trace: cs.getPropertyValue('--trace-rgb').trim() || '25, 230, 180',
-      copper: cs.getPropertyValue('--copper-rgb').trim() || '240, 162, 74',
-      light: document.documentElement.getAttribute('data-theme') === 'light'
-    };
-  }
-
-  function segmentLength(a, b) {
-    return Math.hypot(b[0] - a[0], b[1] - a[1]);
-  }
-
-  function buildTraces() {
-    const step = W < 768 ? 30 : 38;
-    const cols = Math.ceil(W / step) + 1;
-    const rows = Math.ceil(H / step) + 1;
-    const used = new Set();
-    const target = Math.round((cols * rows) / (W < 768 ? 26 : 18));
-    traces = [];
-    for (let n = 0; n < target * 3 && traces.length < target; n++) {
-      let x = Math.floor(Math.random() * cols);
-      let y = Math.floor(Math.random() * rows);
-      if (used.has(x + ',' + y)) continue;
-      let dir = Math.floor(Math.random() * 4) * 2;
-      const cells = [[x, y]];
-      used.add(x + ',' + y);
-      const segments = 2 + Math.floor(Math.random() * 3);
-      for (let seg = 0; seg < segments; seg++) {
-        const len = 2 + Math.floor(Math.random() * 4);
-        let blocked = false;
-        for (let i = 0; i < len; i++) {
-          const nx = x + DIRS[dir][0];
-          const ny = y + DIRS[dir][1];
-          // Las pistas no se cruzan ni se salen de la pantalla
-          if (nx < 0 || ny < 0 || nx >= cols || ny >= rows || used.has(nx + ',' + ny)) { blocked = true; break; }
-          x = nx; y = ny;
-          used.add(x + ',' + y);
-        }
-        cells.push([x, y]);
-        if (blocked) break;
-        dir = (dir + (Math.random() < 0.5 ? 1 : 7)) % 8;
-      }
-      const pts = cells.filter((c, i) => i === 0 || c[0] !== cells[i - 1][0] || c[1] !== cells[i - 1][1])
-        .map(([cx, cy]) => [cx * step, cy * step]);
-      if (pts.length < 2) continue;
-      let length = 0;
-      for (let i = 1; i < pts.length; i++) length += segmentLength(pts[i - 1], pts[i]);
-      if (length < step * 2) continue;
-      traces.push({ pts, length, copper: Math.random() < 0.2 });
-    }
-  }
-
-  function drawBoard() {
-    board.width = Math.round(W * dpr);
-    board.height = Math.round(H * dpr);
-    bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    bctx.clearRect(0, 0, W, H);
-    bctx.lineCap = 'round';
-    bctx.lineJoin = 'round';
-    const alpha = colors.light ? 0.2 : 0.14;
-    traces.forEach(t => {
-      const rgb = t.copper ? colors.copper : colors.trace;
-      bctx.strokeStyle = `rgba(${rgb}, ${alpha})`;
-      bctx.lineWidth = 1.2;
-      bctx.beginPath();
-      t.pts.forEach(([px, py], i) => (i ? bctx.lineTo(px, py) : bctx.moveTo(px, py)));
-      bctx.stroke();
-      // Pad cuadrado al inicio y vía (anillo) al final
-      const [sx, sy] = t.pts[0];
-      bctx.fillStyle = `rgba(${rgb}, ${alpha * 1.5})`;
-      bctx.fillRect(sx - 2.5, sy - 2.5, 5, 5);
-      const [ex, ey] = t.pts[t.pts.length - 1];
-      bctx.beginPath();
-      bctx.arc(ex, ey, 3, 0, Math.PI * 2);
-      bctx.strokeStyle = `rgba(${rgb}, ${alpha * 1.8})`;
-      bctx.stroke();
-    });
-  }
-
-  function pointAt(t, dist) {
-    for (let i = 1; i < t.pts.length; i++) {
-      const a = t.pts[i - 1];
-      const b = t.pts[i];
-      const len = segmentLength(a, b);
-      if (dist <= len) {
-        const k = dist / len;
-        return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k];
-      }
-      dist -= len;
-    }
-    return t.pts[t.pts.length - 1];
-  }
-
-  function newPulse(spread) {
-    const t = traces[Math.floor(Math.random() * traces.length)];
-    return { t, d: spread ? -Math.random() * 400 : -Math.random() * 120, speed: 0.7 + Math.random() * 1.1 };
-  }
-
-  function draw() {
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, W, H);
-    ctx.drawImage(board, 0, 0, W, H);
-    const headAlpha = colors.light ? 0.6 : 0.9;
-    pulses.forEach((p, idx) => {
-      p.d += p.speed;
-      if (p.d > p.t.length + 40) { pulses[idx] = newPulse(false); return; }
-      // Cabeza brillante con estela que se desvanece
-      for (let k = 7; k >= 0; k--) {
-        const dd = p.d - k * 5;
-        if (dd < 0 || dd > p.t.length) continue;
-        const [x, y] = pointAt(p.t, dd);
-        const a = headAlpha * (1 - k / 8);
-        if (k === 0) {
-          ctx.fillStyle = `rgba(${colors.trace}, ${a * 0.25})`;
-          ctx.beginPath();
-          ctx.arc(x, y, 6, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.fillStyle = `rgba(${colors.trace}, ${a})`;
-        ctx.beginPath();
-        ctx.arc(x, y, k === 0 ? 2 : 1.4, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    });
-    frame = 0;
-    if (shouldAnimate()) frame = requestAnimationFrame(draw);
-  }
-
-  // Solo se anima con la pestaña visible, el lienzo en pantalla y sin "reducir movimiento";
-  // en cualquier otro caso queda dibujado un fotograma fijo y no se gasta CPU.
-  let frame = 0;
-  let onScreen = true;
-  const shouldAnimate = () => !reduceMotion && onScreen && !document.hidden;
-  function resume() {
-    if (!frame && shouldAnimate()) frame = requestAnimationFrame(draw);
-  }
-  function pause() {
-    if (frame) cancelAnimationFrame(frame);
-    frame = 0;
-  }
-
-  function setup() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
-    W = window.innerWidth;
-    // Alto de la pantalla completa: así mostrar/ocultar la barra del navegador móvil no obliga a redibujar
-    H = Math.max(window.innerHeight, (window.screen && window.screen.height) || 0);
-    canvas.width = Math.round(W * dpr);
-    canvas.height = Math.round(H * dpr);
-    canvas.style.height = H + 'px';
-    buildTraces();
-    drawBoard();
-    const count = reduceMotion || !traces.length ? 0 : (W < 768 ? 8 : 16);
-    pulses = Array.from({ length: count }, () => newPulse(true));
-  }
-
-  readColors();
-  setup();
-  draw();
-
-  document.addEventListener('visibilitychange', () => (document.hidden ? pause() : resume()));
-  new IntersectionObserver(entries => {
-    onScreen = entries.some(e => e.isIntersecting);
-    if (onScreen) resume(); else pause();
-  }).observe(canvas);
-  motionQuery.addEventListener('change', e => {
-    reduceMotion = e.matches;
-    pause();
-    setup();
-    draw();
-  });
-
-  let lastWidth = W;
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    if (window.innerWidth === lastWidth) return;
-    lastWidth = window.innerWidth;
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { setup(); if (reduceMotion) draw(); }, 200);
-  });
-
-  // Al cambiar de tema o de color de acento se repintan las pistas con los colores nuevos
-  new MutationObserver(() => {
-    readColors();
-    drawBoard();
-    if (reduceMotion) draw();
-  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-accent'] });
-})();
-
-// ===== DESPLAZAMIENTO DE LA BARRA DE NAVEGACIÓN =====
-const navbar = document.getElementById('navbar');
-if (navbar) {
-  let isScrolling = false;
-  window.addEventListener('scroll', () => {
-    if (!isScrolling) {
-      window.requestAnimationFrame(() => {
-        navbar.classList.toggle('scrolled', window.scrollY > 60);
-        isScrolling = false;
-      });
-      isScrolling = true;
-    }
-  });
-}
-
 // ===== UTILIDADES =====
+// Van primero: i18n.js, features.js y los scripts de cada página dependen de ellas. Nada de lo que
+// hay aquí toca el DOM al cargar, así que no puede fallar y dejar al resto de la web sin funciones.
+
 // Ruta relativa a la raíz del sitio ('' en la raíz, '../' en pages/). La da el enlace al manifest que
 // escribe partials/head.html; así también vale en la página 404, que se sirve en cualquier ruta con <base>
 window.rootPath = function() {
@@ -330,6 +79,12 @@ window.formatLaunch = function(gpu) {
   return gpu && gpu.year ? String(gpu.year) : '';
 };
 
+// Fecha larga en el idioma actual ("29 de septiembre de 2026")
+window.formatDate = function(iso) {
+  const d = new Date(`${iso}T12:00:00Z`);
+  return isNaN(d) ? '' : new Intl.DateTimeFormat(window.currentLocale(), { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(d);
+};
+
 // Precio y su contexto: valor, fecha y, si no hay precio, el motivo
 window.priceInfo = function(gpu) {
   const price = window.gpuPrice(gpu);
@@ -345,12 +100,356 @@ window.specText = function(value, suffix = '') {
 
 window.PENDING_TITLE = () => window.tr('ui.pending_hint');
 
-// ===== APARICIÓN AL HACER SCROLL =====
-const revealObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) e.target.classList.add('visible');
+// Cifra de IA de un acelerador (BF16 denso) en TFLOPS
+window.formatAi = function(value) {
+  return value ? `${Number(value).toLocaleString(window.currentLocale(), { maximumFractionDigits: 1 })} TFLOPS` : '—';
+};
+
+// Cargas de trabajo de un acelerador (entrenamiento, inferencia, HPC), traducidas
+window.workloadText = function(gpu) {
+  return (gpu.workloads || []).map(w => window.tr(`workload.${w}`)).join(' · ');
+};
+
+// ===== EFECTOS DECORATIVOS AISLADOS =====
+// El fondo, los contadores y las animaciones de aparición son adorno: si uno falla (un navegador
+// integrado sin una API, un lienzo de 0 px...), se desactiva solo ese efecto, el error queda en la
+// consola y el resto de la web sigue funcionando.
+function effectFailed(name, err) {
+  console.error(`Efecto desactivado (${name}):`, err);
+}
+
+function runEffect(name, fn) {
+  try {
+    fn();
+  } catch (err) {
+    effectFailed(name, err);
+  }
+}
+
+// Observador de «entra en pantalla» para una animación. Si no se puede crear, el contenido se
+// muestra directamente: una animación que falla nunca puede dejarlo oculto.
+function effectObserver(name, onVisible, options) {
+  let failed = false;
+  const show = (el, obs) => {
+    if (failed) return;
+    try {
+      onVisible(el, obs);
+    } catch (err) {
+      failed = true;
+      effectFailed(name, err);
+    }
+  };
+  try {
+    const obs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) show(e.target, obs); }), options);
+    return obs;
+  } catch (err) {
+    effectFailed(name, err);
+    const direct = { observe: el => show(el, direct), unobserve() {}, disconnect() {} };
+    return direct;
+  }
+}
+
+// ===== ALTERNAR TEMA =====
+(function initTheme() {
+  // Solo "light" o "dark": un valor guardado desconocido vuelve al tema oscuro
+  let saved = 'dark';
+  try { saved = localStorage.getItem('gpu-universe-theme') === 'light' ? 'light' : 'dark'; } catch (e) { /* almacenamiento no disponible */ }
+  document.documentElement.setAttribute('data-theme', saved);
+
+  // La etiqueta del botón dice qué hará al pulsarlo ("Cambiar a tema claro" en el tema oscuro)
+  const updateLabels = () => {
+    if (typeof window.t !== 'function') return;
+    const key = document.documentElement.getAttribute('data-theme') === 'light' ? 'a11y.theme_to_dark' : 'a11y.theme_to_light';
+    document.querySelectorAll('.theme-toggle').forEach(btn => btn.setAttribute('aria-label', window.t(key)));
+  };
+  window.addEventListener('i18n:change', updateLabels);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    updateLabels();
+    const btns = document.querySelectorAll('.theme-toggle');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('gpu-universe-theme', next); } catch (e) { /* sin persistencia */ }
+        updateLabels();
+
+        // Vuelve a renderizar los gráficos del canvas para que usen los nuevos colores del tema
+        if (typeof window.renderChart === 'function') window.renderChart();
+        if (typeof window.renderValueChart === 'function') window.renderValueChart();
+      });
+    });
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+})();
+
+
+// ===== FONDO: PISTAS DE CIRCUITO =====
+// Pistas de PCB a 0°/45°/90° con vías en los extremos y pulsos de señal que las recorren.
+// Las pistas se dibujan una vez en un lienzo aparte; cada fotograma solo pinta los pulsos.
+// Con la ventana a 0 px (iframe oculto, navegador integrado en una app, panel que se abre animado)
+// no se dibuja nada: el navegador no deja dibujar un lienzo de 0 px. El fondo aparece cuando la
+// ventana tiene tamaño (resize y ResizeObserver).
+runEffect('fondo de circuitos', function initCircuit() {
+  const canvas = document.getElementById('particles-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const board = document.createElement('canvas');
+  const bctx = board.getContext('2d');
+  if (!ctx || !bctx) return;
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let reduceMotion = motionQuery.matches;
+  // Direcciones en pasos de 45°: índices pares = horizontal/vertical
+  const DIRS = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
+  let W = 0, H = 0, dpr = 1, traces = [], pulses = [], colors = {};
+  let ready = false; // hay un tablero dibujado con un tamaño válido
+  let broken = false; // falló una vez: el efecto queda apagado
+
+  // Un error en cualquier momento (también en un fotograma o al redimensionar) apaga solo el fondo
+  function fail(err) {
+    if (broken) return;
+    broken = true;
+    ready = false;
+    pause();
+    canvas.hidden = true;
+    effectFailed('fondo de circuitos', err);
+  }
+  const guard = fn => (...args) => {
+    if (broken) return;
+    try { fn(...args); } catch (err) { fail(err); }
+  };
+
+  function readColors() {
+    const cs = getComputedStyle(document.documentElement);
+    colors = {
+      trace: cs.getPropertyValue('--trace-rgb').trim() || '25, 230, 180',
+      copper: cs.getPropertyValue('--copper-rgb').trim() || '240, 162, 74',
+      light: document.documentElement.getAttribute('data-theme') === 'light'
+    };
+  }
+
+  function segmentLength(a, b) {
+    return Math.hypot(b[0] - a[0], b[1] - a[1]);
+  }
+
+  function buildTraces() {
+    const step = W < 768 ? 30 : 38;
+    const cols = Math.ceil(W / step) + 1;
+    const rows = Math.ceil(H / step) + 1;
+    const used = new Set();
+    const target = Math.round((cols * rows) / (W < 768 ? 26 : 18));
+    traces = [];
+    for (let n = 0; n < target * 3 && traces.length < target; n++) {
+      let x = Math.floor(Math.random() * cols);
+      let y = Math.floor(Math.random() * rows);
+      if (used.has(x + ',' + y)) continue;
+      let dir = Math.floor(Math.random() * 4) * 2;
+      const cells = [[x, y]];
+      used.add(x + ',' + y);
+      const segments = 2 + Math.floor(Math.random() * 3);
+      for (let seg = 0; seg < segments; seg++) {
+        const len = 2 + Math.floor(Math.random() * 4);
+        let blocked = false;
+        for (let i = 0; i < len; i++) {
+          const nx = x + DIRS[dir][0];
+          const ny = y + DIRS[dir][1];
+          // Las pistas no se cruzan ni se salen de la pantalla
+          if (nx < 0 || ny < 0 || nx >= cols || ny >= rows || used.has(nx + ',' + ny)) { blocked = true; break; }
+          x = nx; y = ny;
+          used.add(x + ',' + y);
+        }
+        cells.push([x, y]);
+        if (blocked) break;
+        dir = (dir + (Math.random() < 0.5 ? 1 : 7)) % 8;
+      }
+      const pts = cells.filter((c, i) => i === 0 || c[0] !== cells[i - 1][0] || c[1] !== cells[i - 1][1])
+        .map(([cx, cy]) => [cx * step, cy * step]);
+      if (pts.length < 2) continue;
+      let length = 0;
+      for (let i = 1; i < pts.length; i++) length += segmentLength(pts[i - 1], pts[i]);
+      if (length < step * 2) continue;
+      traces.push({ pts, length, copper: Math.random() < 0.2 });
+    }
+  }
+
+  function drawBoard() {
+    if (!ready) return;
+    board.width = Math.round(W * dpr);
+    board.height = Math.round(H * dpr);
+    bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    bctx.clearRect(0, 0, W, H);
+    bctx.lineCap = 'round';
+    bctx.lineJoin = 'round';
+    const alpha = colors.light ? 0.2 : 0.14;
+    traces.forEach(t => {
+      const rgb = t.copper ? colors.copper : colors.trace;
+      bctx.strokeStyle = `rgba(${rgb}, ${alpha})`;
+      bctx.lineWidth = 1.2;
+      bctx.beginPath();
+      t.pts.forEach(([px, py], i) => (i ? bctx.lineTo(px, py) : bctx.moveTo(px, py)));
+      bctx.stroke();
+      // Pad cuadrado al inicio y vía (anillo) al final
+      const [sx, sy] = t.pts[0];
+      bctx.fillStyle = `rgba(${rgb}, ${alpha * 1.5})`;
+      bctx.fillRect(sx - 2.5, sy - 2.5, 5, 5);
+      const [ex, ey] = t.pts[t.pts.length - 1];
+      bctx.beginPath();
+      bctx.arc(ex, ey, 3, 0, Math.PI * 2);
+      bctx.strokeStyle = `rgba(${rgb}, ${alpha * 1.8})`;
+      bctx.stroke();
+    });
+  }
+
+  function pointAt(t, dist) {
+    for (let i = 1; i < t.pts.length; i++) {
+      const a = t.pts[i - 1];
+      const b = t.pts[i];
+      const len = segmentLength(a, b);
+      if (dist <= len) {
+        const k = dist / len;
+        return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k];
+      }
+      dist -= len;
+    }
+    return t.pts[t.pts.length - 1];
+  }
+
+  function newPulse(spread) {
+    const t = traces[Math.floor(Math.random() * traces.length)];
+    return { t, d: spread ? -Math.random() * 400 : -Math.random() * 120, speed: 0.7 + Math.random() * 1.1 };
+  }
+
+  const draw = guard(function draw() {
+    frame = 0;
+    if (!ready) return;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    ctx.drawImage(board, 0, 0, W, H);
+    const headAlpha = colors.light ? 0.6 : 0.9;
+    pulses.forEach((p, idx) => {
+      p.d += p.speed;
+      if (p.d > p.t.length + 40) { pulses[idx] = newPulse(false); return; }
+      // Cabeza brillante con estela que se desvanece
+      for (let k = 7; k >= 0; k--) {
+        const dd = p.d - k * 5;
+        if (dd < 0 || dd > p.t.length) continue;
+        const [x, y] = pointAt(p.t, dd);
+        const a = headAlpha * (1 - k / 8);
+        if (k === 0) {
+          ctx.fillStyle = `rgba(${colors.trace}, ${a * 0.25})`;
+          ctx.beginPath();
+          ctx.arc(x, y, 6, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.fillStyle = `rgba(${colors.trace}, ${a})`;
+        ctx.beginPath();
+        ctx.arc(x, y, k === 0 ? 2 : 1.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+    if (shouldAnimate()) frame = requestAnimationFrame(draw);
+  });
+
+  // Solo se anima con la pestaña visible, el lienzo en pantalla y sin "reducir movimiento";
+  // en cualquier otro caso queda dibujado un fotograma fijo y no se gasta CPU.
+  let frame = 0;
+  let onScreen = true;
+  const shouldAnimate = () => ready && !broken && !reduceMotion && onScreen && !document.hidden;
+  function resume() {
+    if (!frame && shouldAnimate()) frame = requestAnimationFrame(draw);
+  }
+  function pause() {
+    if (frame) cancelAnimationFrame(frame);
+    frame = 0;
+  }
+  // Pinta un fotograma ahora; si había uno pendiente, lo sustituye (nunca hay dos bucles a la vez)
+  function redraw() {
+    pause();
+    draw();
+  }
+
+  function setup() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth;
+    // Alto de la pantalla completa: así mostrar/ocultar la barra del navegador móvil no obliga a redibujar
+    H = Math.max(window.innerHeight, (window.screen && window.screen.height) || 0);
+    ready = W > 0 && H > 0;
+    if (!ready) {
+      // Sin tamaño: no se dibuja y no se anima hasta que lo haya
+      pause();
+      traces = [];
+      pulses = [];
+      return;
+    }
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    canvas.style.height = H + 'px';
+    buildTraces();
+    drawBoard();
+    const count = reduceMotion || !traces.length ? 0 : (W < 768 ? 8 : 16);
+    pulses = Array.from({ length: count }, () => newPulse(true));
+  }
+
+  readColors();
+  setup();
+  redraw();
+
+  document.addEventListener('visibilitychange', guard(() => (document.hidden ? pause() : resume())));
+  if (typeof IntersectionObserver === 'function') {
+    new IntersectionObserver(guard(entries => {
+      onScreen = entries.some(e => e.isIntersecting);
+      if (onScreen) resume(); else pause();
+    })).observe(canvas);
+  }
+  motionQuery.addEventListener('change', guard(e => {
+    reduceMotion = e.matches;
+    setup();
+    redraw();
+  }));
+
+  // Cambio de tamaño: se rehace el fondo si cambia el ancho o si aún no lo había (se cargó con 0 px).
+  // En móvil, mostrar/ocultar la barra del navegador cambia solo el alto y no obliga a redibujar.
+  // Con el mismo ancho, un aviso más no pospone un redibujado que ya está en espera.
+  let lastWidth = W;
+  let resizeTimer = 0;
+  const onResize = guard(() => {
+    const width = window.innerWidth;
+    if (width === lastWidth && (ready || resizeTimer)) return;
+    lastWidth = width;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(guard(() => { resizeTimer = 0; setup(); redraw(); }), 200);
+  });
+  window.addEventListener('resize', onResize);
+  // El lienzo ocupa la ventana (position: fixed): su caja cambia cuando cambia el tamaño visible, también
+  // en un iframe o un panel que crece sin que la ventana lance resize
+  if (typeof ResizeObserver === 'function') new ResizeObserver(onResize).observe(canvas);
+
+  // Al cambiar de tema o de color de acento se repintan las pistas con los colores nuevos
+  new MutationObserver(guard(() => {
+    readColors();
+    drawBoard();
+    if (!frame) redraw();
+  })).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-accent'] });
+});
+
+// ===== DESPLAZAMIENTO DE LA BARRA DE NAVEGACIÓN =====
+runEffect('barra al desplazar', () => {
+  const navbar = document.getElementById('navbar');
+  if (!navbar) return;
+  let isScrolling = false;
+  window.addEventListener('scroll', () => {
+    if (!isScrolling) {
+      window.requestAnimationFrame(() => {
+        navbar.classList.toggle('scrolled', window.scrollY > 60);
+        isScrolling = false;
+      });
+      isScrolling = true;
+    }
+  });
+});
+
+// ===== APARICIÓN AL HACER SCROLL =====
+const revealObs = effectObserver('aparición al desplazar', el => el.classList.add('visible'), { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
 // ===== CONSTRUCCIÓN DE COMPONENTES =====
 function wrapWithTooltip(label, defKey) {
@@ -407,16 +506,6 @@ function buildGpuCard(gpu) {
     </article>
   `;
 }
-
-// Cifra de IA de un acelerador (BF16 denso) en TFLOPS
-window.formatAi = function(value) {
-  return value ? `${Number(value).toLocaleString(window.currentLocale(), { maximumFractionDigits: 1 })} TFLOPS` : '—';
-};
-
-// Cargas de trabajo de un acelerador (entrenamiento, inferencia, HPC), traducidas
-window.workloadText = function(gpu) {
-  return (gpu.workloads || []).map(w => window.tr(`workload.${w}`)).join(' · ');
-};
 
 function buildServerCard(gpu) {
   const esc = window.escapeHtml;
@@ -935,15 +1024,11 @@ window.renderHallOfFame = function() {
 };
 
 // ===== PERF BAR ANIMATION =====
-const barObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.querySelectorAll('.gpu-perf-fill').forEach(bar => {
-        bar.style.width = bar.dataset.width + '%';
-      });
-      barObs.unobserve(e.target);
-    }
+const barObs = effectObserver('barras de rendimiento', (card, obs) => {
+  card.querySelectorAll('.gpu-perf-fill').forEach(bar => {
+    bar.style.width = bar.dataset.width + '%';
   });
+  obs.unobserve(card);
 }, { threshold: 0.3 });
 
 // ===== SEARCH & MODAL LOGIC =====
@@ -999,12 +1084,6 @@ function sourcesHtml(gpu) {
       ${reviewed ? `<p>${esc(window.tr('catalog.reviewed', '', { date: reviewed }))}</p>` : ''}
     </details>`;
 }
-
-// Fecha larga en el idioma actual ("29 de septiembre de 2026")
-window.formatDate = function(iso) {
-  const d = new Date(`${iso}T12:00:00Z`);
-  return isNaN(d) ? '' : new Intl.DateTimeFormat(window.currentLocale(), { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(d);
-};
 
 // Notas de datos de los catálogos: precios orientativos y fecha de revisión
 function renderDataNotes() {
@@ -1217,37 +1296,50 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('gpu-modal')) window.openGpuModal(trigger.dataset.openGpu, trigger);
   });
 
-  // Cifras de la portada calculadas a partir de los datos
-  const heroStats = document.querySelector('.hero-stats');
-  if (heroStats) {
+  // Cifras de la portada calculadas a partir de los datos. Las cantidades suben desde 0 al entrar en
+  // pantalla; el año de «Revisión de datos» es una fecha, no una cantidad, y se muestra fijo
+  // (animado se veían cifras como «1199»).
+  runEffect('contadores de la portada', () => {
+    const heroStats = document.querySelector('.hero-stats');
+    if (!heroStats) return;
     const all = getAllGpus();
     const families = new Set(all.map(g => String(g.arch || '').split('/')[0].trim()).filter(Boolean));
     // VRAM dedicada máxima (la memoria unificada de Apple no cuenta)
     const maxVram = Math.max(...all.filter(g => !/UMA/.test(g.vram || '')).map(g => window.parseVram(g.vram)));
-    const stats = { models: all.length, vram: maxVram, archs: families.size, reviewed: Number(String(DATA_META.reviewed).slice(0, 4)) };
-    heroStats.querySelectorAll('[data-stat]').forEach(el => { el.dataset.target = stats[el.dataset.stat]; });
-    const counterObs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          document.querySelectorAll('.stat-num').forEach(animateCounter);
-          counterObs.disconnect();
-        }
-      });
+    const stats = { models: all.length, vram: maxVram, archs: families.size };
+    const reviewed = heroStats.querySelector('[data-stat="reviewed"]');
+    if (reviewed) reviewed.textContent = String(DATA_META.reviewed).slice(0, 4);
+    const counters = [...heroStats.querySelectorAll('[data-stat]')].filter(el => el.dataset.stat in stats);
+    counters.forEach(el => { el.dataset.target = stats[el.dataset.stat]; });
+    const showFinal = el => { el.textContent = Number(el.dataset.target).toLocaleString(window.currentLocale()); };
+    // Con «reducir movimiento» las cifras salen ya con su valor
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      counters.forEach(showFinal);
+      return;
+    }
+    const counterObs = effectObserver('contadores de la portada', (el, obs) => {
+      counters.forEach(animateCounter);
+      obs.disconnect();
     }, { threshold: 0.5 });
     counterObs.observe(heroStats);
-  }
 
-  function animateCounter(el) {
-    const target = parseInt(el.dataset.target);
-    const duration = 2000;
-    const step = target / (duration / 16);
-    let current = 0;
-    const timer = setInterval(() => {
-      current = Math.min(current + step, target);
-      el.textContent = Math.floor(current).toLocaleString();
-      if (current >= target) clearInterval(timer);
-    }, 16);
-  }
+    function animateCounter(el) {
+      const target = parseInt(el.dataset.target);
+      const duration = 2000;
+      const step = target / (duration / 16);
+      let current = 0;
+      const timer = setInterval(() => {
+        try {
+          current = Math.min(current + step, target);
+          el.textContent = Math.floor(current).toLocaleString(window.currentLocale());
+          if (current >= target) clearInterval(timer);
+        } catch (err) {
+          clearInterval(timer);
+          effectFailed('contadores de la portada', err);
+        }
+      }, 16);
+    }
+  });
 
   // Category cards
   document.querySelectorAll('.cat-card').forEach(card => {
@@ -1260,15 +1352,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Reveal Observer
-  const revealObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('active');
-      }
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+  // Aparición de las secciones fijas del HTML al entrar en pantalla
+  runEffect('aparición de secciones', () => {
+    const sectionObs = effectObserver('aparición de secciones', el => el.classList.add('active'), { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => sectionObs.observe(el));
+  });
 
   // Init
   initFilters();
@@ -1292,149 +1380,116 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ===== NOTICIAS =====
-// Feeds comprobados con rss2json (VideoCardz, Guru3D y AnandTech ya no responden)
-const NEWS_FEEDS = [
-  'https://www.techpowerup.com/rss/news',
-  'https://www.tomshardware.com/feeds/tag/gpus',
-  'https://wccftech.com/category/hardware/feed/',
-  'https://www.pcgamer.com/rss/'
-];
-const NEWS_SOURCES = { techpowerup: 'TechPowerUp', tomshardware: "Tom's Hardware", wccftech: 'Wccftech', pcgamer: 'PC Gamer' };
-const GPU_NEWS_PATTERN = /\b(gpus?|graphics|geforce|radeon|rtx|gtx|arc|nvidia|amd|intel|vram|gddr\d?|dlss|fsr|xess|blackwell|rdna|battlemage|ray tracing)\b/i;
-const NEWS_CACHE_KEY = 'gpu-universe-news';
-const NEWS_CACHE_MS = 30 * 60 * 1000;
+// Salen de news.json, en el propio sitio: lo genera cada 3 horas la GitHub Action de publicación
+// (scripts/news.js) a partir de los feeds de TechPowerUp, Tom's Hardware, Wccftech y PC Gamer. El
+// navegador no contacta con ningún servicio externo. Sin conexión, el service worker sirve la última
+// copia guardada y lo indica con la cabecera X-GPU-Universe-Copy: offline.
 const NEWS_COUNT = 6;
+const NEWS_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5" rx=".5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg>';
+let newsState = null; // última carga correcta, para volver a pintarla al cambiar de idioma
 
-// rss2json devuelve fechas "YYYY-MM-DD HH:MM:SS" en UTC, que Safari no sabe interpretar
-function parseNewsDate(dateStr) {
-  const date = new Date(String(dateStr || '').replace(' ', 'T') + 'Z');
-  return isNaN(date) ? new Date(dateStr) : date;
+// Solo enlaces https (lo comprueba también el generador; aquí se vuelve a comprobar al pintar)
+function httpsUrl(url) {
+  try {
+    const parsed = new URL(String(url || ''));
+    return parsed.protocol === 'https:' ? parsed.href : '';
+  } catch (e) {
+    return '';
+  }
 }
 
+function newsDate(value) {
+  const date = typeof value === 'string' ? new Date(value) : null;
+  return date && !isNaN(date) ? date : null;
+}
+
+// «hace 5 minutos», «hace 3 horas», «ayer», «hace 4 días», en el idioma de la web
+function relativeTime(date) {
+  const rtf = new Intl.RelativeTimeFormat(window.currentLang || 'es', { numeric: 'auto' });
+  const minutes = Math.round((Date.now() - date.getTime()) / 60000);
+  if (minutes < 60) return rtf.format(-Math.max(1, minutes), 'minute');
+  const hours = Math.round(minutes / 60);
+  if (hours < 48) return rtf.format(-hours, 'hour');
+  return rtf.format(-Math.round(hours / 24), 'day');
+}
+
+// Fecha de cada noticia: relativa en las últimas 48 horas; si no, día y mes
 function formatNewsDate(date) {
-  if (isNaN(date)) return '';
-  const lang = window.currentLang || 'es';
+  if (!date) return '';
   const hours = (Date.now() - date.getTime()) / 3600000;
-  if (hours >= 0 && hours < 48 && typeof Intl.RelativeTimeFormat === 'function') {
-    const rtf = new Intl.RelativeTimeFormat(lang, { numeric: 'auto' });
-    return hours < 1 ? rtf.format(-Math.max(1, Math.round(hours * 60)), 'minute') : rtf.format(-Math.round(hours), 'hour');
+  if (hours >= 0 && hours < 48) return relativeTime(date);
+  return date.toLocaleDateString(window.currentLocale(), { day: 'numeric', month: 'long' });
+}
+
+async function loadNews() {
+  const res = await fetch(`${window.rootPath()}news.json`, { cache: 'no-cache' });
+  if (!res.ok) throw new Error(`news.json: HTTP ${res.status}`);
+  const data = await res.json();
+  if (!data || typeof data !== 'object' || !Array.isArray(data.items)) throw new Error('news.json: formato no válido');
+  const text = value => (typeof value === 'string' ? value : '');
+  const items = data.items
+    .filter(item => item && typeof item === 'object' && text(item.title).trim() && httpsUrl(item.link))
+    .slice(0, NEWS_COUNT)
+    .map(item => ({ title: text(item.title), link: httpsUrl(item.link), source: text(item.source), date: newsDate(item.date), excerpt: text(item.excerpt) }));
+  return { items, updated: newsDate(data.generatedAt), offline: res.headers.get('X-GPU-Universe-Copy') === 'offline' };
+}
+
+// «Actualizado hace 2 horas»; sin conexión, que es la última copia guardada
+function renderNewsMeta() {
+  const meta = document.getElementById('news-updated');
+  if (!meta) return;
+  const state = newsState;
+  meta.hidden = !(state && state.updated);
+  if (meta.hidden) return;
+  const vars = { time: relativeTime(state.updated) };
+  meta.textContent = state.offline ? window.tr('news.updated_offline', '', vars) : window.tr('news.updated', '', vars);
+  meta.classList.toggle('is-offline', state.offline);
+}
+
+function renderNews(container) {
+  const esc = window.escapeHtml;
+  const { items } = newsState;
+  container.setAttribute('aria-busy', 'false');
+  renderNewsMeta();
+  if (!items.length) {
+    container.innerHTML = window.stateHtml({
+      icon: window.GPUIcons ? window.GPUIcons.chip : '',
+      title: window.tr('news.empty'),
+      hint: window.tr('news.empty_hint'),
+      action: newsRetryButton()
+    });
+    return;
   }
-  return date.toLocaleDateString(lang, { day: 'numeric', month: 'long' });
+  container.innerHTML = items.map(item => `
+        <article class="news-card">
+          <div class="news-img news-img-fallback" aria-hidden="true">${NEWS_ICON}</div>
+          <div class="news-content">
+            <div class="news-date">
+              ${item.date ? `<time datetime="${item.date.toISOString()}">${esc(formatNewsDate(item.date))}</time> · ` : ''}<strong>${esc(item.source)}</strong>
+            </div>
+            <h3><a href="${esc(item.link)}" target="_blank" rel="noopener noreferrer">${esc(item.title)}</a></h3>
+            <p>${esc(item.excerpt)}</p>
+            <a href="${esc(item.link)}" target="_blank" rel="noopener noreferrer" class="news-link" tabindex="-1" aria-hidden="true">${esc(window.tr('catalog.news_read_more', 'Leer más'))} <span>→</span></a>
+          </div>
+        </article>
+      `).join('');
 }
 
-function htmlToText(html) {
-  return (new DOMParser().parseFromString(String(html || ''), 'text/html').body.textContent || '').replace(/\s+/g, ' ').trim();
-}
-
-function safeUrl(url) {
-  return /^https?:\/\//i.test(String(url || '')) ? url : '';
-}
-
-async function fetchFeed(url) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 8000);
-  try {
-    const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`, { signal: controller.signal });
-    const data = await res.json();
-    return data.status === 'ok' ? data.items : [];
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
-async function loadNewsItems() {
-  try {
-    const cached = JSON.parse(sessionStorage.getItem(NEWS_CACHE_KEY) || 'null');
-    if (cached && Date.now() - cached.time < NEWS_CACHE_MS && cached.items.length) return cached.items;
-  } catch (e) { /* sessionStorage no disponible */ }
-
-  // allSettled: si un feed falla, se muestran los demás
-  const results = await Promise.allSettled(NEWS_FEEDS.map(fetchFeed));
-  const seenTitles = new Set();
-  const items = results
-    .flatMap(r => (r.status === 'fulfilled' ? r.value : []))
-    .filter(item => item && item.title && safeUrl(item.link))
-    .filter(item => {
-      const key = item.title.toLowerCase();
-      if (seenTitles.has(key)) return false;
-      seenTitles.add(key);
-      return true;
-    })
-    .sort((a, b) => parseNewsDate(b.pubDate) - parseNewsDate(a.pubDate));
-
-  // Primero las noticias de GPUs; si no hay suficientes, se completa con el resto
-  const gpuNews = items.filter(item => GPU_NEWS_PATTERN.test(`${item.title} ${(item.categories || []).join(' ')}`));
-  const picked = [...gpuNews, ...items.filter(item => !gpuNews.includes(item))].slice(0, NEWS_COUNT).map(item => {
-    let image = item.thumbnail || (item.enclosure && item.enclosure.link) || '';
-    if (!image && item.description) {
-      const imgMatch = item.description.match(/<img[^>]+src="([^">]+)"/);
-      if (imgMatch) image = imgMatch[1];
-    }
-    const hostname = new URL(item.link).hostname;
-    const sourceKey = Object.keys(NEWS_SOURCES).find(k => hostname.includes(k));
-    return {
-      title: htmlToText(item.title),
-      link: item.link,
-      image: safeUrl(image),
-      date: item.pubDate,
-      source: sourceKey ? NEWS_SOURCES[sourceKey] : hostname.replace(/^www\./, ''),
-      summary: htmlToText(item.description).slice(0, 160)
-    };
-  });
-
-  if (picked.length) {
-    try { sessionStorage.setItem(NEWS_CACHE_KEY, JSON.stringify({ time: Date.now(), items: picked })); } catch (e) { /* sin caché */ }
-  }
-  return picked;
+function newsRetryButton() {
+  return `<button type="button" class="btn-load-more" data-news-retry><span aria-hidden="true">↻</span> ${window.escapeHtml(window.tr('catalog.news_retry', 'Reintentar'))}</button>`;
 }
 
 async function initNews() {
   const container = document.getElementById('news-container');
   if (!container) return;
-  const esc = window.escapeHtml;
-
   try {
-    // safeUrl otra vez al pintar: la lista puede venir de la caché de la sesión
-    const items = (await loadNewsItems()).filter(item => item && safeUrl(item.link));
-    if (!items.length) throw new Error('No news items found');
-
-    container.setAttribute('aria-busy', 'false');
-    container.innerHTML = items.map(item => {
-      const date = parseNewsDate(item.date);
-      const summary = String(item.summary || '');
-      const shortSummary = summary.length >= 160 ? summary.replace(/\s+\S*$/, '') + '…' : summary;
-      const imageUrl = safeUrl(item.image);
-      const image = imageUrl
-        ? `<img src="${esc(imageUrl)}" class="news-img" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`
-        : `<div class="news-img news-img-fallback" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5" rx=".5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></div>`;
-      return `
-        <article class="news-card">
-          ${image}
-          <div class="news-content">
-            <div class="news-date">
-              <time datetime="${isNaN(date) ? '' : date.toISOString()}">${esc(formatNewsDate(date))}</time> · <strong>${esc(item.source)}</strong>
-            </div>
-            <h3><a href="${esc(item.link)}" target="_blank" rel="noopener noreferrer">${esc(item.title)}</a></h3>
-            <p>${esc(shortSummary)}</p>
-            <a href="${esc(item.link)}" target="_blank" rel="noopener noreferrer" class="news-link" tabindex="-1" aria-hidden="true">${window.tr('catalog.news_read_more', 'Leer más')} <span>→</span></a>
-          </div>
-        </article>
-      `;
-    }).join('');
-
-    // Si una imagen falla, se sustituye por el marcador genérico
-    container.querySelectorAll('img.news-img').forEach(img => {
-      img.addEventListener('error', () => {
-        const fallback = document.createElement('div');
-        fallback.className = 'news-img news-img-fallback';
-        fallback.setAttribute('aria-hidden', 'true');
-        fallback.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5" rx=".5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg>';
-        img.replaceWith(fallback);
-      }, { once: true });
-    });
+    newsState = await loadNews();
+    renderNews(container);
   } catch (error) {
+    newsState = null;
+    renderNewsMeta();
     console.warn('Error loading news:', error);
-    // Sin conexión se explica que las noticias necesitan internet; si no, que el servicio no responde
+    // Sin conexión (y sin copia guardada) se explica; si no, que no se pudieron leer
     const offline = navigator.onLine === false;
     container.setAttribute('aria-busy', 'false');
     container.innerHTML = window.stateHtml({
@@ -1442,15 +1497,25 @@ async function initNews() {
       icon: window.GPUIcons ? window.GPUIcons[offline ? 'offline' : 'alert'] : '',
       title: window.tr(offline ? 'catalog.news_offline' : 'catalog.news_error', 'No se pudieron cargar las noticias en este momento.'),
       hint: window.tr(offline ? 'catalog.news_offline_hint' : 'catalog.news_error_hint', ''),
-      action: `<button type="button" class="btn-load-more" data-news-retry><span aria-hidden="true">↻</span> ${esc(window.tr('catalog.news_retry', 'Reintentar'))}</button>`
-    });
-    container.querySelector('[data-news-retry]').addEventListener('click', () => {
-      container.innerHTML = newsSkeletonHtml();
-      container.setAttribute('aria-busy', 'true');
-      initNews();
+      action: newsRetryButton()
     });
   }
 }
+
+// Reintentar (estado de error o sin noticias)
+document.addEventListener('click', e => {
+  const container = document.getElementById('news-container');
+  if (!container || !e.target.closest('#news-container [data-news-retry]')) return;
+  container.innerHTML = newsSkeletonHtml();
+  container.setAttribute('aria-busy', 'true');
+  initNews();
+});
+
+// Al cambiar de idioma se vuelven a escribir las fechas y el «Actualizado hace…»
+window.addEventListener('i18n:change', () => {
+  const container = document.getElementById('news-container');
+  if (container && newsState) renderNews(container);
+});
 
 // Marcador de carga de las noticias (el mismo que trae el HTML de partials/news.html)
 function newsSkeletonHtml() {
@@ -1460,7 +1525,7 @@ function newsSkeletonHtml() {
 
 // ===== USO SIN CONEXIÓN =====
 // El service worker (sw.js, en la raíz) guarda la web para poder abrirla sin conexión.
-// Las noticias siguen necesitando red: sin conexión muestran su aviso.
+// También guarda la última copia de news.json: sin conexión se ven esas noticias, con su aviso.
 if ('serviceWorker' in navigator && /^https?:$/.test(window.location.protocol)) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register(`${window.rootPath()}sw.js`).catch(err => console.warn('Service worker:', err));

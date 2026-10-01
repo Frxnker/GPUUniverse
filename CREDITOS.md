@@ -62,9 +62,10 @@ Copias locales en `assets/fonts/`, con la [SIL Open Font License 1.1](https://op
 
 ## Noticias
 
-- Los titulares, resúmenes y enlaces de «Últimas noticias» vienen, en el momento de visitar la
-  web, de los feeds públicos de TechPowerUp, Tom's Hardware, Wccftech y PC Gamer (a través del
-  servicio rss2json).
+- Los titulares y resúmenes de «Últimas noticias» vienen de los feeds públicos de TechPowerUp,
+  Tom's Hardware, Wccftech y PC Gamer. Una GitHub Action los descarga cada 3 horas y guarda en
+  `news.json` el título, el enlace, la fuente, la fecha y un extracto corto (no los artículos ni sus
+  imágenes).
 - Pertenecen a sus autores; la web solo enlaza a la noticia original.
 
 ## Marcas registradas

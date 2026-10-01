@@ -13,8 +13,8 @@ acabe interpretado como HTML o como script (XSS).
 | URL: `?q`, filtros, `?tab`, `?dir` | No | Catálogo de Gaming | El filtro solo se aplica si existe su botón (`CSS.escape`); la búsqueda solo filtra, no se pinta como HTML | ídem |
 | URL: `?play`, `#psu`… | No | Retos y herramientas | Lista cerrada de retos y pestañas | ídem |
 | `localStorage` | **No** | Tema, color, idioma, progreso, listas, «mi GPU» | Validación de cada clave (ver abajo) | ídem |
-| `sessionStorage` (caché de noticias) | No | Noticias | Las URL se vuelven a validar al pintar | ídem |
-| RSS (vía rss2json) | **No** | Noticias | Título y resumen a texto (`htmlToText` + `escapeHtml`); enlaces e imágenes solo `http(s)` (`safeUrl`); las noticias sin enlace válido se descartan | ídem |
+| Feeds RSS/Atom de los medios (los lee la GitHub Action, no el navegador) | **No** | `news.json` | `scripts/news.js`: título y extracto a texto plano (sin etiquetas, scripts ni caracteres de control), con tope de longitud; enlaces solo `https` y sin usuario ni contraseña; nada de imágenes ni artículos completos; `validateNews` comprueba la forma antes de publicar | `tests/news.test.js` |
+| `news.json` (del propio sitio, o su copia sin conexión en la caché del service worker) | No del todo | Noticias | La web lo vuelve a validar al pintar: solo textos, enlaces `https` (`httpsUrl`) y todo con `escapeHtml` | `tests/security.test.js`, `tests/news.test.js` |
 | Lo que escribe el usuario (buscador, selector de GPU) | No | Resultados | Se escapa (`escapeHtml`, `highlightMatch`) | `features.test.js` |
 
 ### `localStorage`: por qué no se confía en él
@@ -68,7 +68,7 @@ GitHub Pages no permite cabeceras HTTP propias:
 
 ```
 default-src 'self'; script-src 'self' 'sha256-…'; style-src 'self' 'unsafe-inline';
-img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://api.rss2json.com;
+img-src 'self' data:; font-src 'self'; connect-src 'self';
 manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'
 ```
 
@@ -78,7 +78,9 @@ manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form
     `npm run shell` lo calcula, así que no hay que tocar la política si cambia el script.
 - **Estilos:** `'unsafe-inline'` hace falta por los atributos `style` (anchos de barras y
   gráficas). Es mucho menos peligroso que permitir scripts en línea.
-- **Imágenes:** `https:` para las miniaturas de las noticias, que vienen de muchos dominios.
+- **Imágenes y datos:** solo del propio sitio. Desde que las noticias salen de `news.json` (Fase B,
+  01/10/2026) ya no hace falta permitir `https://api.rss2json.com` ni imágenes `https:` de los medios;
+  una prueba exige que `connect-src` sea `'self'` y que `img-src` no admita otros dominios.
 - **Límites de una CSP en `<meta>`:**
   - No admite `frame-ancestors`, así que no protege contra que otra web meta la página en un
     `<iframe>` (clickjacking).
@@ -86,17 +88,18 @@ manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form
   - La web no tiene acciones sensibles que se puedan secuestrar así.
 
 Comprobado en Chrome, Firefox y WebKit: 0 violaciones en las 10 páginas, con el visor 3D, las
-noticias con imágenes externas, el detalle de GPU, el buscador y el service worker funcionando.
+noticias, el detalle de GPU, el buscador y el service worker funcionando (de nuevo el 01/10/2026,
+con la política sin otros dominios).
 
 ## Enlaces externos
 
 Todos los `target="_blank"` llevan `rel="noopener noreferrer"`, y hay una prueba que lo exige.
-Las imágenes de las noticias se piden con `referrerpolicy="no-referrer"`.
 
 ## Servicios de terceros
 
-- **rss2json** (noticias):
-  - Recibe qué feeds se piden, nunca datos del usuario.
-  - Si falla o limita las peticiones, la web muestra su estado de error.
+- **Ninguno al visitar la web.** Las noticias las descarga la GitHub Action de publicación
+  directamente de los medios (sin servicios intermedios) y se sirven desde el propio sitio; el
+  navegador del visitante no contacta con nadie más. Hasta el 01/10/2026 se usaba rss2json, que
+  sabía qué visitas había y limitaba las peticiones.
 - No hay analítica, rastreadores ni CDN: fuentes, Three.js, banderas e iconos se sirven desde el
   propio sitio.

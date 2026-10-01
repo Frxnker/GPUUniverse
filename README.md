@@ -30,8 +30,9 @@ y calculadoras. Está en 6 idiomas, funciona sin conexión y no necesita compila
   guarda en el navegador.
 - **Buscador rápido** (Ctrl+K), favoritas, recientes y bandeja de comparación.
 - **Recomendador** en la portada (tres preguntas).
-- **Noticias** de TechPowerUp, Tom's Hardware, Wccftech y PC Gamer. Necesitan conexión; si el
-  servicio falla, la web lo dice y ofrece reintentar.
+- **Noticias** de TechPowerUp, Tom's Hardware, Wccftech y PC Gamer, con «Actualizado hace…». Las
+  recoge cada 3 horas una GitHub Action y se sirven desde el propio sitio (`news.json`): el
+  navegador no contacta con ningún servicio externo y, sin conexión, se ve la última copia guardada.
 - **Idiomas**: español, inglés, francés, alemán, italiano y ruso, con plurales rusos correctos.
 - **Aspecto**: tema claro y oscuro con estética de placa de circuito («Silicio / PCB»).
 - **Sin conexión**: se puede instalar como app y, tras la primera visita, funciona sin red.
@@ -50,7 +51,8 @@ y calculadoras. Está en 6 idiomas, funciona sin conexión y no necesita compila
 
 - HTML, CSS y JavaScript sin frameworks ni compilación: lo que hay en el repositorio es lo que se
   publica.
-- Nada se carga de otros dominios salvo las noticias:
+- Nada se carga de otros dominios, tampoco las noticias:
+  - noticias en `news.json`, del mismo origen (las genera `scripts/news.js`);
   - fuentes locales (Exo 2, IBM Plex Sans y JetBrains Mono);
   - Three.js 0.186 local para el visor 3D;
   - banderas e iconos propios.
@@ -76,7 +78,8 @@ y calculadoras. Está en 6 idiomas, funciona sin conexión y no necesita compila
 ├── vendor/three/               Three.js (copia local)
 ├── sw.js, manifest.webmanifest Uso sin conexión e instalación
 ├── sitemap.xml, robots.txt     Buscadores
-├── scripts/                    serve.js (servidor local) y shell.js (bloques comunes)
+├── scripts/                    serve.js (servidor local), shell.js (bloques comunes),
+│                               news.js (noticias) y site.js (lo que se publica)
 ├── tests/                      Pruebas automáticas
 └── docs/                       Registro de progreso y auditoría de seguridad
 ```
@@ -91,10 +94,12 @@ git clone https://github.com/Frxnker/GPUUniverse.git
 cd GPUUniverse
 npm install        # solo instala jsdom, que usan las pruebas
 npm start          # http://localhost:8080/  (también responde en /GPUUniverse/, como GitHub Pages)
+npm run news       # opcional: descarga los feeds y genera news.json (no se guarda en git)
 ```
 
 - Ábrela a través del servidor, no con doble clic en `index.html`: el service worker y las
   noticias necesitan `http://`.
+- Sin `npm run news`, la sección de noticias muestra su aviso de error con el botón de reintentar.
 - El servidor local distingue mayúsculas y minúsculas igual que GitHub Pages.
 
 ## Pruebas
@@ -113,11 +118,15 @@ Las pruebas (jsdom con el test runner de Node) cubren:
 - los flujos principales (comparar, favoritos, Ctrl+K, herramientas y retos);
 - la accesibilidad (encabezados, teclado, etiquetas);
 - los metadatos y el uso sin conexión;
+- las noticias: el generador con feeds de ejemplo (válidos, rotos, con HTML hostil y sin fechas) y
+  su sección en la web (estados, idiomas, copia sin conexión);
+- lo que se publica (ni pruebas, ni scripts, ni documentación);
+- que un efecto decorativo que falla (o una ventana de 0 px) no rompa la página;
 - la seguridad (entradas hostiles, CSP);
 - que no haya CSS muerto;
 - las mayúsculas en las rutas.
 
-GitHub Actions las ejecuta en cada push y pull request.
+GitHub Actions las ejecuta en cada push y pull request, y antes de cada publicación.
 
 ## Cómo cambiar cosas
 
@@ -132,13 +141,23 @@ GitHub Actions las ejecuta en cada push y pull request.
   deja en `null` (se muestra como pendiente).
 - **Estilos:** `css/style.css` está en capas y el orden importa (ver su índice).
 - **Service worker:** si cambia la lista de archivos que guarda, sube `VERSION` en `sw.js`.
+- **Noticias:** los feeds y el filtro de GPUs están en `scripts/news.js`; la forma de `news.json`
+  la comprueba `validateNews` (y las pruebas).
 - **Progreso guardado:** si cambia la forma del estado, sube `VERSION` en `js/progress.js` y añade
   la migración.
 
 ## Publicación
 
-- GitHub Pages publica la rama `main` tal cual.
-- `_config.yml` evita publicar lo que no es de la web (`partials/`, `tests/`, `scripts/`, `docs/`).
+- La publica la GitHub Action «Noticias y publicación» (`.github/workflows/noticias.yml`): cada 3
+  horas, en cada push a `main` y a mano desde la pestaña Actions.
+  - Genera `news.json`, pasa `npm run shell -- --check` y `npm test`, monta el sitio con
+    `scripts/site.js` y lo despliega en GitHub Pages. No hace commits.
+  - Solo publica la web y su licencia: nada de `partials/`, `tests/`, `scripts/`, `docs/`,
+    `package*.json`, `README.md` ni `CREDITOS.md`.
+  - Si fallan todos los feeds, se conserva el `news.json` publicado; nunca se publica vacío.
+  - Requisito en GitHub: Settings → Pages → Source: «GitHub Actions».
+- `_config.yml` solo cuenta si se vuelve a publicar desde la rama; una prueba comprueba que coincide
+  con lo que publica la acción.
 - La URL pública está en `"homepage"` de `package.json`: de ahí salen el `canonical`, la sitemap y
   la ruta de la 404.
 

@@ -111,12 +111,15 @@ test('las noticias sin red muestran error y botón de reintento, nunca noticias 
   }
 });
 
-test('las noticias muestran solo lo que devuelve el servicio', async () => {
-  const feed = {
-    status: 'ok',
-    items: [{ title: 'NVIDIA anuncia una GPU', link: 'https://www.techpowerup.com/1', pubDate: '2026-09-28 10:00:00', description: 'Texto', categories: ['GPU'] }]
+// Las noticias salen de news.json (Fase B; antes, de rss2json): se pinta solo lo que trae el archivo
+test('las noticias muestran solo lo que trae news.json', async () => {
+  const data = {
+    format: 1,
+    generatedAt: '2026-09-28T11:00:00.000Z',
+    failedSources: [],
+    items: [{ title: 'NVIDIA anuncia una GPU', link: 'https://www.techpowerup.com/1', source: 'TechPowerUp', date: '2026-09-28T10:00:00.000Z', excerpt: 'Texto' }]
   };
-  const fetchImpl = () => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(feed) });
+  const fetchImpl = () => Promise.resolve({ ok: true, status: 200, headers: { get: () => null }, json: () => Promise.resolve(data) });
   const { document, close } = await loadPage('index.html', { lang: 'es', fetchImpl, wait: 200 });
   const titles = [...document.querySelectorAll('#news-container .news-card h3')].map(h => h.textContent.trim());
   close();

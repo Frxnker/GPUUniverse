@@ -179,6 +179,8 @@ tres páginas.
     JS) y la web muestra su estado de error.
   - Propuesta para las fases siguientes: guardar la caché en `localStorage` en lugar de
     `sessionStorage`, para reducir peticiones entre pestañas y visitas.
+  - **Resuelto en la Fase B de la segunda tanda (01/10/2026):** la web ya no usa rss2json; las
+    noticias salen de un `news.json` del propio sitio.
 
 ---
 
@@ -523,7 +525,7 @@ Detalle completo en [`docs/SEGURIDAD.md`](SEGURIDAD.md).
 
 ---
 
-## Fase extra — Publicación y legal ✅ (falta comprobarlo en la web publicada tras el push)
+## Fase extra — Publicación y legal ✅ (comprobada en la web publicada el 01/10/2026)
 
 **Qué cambia**
 - **GitHub Actions** (`.github/workflows/pruebas.yml`), en cada push y pull request:
@@ -563,10 +565,11 @@ Detalle completo en [`docs/SEGURIDAD.md`](SEGURIDAD.md).
 - GitHub Pages distingue mayúsculas: `pages/Gaming.html` da 404, como anticipaba la prueba.
 - `sw.js`, `manifest.webmanifest`, `sitemap.xml` y `robots.txt` se sirven con su tipo.
 - Hay HSTS.
-- **Tras el próximo push** hay que comprobar:
-  - que `/partials/nav.html` da 404 (por `_config.yml`);
-  - que la CSP no bloquea nada en producción;
-  - que GitHub Actions pasa en verde.
+- **Comprobado tras el push** (versión `c87b83c`, 01/10/2026) ✅:
+  - `/partials/nav.html` da 404, igual que `tests/`, `docs/`, `package.json` y `README.md`
+    (`_config.yml`); `LICENSE` sí se sirve;
+  - la CSP no bloquea nada en las 9 páginas y la escena 3D de Aprender funciona;
+  - GitHub Actions («Pruebas») pasa en verde en `c87b83c`.
 
 **Cómo se ha comprobado**
 - `npm test`: 129 pruebas en ~21 s. Hay 4 nuevas de rutas.
@@ -667,10 +670,8 @@ Detalle completo en [`docs/SEGURIDAD.md`](SEGURIDAD.md).
   a tu criterio.
 
 **Queda bloqueado o sin verificar**
-- Comprobaciones de la web publicada tras el próximo push:
-  - que `/partials/` deja de publicarse;
-  - la CSP en producción;
-  - el primer run de GitHub Actions.
+- ~~Comprobaciones de la web publicada tras el próximo push~~ ✅ hechas el 01/10/2026: `/partials/`
+  da 404, la CSP no bloquea nada en producción y el primer run de GitHub Actions pasó en verde.
 - Buenas prácticas en 96 en las páginas con noticias mientras rss2json limite las peticiones
   (propuesta 1).
 - 48 GPUs de escritorio y 2 de portátil sin índice gaming (propuesta 5).
@@ -681,6 +682,236 @@ Detalle completo en [`docs/SEGURIDAD.md`](SEGURIDAD.md).
 
 ## Decisiones pendientes
 
-1. Qué propuestas aprobar (ver arriba).
-2. Hacer push de los commits de seguridad, publicación y documentación para comprobar la web
-   publicada y el primer run de GitHub Actions.
+1. ~~Qué propuestas aprobar~~: el 01/10/2026 se aprueban la 1 (noticias propias) y la 3 (exportar e
+   importar); la 2 y la 4 quedan fuera de alcance y la 5 espera a que se apruebe una fuente. Ver
+   «Segunda tanda».
+2. ~~Hacer push para comprobar la web publicada~~ ✅ hecho (ver «Publicación y legal»).
+
+---
+
+# Segunda tanda (desde el 01/10/2026)
+
+Punto de partida: `c87b83c`, publicado; `npm test` 129/129 en ~34 s; GitHub Actions en verde. El
+repositorio no había cambiado desde ese commit.
+
+| Fase | Estado | Detalle |
+|---|---|---|
+| A — La web se rompía con 0 px de ancho | ✅ | Fondo sin dibujar hasta tener tamaño; efectos decorativos aislados; utilidades al principio de `app.js`; «Revisión de datos» fija. |
+| B — Noticias propias, sin rss2json | 🟡 | Hecho y comprobado en local. Falta: que cambies la fuente de Pages, el push y comprobar la acción y la web publicada. |
+| C — Exportar e importar los datos | ⬜ | — |
+
+---
+
+## Fase A — Fallo: la web entera se rompía si cargaba con 0 px de ancho ✅
+
+**El fallo** (reproducido en producción, `c87b83c`):
+- `initCircuit` medía el fondo con `window.innerWidth`. Con 0 px (iframe oculto, navegador integrado
+  en una app, panel que se abre animado), el lienzo auxiliar medía 0 y `ctx.drawImage` lanzaba
+  `InvalidStateError`.
+- Ese error cortaba `app.js` antes de definir `window.tr`, y `features.js` fallaba en cadena: sin
+  textos dinámicos, catálogo ni funciones hasta recargar.
+- En la web publicada, dentro de un iframe de 0×0, 9 de las 10 páginas se quedaban sin `window.tr` y
+  el chip de nivel salía en español («Nv. 1») con la web en alemán. Solo se salvaba Aprender, que no
+  tiene fondo de circuitos.
+- Las pruebas no lo veían porque jsdom no tiene canvas y el lienzo simulado aceptaba cualquier cosa.
+
+**Qué cambia** (`js/app.js`)
+- **Fondo de circuitos:**
+  - con ancho o alto 0 no se dibuja ni se anima;
+  - aparece en cuanto la ventana tiene tamaño: `resize` y un `ResizeObserver` sobre el propio lienzo,
+    que cubre también un iframe o un panel que crece sin que la ventana avise;
+  - se conservan las pausas: pestaña oculta, lienzo fuera de pantalla y movimiento reducido (con
+    movimiento reducido queda un único fotograma fijo);
+  - un cambio de tamaño con el mismo ancho no pospone un redibujado que ya está en espera. Sin esto,
+    en las páginas pesadas el fondo tardaba hasta 1,2 s en aparecer al agrandar el iframe.
+- **Efectos decorativos aislados** (`runEffect`, `effectObserver`):
+  - fondo de circuitos, barra al desplazar, contadores de la portada y animaciones de aparición
+    (secciones, tarjetas y barras de rendimiento);
+  - si uno falla, se desactiva solo ese efecto y el error queda en la consola como
+    «Efecto desactivado (nombre): …»;
+  - el fondo también se protege en cada fotograma y en cada evento: si falla, se oculta el lienzo y
+    no se vuelve a intentar;
+  - si una animación de aparición no puede crear su observador, el contenido se muestra directamente,
+    para que nunca quede oculto.
+- **Utilidades al principio de `app.js`**: `tr`, `escapeHtml`, `stateHtml`, `formatPrice`,
+  `formatDate`, `rootPath`, `localText`, `priceInfo`… se definen antes que cualquier efecto. Ninguna
+  toca el DOM al cargar, así que no pueden fallar.
+- **«Revisión de datos» de la portada**:
+  - el año se escribe fijo, sin animarse desde 0 (en las capturas salía «1199»);
+  - las otras tres cifras siguen subiendo desde 0, ahora con el formato del idioma de la web (antes
+    usaban el del navegador);
+  - con «reducir movimiento» salen ya con su valor final.
+- `sw.js`: `VERSION` pasa a `v2`, porque cambia un archivo precacheado.
+
+**Cómo se ha comprobado**
+- **Prueba nueva `tests/resilience.test.js`** (14 casos). **Antes del arreglo fallaban 13** (la de
+  Aprender pasaba, porque no tiene fondo):
+  - cada una de las 10 páginas con la ventana a 0 × 0 px y en alemán: existen `window.tr`,
+    `escapeHtml`, `formatPrice`, `GPUStore` y `GPUProgress`, el chip de nivel sale traducido y no hay
+    errores;
+  - al pasar de 0 px a 1280 × 800, el fondo se dibuja y se anima;
+  - se conservan las pausas por pestaña oculta y por movimiento reducido;
+  - con un fallo simulado del lienzo, la página funciona entera (catálogo incluido) y queda un único
+    error en la consola;
+  - la cifra «Revisión de datos» no cambia mientras las demás se animan, y con movimiento reducido
+    todas salen con su valor final.
+- **Cambio en el entorno de pruebas** (`tests/helpers/env.js`). No cambia lo que comprueba ninguna
+  prueba existente:
+  - el `drawImage` simulado lanza el mismo `InvalidStateError` que un navegador real cuando el origen
+    mide 0 px, y cuenta los dibujos que sí se hacen;
+  - opción `viewport` para fijar el tamaño de la ventana y `__setViewport` para cambiarlo;
+  - `__observers` permite simular que un elemento entra en pantalla.
+- `npm test`: **143/143 en ~21 s**. `node scripts/shell.js --check` correcto.
+- **Navegador real, iframe de 0×0**: Chrome, Firefox 155 y WebKit 26.6 × 10 páginas, en alemán. 30/30
+  correctas:
+  - dentro del iframe, `window.tr`, `GPUStore` y `GPUProgress` existen, el chip dice «Lvl. 1» y no
+    hay errores de consola;
+  - al agrandarlo a 1280×800, el fondo de circuitos se dibuja (20.000-40.000 píxeles pintados) en las
+    9 páginas que lo tienen.
+  - La misma comprobación contra la web publicada (`c87b83c`) da 9 fallos de 10.
+- **Revisión completa**: 360 vistas (Chrome, Firefox y WebKit × 10 páginas × escritorio y móvil × claro
+  y oscuro × es, ru y de):
+  - **0 errores de consola** y 0 páginas con scroll horizontal;
+  - solo aparecen el aviso de la herramienta por el service worker bloqueado y los dos avisos de
+    Firefox de siempre (filtrado de sombras WebGL en Aprender y `preload` ignorado en Gaming móvil);
+  - las capturas muestran el año «2026» fijo en la portada y el fondo de circuitos normal.
+
+**Pendiente**
+- Nada de esta fase. Commit y push, cuando los confirmes.
+
+---
+
+## Fase B — Noticias propias, sin rss2json 🟡 (hecha en local; falta publicarla)
+
+**Decisiones (01/10/2026):** publicar con GitHub Actions (artefacto de Pages, sin commits automáticos)
+y noticias sin imágenes de los medios.
+
+**Qué cambia**
+- **`scripts/news.js`** (`npm run news`), sin dependencias:
+  - descarga directamente los 4 feeds (TechPowerUp, Tom's Hardware, Wccftech y PC Gamer), con 20 s
+    de tiempo máximo y 12 MB de tope por feed (PC Gamer manda el artículo entero, ~5 MB);
+  - lector propio de RSS 2.0, RDF y Atom: aparta los bloques CDATA antes de buscar etiquetas, porque
+    dentro va HTML con sus propias `<link>` y `<title>`;
+  - mismo criterio que tenía la web: más recientes primero, primero las que encajan con
+    `GPU_NEWS_PATTERN` y, si no llegan a 6, se completa con el resto; sin títulos ni enlaces
+    repetidos;
+  - por noticia: `title`, `link` (solo `https`, sin usuario ni contraseña), `source`, `date` (ISO, o
+    `null` si falta, es ilegible o está en el futuro) y `excerpt` (texto plano de 160 caracteres como
+    máximo, cortado en una palabra);
+  - globales: `format`, `generatedAt` y `failedSources` (fuente y motivo);
+  - un feed que falla o cambia de formato se anota en el log (como aviso visible en el resumen del
+    run) y se sigue con el resto;
+  - si fallan todos, se conserva el `news.json` publicado tal cual, con su fecha real; si no se puede
+    leer, el que haya en local; si no hay ninguno válido, termina con error y no escribe nada;
+  - `news.json` no se guarda en git (`.gitignore`).
+- **`scripts/site.js`**: monta `_site/` con una lista cerrada (páginas, `css/`, `js/`, `assets/`,
+  `vendor/`, `sw.js`, manifest, sitemap, `robots.txt`, `LICENSE` y `news.json`). Falla si falta algo.
+- **`.github/workflows/noticias.yml`** («Noticias y publicación»):
+  - se ejecuta cada 3 horas (en el minuto 17), en cada push a `main` y a mano;
+  - genera las noticias, pasa `shell --check` y `npm test`, monta el sitio y lo publica con
+    `actions/upload-pages-artifact@v5` y `actions/deploy-pages@v5` (aprobadas el 01/10/2026);
+  - permisos mínimos: `contents: read` y, solo en el paso de publicar, `pages: write` e
+    `id-token: write`. Un despliegue cada vez;
+  - «Pruebas» sigue igual (cada push y pull request).
+- **La web** (`js/app.js`, `partials/news.html`, `css/style.css`):
+  - `initNews` lee `news.json` del propio sitio y vuelve a validar cada noticia al pintarla (textos,
+    enlaces `https`, todo escapado);
+  - fuera rss2json, la caché en `sessionStorage` y las miniaturas de terceros. Las tarjetas llevan la
+    franja con el chip, ahora de 96 px en vez de 180 (el esqueleto de carga mide lo mismo);
+  - «Actualizado hace X» con `Intl.RelativeTimeFormat` en los 6 idiomas. Sin conexión: «Sin conexión:
+    última copia guardada, actualizada hace X», en cobre;
+  - estados de carga, sin noticias (nuevo) y error, con reintento;
+  - al cambiar de idioma se reescriben las fechas y el «Actualizado hace…» (antes las fechas se
+    quedaban en el idioma anterior hasta recargar).
+- **CSP**: `connect-src 'self'` e `img-src 'self' data:`; ya no se permite ningún otro dominio.
+- **Service worker** (`sw.js`, `VERSION` `v3`):
+  - `news.json`: primero la red y, sin conexión, la última copia, marcada con la cabecera
+    `X-GPU-Universe-Copy: offline` para que la página lo diga;
+  - va en una caché aparte (`gpu-universe-news`) que no se borra al subir `VERSION`;
+  - se guarda ya al instalarse, porque en la primera visita la página pide las noticias antes de que
+    el service worker la controle.
+- **Textos**: 4 claves nuevas por idioma (`news.updated`, `news.updated_offline`, `news.empty`,
+  `news.empty_hint`) y los textos de error adaptados («No se pudo leer el archivo de noticias»), en
+  los 6 idiomas.
+- `_config.yml` queda solo por si se vuelve a publicar desde la rama. README, `docs/SEGURIDAD.md` y
+  `CREDITOS.md` actualizados.
+
+**Pruebas que cambian, y por qué**
+- Tres pruebas daban a la web respuestas con el formato de rss2json, que ya no existe. Se adaptan a
+  `news.json` y siguen comprobando lo mismo:
+  - `pages.test.js`: «las noticias muestran solo lo que devuelve el servicio» pasa a «… lo que trae
+    news.json»;
+  - `security.test.js`: «RSS hostil» pasa a «news.json hostil» (texto escapado, solo enlaces `https`;
+    ahora también se descartan los `http:`);
+  - `security.test.js`: «caché de noticias manipulada en sessionStorage» pasa a «copia sin conexión de
+    news.json manipulada». Esa caché ya no existe; su equivalente es la copia del service worker.
+- La prueba de la CSP exige además `connect-src 'self'` y que `img-src` no admita otros dominios.
+
+**Cómo se ha comprobado**
+- **`tests/news.test.js`** (14 pruebas), con feeds de ejemplo en `tests/fixtures/news/` y la descarga
+  simulada:
+  - RSS y Atom válidos;
+  - rotos (una página HTML y un XML cortado);
+  - HTML hostil: scripts, `onerror`, HTML escapado dos veces, enlaces `javascript:`, `http:`,
+    `data:` y con contraseña, caracteres de control y textos enormes;
+  - sin fechas;
+  - selección y duplicados;
+  - forma del archivo (`validateNews`);
+  - un feed caído o con otro formato: se anota y se sigue;
+  - todos caídos: se conserva la copia publicada, o la local; sin ninguna, error y nada escrito;
+  - el `news.json` generado cumple el formato (en la acción, el recién generado);
+  - la web: lee `news.json` del mismo origen en las 4 páginas, sin imágenes ni peticiones externas;
+    «Actualizado hace…» y la copia sin conexión en los 6 idiomas; cambio de idioma; estados vacío y de
+    error con reintento; archivos rotos o con tipos erróneos.
+- **`tests/site.test.js`** (5 pruebas):
+  - el artefacto lleva lo necesario y nada del desarrollo;
+  - coincide exactamente con lo que GitHub Pages servía desde la rama (archivos de git menos
+    `_config.yml`). Comprobado que falla si se quita un archivo de la lista;
+  - incluye todo lo que precachea el service worker;
+  - sin `news.json` no se monta.
+- `npm test`: **162/162 en ~21 s**. `shell --check` correcto.
+- **Pasos del workflow simulados en local**, en orden: noticias reales (267 leídas, 6 elegidas),
+  `shell --check`, `npm test` (incluida la validación del `news.json` real) y montaje de `_site`
+  (90 archivos, 3,7 MB).
+- **CSP nueva en navegador real** (Chrome, Firefox y WebKit × 10 páginas): 30/30 sin violaciones ni
+  errores, con el visor 3D, el detalle de GPU y el buscador funcionando.
+- **Sin conexión con el service worker real** (primera visita con red y servidor apagado; Chrome,
+  Firefox y WebKit × 4 páginas con noticias):
+  - las 12 muestran las 6 noticias con «Offline: zuletzt gespeicherte Kopie, aktualisiert vor …»;
+  - limitación ya existente, ajena a esta fase: tras una sola visita, la imagen grande de la portada y
+    la de Gaming no están guardadas y su carga falla sin conexión. Se guardan a partir de la segunda
+    visita;
+  - en Windows, con el servidor local apagado, Firefox y WebKit tardan ~2 s en dar por fallida cada
+    conexión, así que esa simulación tarda 6-9 s por página. Con una desconexión real el fallo es
+    inmediato.
+- **axe-core** en las 4 páginas con noticias: 72 vistas (con red, sin conexión, sin noticias y error;
+  claro y oscuro; escritorio y móvil; es y de), **0 infracciones**, también con el texto en cobre.
+- **Lighthouse móvil** (mediana de 3 pasadas, servidor local):
+
+  | Página | Antes: Rend. / Acces. / BP / SEO | Después: Rend. / Acces. / BP / SEO | Peso antes → después |
+  |---|---|---|---|
+  | Portada | 95 / 100 / 100 / 100 | 95 / 100 / **100** / 100 | 2.037 → **330 KiB** |
+  | Gaming | 98 / 100 / 100 / 100 | 98 / 100 / **100** / 100 | 390 → 332 KiB |
+  | Servidor | 98 / 100 / 100 / 100 | 98 / 100 / **100** / 100 | 384 → 326 KiB |
+  | Workstation | 98 / 100 / 100 / 100 | 98 / 100 / **100** / 100 | 385 → 326 KiB |
+
+  - **Antes**: hoy rss2json respondía (200 en sus 48 peticiones) y Buenas prácticas salía 100. El
+    30/09, cuando limitaba (429), bajaba a 96. La nota dependía del estado de un tercero.
+  - **Después**: 100 en las 12 pasadas, con 0 peticiones a otros dominios (antes, 4 a rss2json en cada
+    página y, en la portada, imágenes de 3 dominios de los medios).
+- **Revisión completa**: 360 vistas (Chrome, Firefox y WebKit × 10 páginas × escritorio y móvil × claro y oscuro
+  × es, ru y de) con el `news.json` real: **0 errores de consola** y 0 páginas con scroll horizontal; solo
+  los avisos conocidos (service worker bloqueado por la herramienta y los dos de Firefox). La sección de
+  noticias, revisada aparte en Chrome, WebKit y Firefox (es, de, ru; claro y oscuro; escritorio y móvil).
+
+**Pendiente** (necesita tu acción)
+1. Cambiar en GitHub: Settings → Pages → Source: «GitHub Actions» (pasos exactos en el informe).
+2. Commit y push, cuando los confirmes.
+3. Después: comprobar el run de «Noticias y publicación» en verde, que `news.json` se publica y que las
+   noticias se ven en la web real (también en un iframe de 0×0, por la Fase A).
+
+**Riesgos**
+- GitHub desactiva las tareas programadas de un repositorio público tras 60 días sin actividad. Si
+  pasa, las noticias dejan de actualizarse: la web seguiría mostrando «Actualizado hace X días», que
+  es honesto, y GitHub avisa por correo para reactivarlas.
+- Las ejecuciones programadas pueden retrasarse en horas de mucha carga de GitHub.

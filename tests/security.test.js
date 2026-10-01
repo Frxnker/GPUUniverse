@@ -62,40 +62,44 @@ test('localStorage hostil (listas, mi GPU, progreso, idioma, tema y color) no in
   }
 });
 
-test('RSS hostil: el texto se muestra como texto y los enlaces javascript: se descartan', async () => {
-  const feed = {
-    status: 'ok',
-    items: [
-      { title: `GPU ${XSS}`, link: 'https://www.techpowerup.com/1', pubDate: '2026-09-28 10:00:00', description: `<script>window.__xss=1</script>${XSS} texto`, thumbnail: 'javascript:window.__xss=1', categories: ['GPU'] },
-      { title: 'NVIDIA con enlace malo', link: 'javascript:window.__xss=1', pubDate: '2026-09-28 11:00:00', description: 'x', categories: ['GPU'] },
-      { title: 'AMD con imagen mala', link: 'https://www.tomshardware.com/2', pubDate: '2026-09-28 12:00:00', description: 'x', enclosure: { link: 'data:text/html,<script>1</script>' }, categories: ['GPU'] }
-    ]
-  };
-  const fetchImpl = () => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(feed) });
-  const { document, window, close } = await loadPage('index.html', { lang: 'es', fetchImpl, wait: 200 });
+// Las noticias salen de news.json (Fase B; antes, de rss2json). El generador ya lo limpia (tests/news.test.js),
+// pero la web no se fía: un news.json manipulado se pinta como texto y solo con enlaces https
+const hostileNews = {
+  format: 1,
+  generatedAt: '2026-09-28T13:00:00.000Z',
+  failedSources: [{ source: XSS, reason: XSS }],
+  items: [
+    { title: `GPU ${XSS}`, link: 'https://www.techpowerup.com/1', source: XSS, date: XSS, excerpt: `<script>window.__xss=1</script>${XSS} texto`, image: 'javascript:window.__xss=1' },
+    { title: 'NVIDIA con enlace malo', link: 'javascript:window.__xss=1', source: 'X', date: '2026-09-28T11:00:00.000Z', excerpt: 'x' },
+    { title: 'AMD con enlace http', link: 'http://www.tomshardware.com/2', source: 'X', date: '2026-09-28T11:00:00.000Z', excerpt: 'x' },
+    { title: 'Intel con enlace data:', link: 'data:text/html,<script>1</script>', source: 'X', date: '2026-09-28T11:00:00.000Z', excerpt: 'x' }
+  ]
+};
+const newsResponse = (data, offline = false) => () => Promise.resolve({ ok: true, status: 200, headers: { get: name => (offline && /x-gpu-universe-copy/i.test(name) ? 'offline' : null) }, json: () => Promise.resolve(JSON.parse(JSON.stringify(data))) });
+
+test('news.json hostil: el texto se muestra como texto y solo quedan enlaces https', async () => {
+  const { document, window, close } = await loadPage('index.html', { lang: 'es', fetchImpl: newsResponse(hostileNews), wait: 200 });
   const found = injected(document, window);
   const titles = [...document.querySelectorAll('#news-container .news-card h3')].map(h => h.textContent.trim());
   const links = [...document.querySelectorAll('#news-container a')].map(a => a.getAttribute('href'));
   const imgs = [...document.querySelectorAll('#news-container img')].map(i => i.getAttribute('src'));
   close();
   assert.deepEqual(found, CLEAN);
-  // htmlToText se queda solo con el texto: la etiqueta del título hostil desaparece
-  assert.ok(titles.includes('GPU'), titles.join(' | '));
-  assert.ok(!titles.includes('NVIDIA con enlace malo'), 'la noticia con enlace javascript: se descarta');
-  assert.ok(links.every(h => /^https:\/\//.test(h)), links.join(', '));
+  // El HTML del título se ve tal cual, como texto (escapado), sin crear elementos
+  assert.deepEqual(titles, [`GPU ${XSS}`]);
+  assert.ok(links.length > 0 && links.every(h => /^https:\/\//.test(h)), links.join(', '));
   assert.deepEqual(imgs, []);
 });
 
-test('caché de noticias manipulada en sessionStorage: se vuelve a validar al pintar', async () => {
-  const items = [{ title: 'Noticia', link: 'javascript:window.__xss=1', image: 'javascript:1', date: '2026-09-28 10:00:00', source: XSS, summary: XSS },
-    { title: 'Buena', link: 'https://www.pcgamer.com/1', image: 'javascript:1', date: '2026-09-28 10:00:00', source: XSS, summary: XSS }];
-  const beforeScripts = window => window.sessionStorage.setItem('gpu-universe-news', JSON.stringify({ time: Date.now(), items }));
-  const { document, window, close } = await loadPage('index.html', { lang: 'es', beforeScripts, wait: 200 });
+test('copia sin conexión de news.json manipulada (caché del service worker): se vuelve a validar al pintar', async () => {
+  const { document, window, close } = await loadPage('index.html', { lang: 'es', fetchImpl: newsResponse(hostileNews, true), wait: 200 });
   const found = injected(document, window);
   const titles = [...document.querySelectorAll('#news-container .news-card h3')].map(h => h.textContent.trim());
+  const offline = document.getElementById('news-updated').classList.contains('is-offline');
   close();
   assert.deepEqual(found, CLEAN);
-  assert.deepEqual(titles, ['Buena']);
+  assert.deepEqual(titles, [`GPU ${XSS}`]);
+  assert.equal(offline, true);
 });
 
 test('estado de progreso: versión, migración y saneado de lo guardado', async () => {
@@ -144,6 +148,9 @@ test('CSP en todas las páginas: sin scripts en línea salvo el de pre-pintado (
     if (!directives['script-src'] || directives['script-src'].some(v => /unsafe-(inline|eval)/.test(v))) bad.push(`${page}: script-src inseguro`);
     if (!(directives['object-src'] || []).includes("'none'")) bad.push(`${page}: falta object-src 'none'`);
     if (!(directives['base-uri'] || []).includes("'self'")) bad.push(`${page}: falta base-uri 'self'`);
+    // Fase B: las noticias son del propio sitio, así que ni datos ni imágenes de otros dominios
+    if ((directives['connect-src'] || []).join(' ') !== "'self'") bad.push(`${page}: connect-src permite otros dominios`);
+    if ((directives['img-src'] || []).some(v => /^https?:/.test(v))) bad.push(`${page}: img-src permite imágenes de otros dominios`);
     // La CSP va antes que cualquier script o recurso
     if (head.indexOf('Content-Security-Policy') > head.search(/<script|<link rel="(?:stylesheet|preload)"/)) bad.push(`${page}: la CSP llega tarde`);
     // Cada script en línea tiene su hash en la política
