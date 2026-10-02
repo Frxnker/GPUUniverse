@@ -2440,6 +2440,8 @@ body,
     right: 0;
     width: 100%;
     height: 100vh;
+    /* Altura visible: en el móvil 100vh incluye lo que tapa la barra del navegador */
+    height: 100dvh;
     pointer-events: none;
     z-index: 1050;
     overflow: hidden;
@@ -2466,6 +2468,10 @@ body,
     margin: 0;
     border-left: 1px solid rgba(255, 255, 255, 0.1);
     pointer-events: auto;
+    /* Si las opciones no caben (móvil bajo o en horizontal) el panel se desplaza solo y, al llegar
+       al final, el gesto no pasa a la página */
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   [data-theme="light"] .nav-links {
@@ -2628,7 +2634,9 @@ body,
     gap: 0.5rem;
   }
 
-  body.menu-open {
+  /* El fondo se bloquea en <html>: es quien desplaza la página (con su overflow-x: clip, el overflow
+     de body no llega a la ventana). Ver también keep-scrollbar-gap en «Capas propias» */
+  html:has(> body.menu-open) {
     overflow: hidden;
   }
 
@@ -3908,7 +3916,8 @@ body,
 }
 
 /* ===== MODAL DE DETALLE ===== */
-body.modal-open {
+/* Fondo bloqueado en <html>, como con el menú móvil */
+html:has(> body.modal-open) {
   overflow: hidden;
 }
 
@@ -7386,8 +7395,15 @@ body.has-tray .toast-stack {
 }
 
 /* ---------- Capas propias: fondo y bloqueo del scroll ---------- */
-body.layer-open {
+/* Fondo bloqueado en <html>, como con el menú móvil */
+html:has(> body.layer-open) {
   overflow: hidden;
+}
+
+/* Con el fondo bloqueado se guarda el hueco de la barra y en escritorio nada se mueve al ocultarla.
+   app.js solo pone la clase si la página se desplazaba: en una sin barra (learn.html) no añade hueco */
+html.keep-scrollbar-gap {
+  scrollbar-gutter: stable;
 }
 
 .drawer-backdrop,

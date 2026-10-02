@@ -448,6 +448,19 @@ runEffect('barra al desplazar', () => {
   });
 });
 
+// ===== FONDO BLOQUEADO (MENÚ MÓVIL, DETALLE DE GPU, CAPAS) =====
+// El CSS bloquea el scroll en <html> mientras body tiene menu-open, modal-open o layer-open. Si la
+// página se desplazaba, keep-scrollbar-gap guarda el hueco de la barra que desaparece
+(function keepScrollbarGap() {
+  const root = document.documentElement;
+  const locks = ['menu-open', 'modal-open', 'layer-open'];
+  new MutationObserver(() => {
+    const locked = locks.some(c => document.body.classList.contains(c));
+    // scrollHeight sigue midiendo el contenido aunque <html> ya tenga overflow: hidden
+    root.classList.toggle('keep-scrollbar-gap', locked && root.scrollHeight > root.clientHeight);
+  }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+})();
+
 // ===== APARICIÓN AL HACER SCROLL =====
 const revealObs = effectObserver('aparición al desplazar', el => el.classList.add('visible'), { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
@@ -1182,6 +1195,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const openMenu = () => {
     mobileBtn.classList.add('active');
     mobileBtn.setAttribute('aria-expanded', 'true');
+    // El panel tiene su propio scroll: al abrirlo empieza siempre arriba
+    navLinks.scrollTop = 0;
     navLinks.classList.add('active');
     document.body.classList.add('menu-open');
     // El panel pasa a ser visible en este fotograma (visibility): el foco entra en el siguiente
